@@ -1,4 +1,13 @@
 {
-  "last_published_at": null,
-  "published_urls": []
+  "last_published_at": "2026-08-02T20:05:55Z",
+  "published_urls": [
+    "https://lemire.me/blog/2026/08/02/how-fast-is-c26s-stdhive/",
+    "https://github.com/wie-project/kakehashi",
+    "https://blog.juni-mp4.com/posts/42/rooting-the-tplink-tl841n-pt1/",
+    "https://sebsite.pw/w/20260802-sizeof.html",
+    "https://victoriametrics.com/blog/go-1-27/index.html",
+    "https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/",
+    "https://www.bfswa.blog/p/llms-wont-break-symmetric-crypto",
+    "https://warez.sl0p.foo/apple-screensharing-rce/"
+  ]
 }

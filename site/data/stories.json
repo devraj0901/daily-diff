@@ -1,5 +1,113 @@
 {
-  "edition_date": null,
-  "generated_at": null,
-  "stories": []
+  "edition_date": "2026-08-03",
+  "generated_at": "2026-08-02T20:05:55Z",
+  "stories": [
+    {
+      "id": "cpp26-std-hive-benchmark",
+      "title": "How fast is C++26's std::hive?",
+      "dek": "Daniel Lemire benchmarks the new C++26 std::hive container against vector and list for append, iteration, erase, and memory use.",
+      "why": "Lemire measures hive on GCC 16.1 with nanoseconds, cycles, and instructions per element, so you can see exactly where the container's guarantees cost you instead of trusting marketing claims.",
+      "takeaway": "Hive is not a faster vector — it is a better list: stable references and O(1) scattered erase with only about a byte per element of overhead over a packed vector, but iteration stays latency-bound like a list.",
+      "source": "Lobsters",
+      "source_url": "https://lemire.me/blog/2026/08/02/how-fast-is-c26s-stdhive/",
+      "authors": ["Daniel Lemire"],
+      "published_at": "2026-08-02T18:28:22Z",
+      "tags": ["c++", "performance"],
+      "read_minutes": 6
+    },
+    {
+      "id": "kakehashi-macos-linux-arm",
+      "title": "Show HN: Kakehashi – Experimental userspace to run macOS binaries on Linux ARM",
+      "dek": "A userspace translation layer that loads Darwin Mach-O binaries on Linux aarch64 with a freestanding libSystem and BSD syscall translation.",
+      "why": "For systems engineers curious about running macOS CLI tools (7-Zip, curl) on cheap Linux arm64 CI runners without emulating the CPU — the README includes honest measured performance gaps and a cost comparison against macOS runners.",
+      "takeaway": "The overhead is at the syscall boundary, not the instructions: multi-file 7zz runs about 5.2x slower under kh, yet Linux arm64 CI minutes cost roughly 10–12x less than macOS, which is the actual motivation.",
+      "source": "HN",
+      "source_url": "https://github.com/wie-project/kakehashi",
+      "discussion_url": "https://news.ycombinator.com/item?id=49145937",
+      "authors": ["Vladislav Kalinkin"],
+      "published_at": "2026-08-02T16:26:40Z",
+      "tags": ["systems", "os", "macos", "arm64"],
+      "read_minutes": 8
+    },
+    {
+      "id": "tplink-tl841n-rooting",
+      "title": "Rooting, firmware analysis and persistent credentials of the TP-Link TL-841N",
+      "dek": "A hands-on teardown of a $10 router: UART discovery, firmware dumps via tftp and a CH341A flash programmer, squashfs unpacking, and the hardcoded credentials inside.",
+      "why": "A concrete end-to-end IoT hacking walkthrough demonstrating both firmware extraction routes on a real device, ending with plaintext admin credentials and an unsalted password hash.",
+      "takeaway": "Even budget consumer routers ship hardcoded admin creds (admin:admin, admin:1234) and unsalted MD5 password hashes in firmware — one credential survives a full factory reset.",
+      "source": "HN",
+      "source_url": "https://blog.juni-mp4.com/posts/42/rooting-the-tplink-tl841n-pt1/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49145883",
+      "authors": ["juni"],
+      "published_at": "2026-08-02T16:19:17Z",
+      "tags": ["security", "hardware", "firmware"],
+      "read_minutes": 12
+    },
+    {
+      "id": "sizeof-parsing-in-c",
+      "title": "sizeof is surprisingly difficult to parse in C",
+      "dek": "Why parsing sizeof's operand is a backtracking trap: compound literals and postfix operators blur the line between type names and expressions.",
+      "why": "A compact parser-design note for anyone working on C frontends — it covers the naive approach, the compound-literal case like sizeof(int){0}, and why merging cast and unary parsing breaks on sizeof(int)+1.",
+      "takeaway": "You cannot unify unary-expression and cast parsing for sizeof: sizeof(int)+1 is addition, not the size of a cast — and C2y's new _Countof inherits every one of the same cases.",
+      "source": "Lobsters",
+      "source_url": "https://sebsite.pw/w/20260802-sizeof.html",
+      "authors": ["sebsite"],
+      "published_at": "2026-08-02T06:01:51Z",
+      "tags": ["c", "compilers", "parsing"],
+      "read_minutes": 3
+    },
+    {
+      "id": "go-1-27-interactive-tour",
+      "title": "Go 1.27 Interactive Tour",
+      "dek": "A hands-on, runnable tour of Go 1.27: generic methods, promoted-field struct literals, wider type inference, ML-DSA post-quantum signatures, and the json/v2 graduation.",
+      "why": "More useful than the release notes: each feature ships with a working example plus links to the relevant CLs and proposals, and it flags the tradeoffs, such as interfaces still being unable to declare generic methods.",
+      "takeaway": "Go 1.27's center of gravity is the type system — generic methods and generalized function type inference land — alongside crypto/mldsa for post-quantum signatures and json/v2 becoming the default engine behind encoding/json.",
+      "source": "HN",
+      "source_url": "https://victoriametrics.com/blog/go-1-27/index.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49140218",
+      "authors": ["VictoriaMetrics"],
+      "published_at": "2026-08-02T01:35:51Z",
+      "tags": ["go", "programming-languages"],
+      "read_minutes": 10
+    },
+    {
+      "id": "lean-kernel-soundness-bug-14576",
+      "title": "Postmortem for Lean Kernel Soundness Bug #14576",
+      "dek": "Lean's kernel had a soundness bug reachable via phantom parameters in nested inductive types; it surfaced through an AI-assisted 'disproof' of Collatz and was fixed within an hour.",
+      "why": "A rare inside look at the Lean FRO's incident response: what the bug was, why the independent nanoda checker also missed it (a second, unrelated bug), and why restricting metaprogramming is the wrong fix.",
+      "takeaway": "Soundness cannot depend on an untrusted elaborator refusing to build bad terms — the kernel must reject ill-typed declarations itself — and independent proof checkers only help if you keep both implementations current.",
+      "source": "Lobsters",
+      "source_url": "https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/",
+      "authors": ["Leonardo de Moura"],
+      "published_at": "2026-08-01T21:51:11Z",
+      "tags": ["lean", "formal-verification", "pl"],
+      "read_minutes": 6
+    },
+    {
+      "id": "llms-wont-break-symmetric-crypto",
+      "title": "LLMs won't break symmetric crypto",
+      "dek": "JP Aumasson on Anthropic's Mythos cryptanalysis results and why symmetric primitives are structurally resistant to LLM-driven attacks.",
+      "why": "Contextualizes the real results — HAWK-512 reduced from a 128-bit target to at most 108 bits, and an improved key recovery on 7-round AES-128 — and argues why full-round AES, SHA-3, and BLAKE3 remain safe.",
+      "takeaway": "Symmetric crypto's deliberate lack of mathematical structure (XOR and modular addition each destroy the other's structure) leaves mostly well-explored differential cryptanalysis, so LLM effort is better spent on underanalyzed post-quantum candidates.",
+      "source": "Lobsters",
+      "source_url": "https://www.bfswa.blog/p/llms-wont-break-symmetric-crypto",
+      "authors": ["JP Aumasson"],
+      "published_at": "2026-08-01T21:11:22Z",
+      "tags": ["security", "cryptography", "ai"],
+      "read_minutes": 7
+    },
+    {
+      "id": "apple-screensharing-preauth-rce",
+      "title": "Apple Screen Sharing Pre-Auth RCE",
+      "dek": "A frame-length validation bug in screensharingd's SRP handler lets an unauthenticated attacker achieve root RCE; fixed in macOS 26.6.",
+      "why": "A detailed root-cause writeup: the 'frame too large' error path returns the stale success status of the preceding read, the caller treats it as authentication complete, and the cleartext session's root file-copy protocol does the rest.",
+      "takeaway": "Error-path hygiene in auth code matters: returning a stale success code on a validation failure skips the entire SRP key exchange and cipher install, handing pre-auth root file read/write — and crontabs must be mode 0600 or cron silently ignores them.",
+      "source": "Lobsters",
+      "source_url": "https://warez.sl0p.foo/apple-screensharing-rce/",
+      "authors": ["navi_the_clown"],
+      "published_at": "2026-08-01T19:39:20Z",
+      "tags": ["security", "macos", "rce"],
+      "read_minutes": 9
+    }
+  ]
 }
