@@ -1,5 +1,5 @@
 {
-  "last_published_at": "2026-08-02T20:05:55Z",
+  "last_published_at": "2026-08-03T02:35:57Z",
   "published_urls": [
     "https://lemire.me/blog/2026/08/02/how-fast-is-c26s-stdhive/",
     "https://github.com/wie-project/kakehashi",
@@ -8,6 +8,10 @@
     "https://victoriametrics.com/blog/go-1-27/index.html",
     "https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/",
     "https://www.bfswa.blog/p/llms-wont-break-symmetric-crypto",
-    "https://warez.sl0p.foo/apple-screensharing-rce/"
+    "https://warez.sl0p.foo/apple-screensharing-rce/",
+    "https://arnav.tech/essays/new-arr-formulas-in-ai-saas/",
+    "https://blog.gaborkoos.com/posts/2026-08-03-Your-JSON-Is-Lying-to-You/",
+    "https://github.com/johnsonjh/cpm386",
+    "https://pythonspeed.com/articles/faster-float-math-rust/"
   ]
 }
