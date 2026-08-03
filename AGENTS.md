@@ -6,14 +6,15 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
 
 1. Read `site/data/stories.json` and `publisher-state.json` before changing anything.
 2. Inspect the candidate JSON injected by `scripts/collect_candidates.py`.
-3. Publish **only** candidates newer than the last published edition and not already in `published_urls`.
-4. Use web extraction/search to read the primary article, paper, or project page before writing copy. Do not infer technical details from an RSS title alone.
-5. Select at most 8 items. Prefer deep technical writing, reproducible research, important open-source internals, systems work, security, databases, programming languages, and practical AI engineering. Exclude press releases, generic listicles, shallow opinion, duplicate coverage, and marketing copy.
-6. Write concise, factual copy. `dek` is one sentence. `why` is 1–2 sentences explaining who benefits and what the reader will learn. `takeaway` is one concrete engineering insight. Never invent metrics, authors, dates, or claims.
-7. Preserve the canonical source URL. Add a discussion URL only when the candidate provides one (usually Hacker News).
-8. Update `site/data/stories.json` and `publisher-state.json` atomically enough that a failed run does not mark unpublished items as seen.
-9. If there are no genuinely good new items, make no content commit. A quiet edition is better than filler.
-10. If content changed, run the validation commands below, then commit and push to `main`.
+3. Read Karakeep as a separate high-signal source. Use the Karakeep MCP search tool with `is:link` plus an `after:YYYY-MM-DD` cutoff based on `last_published_at`, sorted newest first. Search enough results to cover the interval, then fetch the full markdown for promising bookmarks with the bookmark-content tool. Do not assume the RSS collector includes Karakeep; it does not.
+4. Publish **only** candidates newer than the last published edition and not already in `published_urls`. For Karakeep, use the bookmark creation timestamp as the freshness timestamp and its canonical bookmarked URL as `source_url`.
+5. Use web extraction/search or the Karakeep bookmark content to read the primary article before writing copy. Do not infer technical details from a title or short summary alone.
+6. Select at most 8 items across all sources. Prefer deep technical writing, reproducible research, important open-source internals, systems work, security, databases, programming languages, and practical AI engineering. Exclude press releases, generic listicles, shallow opinion, duplicate coverage, and marketing copy. Karakeep items are eligible, not automatic inclusions.
+7. Write concise, factual copy. `dek` is one sentence. `why` is 1–2 sentences explaining who benefits and what the reader will learn. `takeaway` is one concrete engineering insight. Never invent metrics, authors, dates, or claims.
+8. Preserve the canonical source URL. Add a discussion URL only when the candidate provides one (usually Hacker News).
+9. Update `site/data/stories.json` and `publisher-state.json` atomically enough that a failed run does not mark unpublished items as seen.
+10. If there are no genuinely good new items, make no content commit. A quiet edition is better than filler.
+11. If content changed, run the validation commands below, then commit and push to `main`.
 
 ## Story schema
 
@@ -24,7 +25,7 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
   "dek": "One-sentence description.",
   "why": "Why this is worth a focused read.",
   "takeaway": "One concrete engineering takeaway.",
-  "source": "HN | arXiv | Lobsters | Blog | GitHub | Other",
+  "source": "HN | arXiv | Lobsters | Karakeep | Blog | GitHub | Other",
   "source_url": "https://...",
   "discussion_url": "https://...",
   "authors": ["Author"],
