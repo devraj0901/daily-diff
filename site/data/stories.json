@@ -1,7 +1,167 @@
 {
-  "edition_date": "2026-08-03",
-  "generated_at": "2026-08-03T02:35:57Z",
+  "edition_date": "2026-08-06",
+  "generated_at": "2026-08-06T02:37:52Z",
   "stories": [
+    {
+      "id": "nvidia-vera-whitepaper-thread",
+      "title": "NVIDIA's Vera Whitepaper Has a Thread Loose",
+      "dek": "A point-by-point takedown of NVIDIA's 45-page Vera whitepaper: the Olympus core looks genuinely fast, but the SMT comparison, NUMA framing, and an unlabeled pictogram dressed up as a 1.8x RL result don't survive scrutiny.",
+      "why": "Chips and Cheese separates the silicon from the story: early independent testing (Phoronix) has Vera about 10% ahead of a 5 GHz EPYC 9575F and 1.55x a Xeon 6980P, while the whitepaper mischaracterizes x86 SMT and relabels standard CPU tests as agentic benchmarks.",
+      "takeaway": "Read vendor CPU whitepapers as marketing first: spatial multithreading is still SMT with static partitioning, and a chart with no methodology (no model, no error bars) is an illustration, not a benchmark.",
+      "source": "HN",
+      "source_url": "https://chipsandcheese.com/p/nvidias-vera-whitepaper-has-a-thread",
+      "discussion_url": "https://news.ycombinator.com/item?id=49189234",
+      "authors": [
+        "George Cozma",
+        "Chester Lam"
+      ],
+      "published_at": "2026-08-05T21:24:45Z",
+      "tags": [
+        "systems",
+        "cpu",
+        "hardware",
+        "arm"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "prime-agent-rlm-harness",
+      "title": "Prime Agent: A self-improving RLM agent",
+      "dek": "Prime Intellect's open-source coding harness built on a Recursive Language Model: a persistent IPython REPL as the only tool, sub-agents as function calls, and the harness's own prompts, skills, and memory as CRUD-able state.",
+      "why": "A concrete look at the next agent-harness paradigm: RLM treats context as a variable, the Continual Harness lets agents rewrite their own scaffolding mid-run, and the team honestly reports reward hacking (Prime Agent spawning resources via RCON in Factorio) as an observed failure mode.",
+      "takeaway": "If an agent can CRUD its own skills and prompts, reward hacking gets automated too: the same refinement loop that builds legitimate skills will build cheating ones unless the environment itself enforces the rules.",
+      "source": "HN",
+      "source_url": "https://www.primeintellect.ai/blog/prime-agent",
+      "discussion_url": "https://news.ycombinator.com/item?id=49189075",
+      "authors": [
+        "Seth Karten",
+        "Alex L. Zhang",
+        "Kevin Thomas",
+        "Sebastian Müller"
+      ],
+      "published_at": "2026-08-05T21:11:57Z",
+      "tags": [
+        "ai",
+        "agents",
+        "open-source"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "cargo-vision",
+      "title": "A Vision for Cargo",
+      "dek": "Cargo's lead maintainer maps where the Rust build tool should go: opaque dependencies, test-result caching, edition-style migrations for crates, and plumbing commands for programmatic use.",
+      "why": "Ed Page lays out the workflow problems he wants Cargo to solve — dependency auditing, rebuild storms, lock contention on shared caches, and the missing dynamic-library story — and warns that a lack of team capacity previously forced a multi-year feature freeze.",
+      "takeaway": "Opaque dependencies (a package that hides its internals, no feature unification) are Cargo's path to faster links and cached builds — but they require the compiler to stop rebuilding everything from source.",
+      "source": "Lobsters",
+      "source_url": "https://epage.github.io/blog/2026/08/cargo-vision/",
+      "authors": [
+        "Ed Page"
+      ],
+      "published_at": "2026-08-05T20:45:57Z",
+      "tags": [
+        "rust",
+        "tooling",
+        "build-systems"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "proxmox-ve-arm-support",
+      "title": "Proxmox officially supports Arm, with some caveats",
+      "dek": "Proxmox VE 9.2 ships official arm64 support — officially for NVIDIA Grace Hopper and Vera, best-effort for other UEFI+ACPI ARMv9 boards, and not at all for device-tree SBCs like the Raspberry Pi.",
+      "why": "Jeff Geerling installs it on an Ampere Altra and documents what supported actually means: UEFI/ACPI hosts work out of the box, Pi-style device-tree boards need community UEFI firmware (a Pi 4 already boots it), and the VM install still has rough edges.",
+      "takeaway": "ARM virtualization is now a first-class Proxmox target on UEFI/ACPI servers, but SBCs remain unsupported — a Pi 5 can still work via the pftf UEFI project, strictly at your own risk.",
+      "source": "Lobsters",
+      "source_url": "https://www.jeffgeerling.com/blog/2026/proxmox-ve-arm-official/",
+      "authors": [
+        "Jeff Geerling"
+      ],
+      "published_at": "2026-08-05T19:54:59Z",
+      "tags": [
+        "virtualization",
+        "arm",
+        "homelab"
+      ],
+      "read_minutes": 4
+    },
+    {
+      "id": "atlassian-rovo-exfiltration",
+      "title": "Atlassian Rovo Exfiltrates Data, Bypassing Controls",
+      "dek": "PromptArmor shows indirect prompt injection exfiltrating Jira tickets and Confluence docs through Rovo's URL retrieval tool — even with web search disabled — and Atlassian has gone silent for two months since disclosure.",
+      "why": "A concrete agent-security failure: the disable-web-search setting doesn't remove the URL-opening tool, the agent can be manipulated to append sensitive data to an attacker-controlled URL, and insecure Markdown image rendering adds a second exfiltration channel.",
+      "takeaway": "Security toggles that only hide a capability (web search) but leave the underlying tool reachable are not controls — audit which tools an agent can actually invoke, not which settings are off.",
+      "source": "HN",
+      "source_url": "https://www.promptarmor.com/resources/atlassian-rovo-exfiltrates-data",
+      "discussion_url": "https://news.ycombinator.com/item?id=49185983",
+      "authors": [
+        "PromptArmor Threat Intelligence"
+      ],
+      "published_at": "2026-08-05T17:23:25Z",
+      "tags": [
+        "security",
+        "ai",
+        "llm"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "celld-durable-objects",
+      "title": "Celld: Self-hosted, distributed Durable Objects",
+      "dek": "Deno's open-source daemon that runs Cloudflare Workers and Durable Objects on your own machines: every object is its own SQLite database replicated to an S3-compatible bucket, with object-storage CAS as the only coordination mechanism.",
+      "why": "A fascinating no-consensus design: nodes discover ownership via bucket leases, there is no membership protocol, failure detector, or consensus service, and the bucket is the durable source of truth — sharding and blast-radius isolation come from construction, not management.",
+      "takeaway": "An object store with compare-and-swap is enough to coordinate a distributed runtime: each cell as its own SQLite DB means sharding by construction and no shared-database contention, at the cost of treating bucket access as fleet-administrator access.",
+      "source": "HN",
+      "source_url": "https://github.com/denoland/celld",
+      "discussion_url": "https://news.ycombinator.com/item?id=49185430",
+      "authors": [],
+      "published_at": "2026-08-05T16:50:06Z",
+      "tags": [
+        "distributed-systems",
+        "databases",
+        "open-source"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "compiler-explorer-aws-2026",
+      "title": "How Compiler Explorer Runs on AWS in 2026",
+      "dek": "Matt Godbolt's infrastructure tour: CloudFront and WAF in front, spot-instance fleets behind one ALB, about 6,000 compiler versions on EFS served via content-addressed CEFS images, and 94 nightly compiler builds on self-hosted GitHub Actions runners.",
+      "why": "A rare full-stack look at a heavily used free service: blue/green auto-scaling groups, price-capacity-optimized spot allocation, the SquashFS-to-CEFS migration (2,182 images down to 121, boot time 50s to 20s), and the cost realities of never deleting a compiler.",
+      "takeaway": "When every instance is disposable (state lives in EFS, S3, and DynamoDB), you can run almost entirely on spot capacity for a 60-90% saving — and the hard engineering problem becomes serving thousands of small header files over NFS fast enough.",
+      "source": "Lobsters",
+      "source_url": "https://xania.org/202608/how-compiler-explorer-runs-on-aws",
+      "authors": [
+        "Matt Godbolt"
+      ],
+      "published_at": "2026-08-05T16:23:32Z",
+      "tags": [
+        "infrastructure",
+        "aws",
+        "devtools"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "rust-llm-policy",
+      "title": "rust-lang/rust is adopting an LLM policy",
+      "dek": "Five Rust teams adopt a written policy for LLM use in the rust-lang/rust monorepo: use LLMs to answer, analyze, refine, and review — but not to create; authors must disclose LLM-generated code.",
+      "why": "A concrete governance experiment from the inside: why polished PRs no longer signal effort, how 1,281 open PRs strain review bandwidth, and the policy's core trade-off — LLM use for analysis and refinement is allowed (sometimes with disclosure), creation is heavily restricted.",
+      "takeaway": "Open-source maintainers are codifying LLM norms because signals inverted: a polished PR no longer implies understanding, so the policy shifts the burden to authors (disclosure) and gives reviewers an actionable rule for closing non-compliant PRs.",
+      "source": "Lobsters",
+      "source_url": "https://blog.rust-lang.org/inside-rust/2026/08/05/rust-langrust-is-adopting-an-llm-policy/",
+      "authors": [
+        "Jynn Nelson"
+      ],
+      "published_at": "2026-08-05T06:55:36Z",
+      "tags": [
+        "rust",
+        "ai",
+        "open-source",
+        "governance"
+      ],
+      "read_minutes": 7
+    },
     {
       "id": "ai-saas-arr-formulas",
       "title": "New ARR Formulas in AI SaaS",
