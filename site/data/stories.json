@@ -1,13 +1,126 @@
 {
-  "edition_date": "2026-08-07",
-  "generated_at": "2026-08-07T02:38:30Z",
+  "edition_date": "2026-08-08",
+  "generated_at": "2026-08-08T02:35:35.846659Z",
   "stories": [
+    {
+      "id": "planetscale-concurrency-vs-throughput",
+      "title": "Concurrency vs. Throughput: why more parallelism can make databases slower",
+      "dek": "A production meltdown triggered by one long-running transaction shows why capping concurrency — not raising limits — restored throughput: ten thousand in-flight snapshot reads each walked growing version chains until InnoDB's buffer pool buckled.",
+      "why": "For anyone running MySQL or Postgres in production, this is a detailed postmortem of a sixteen-minute outage with real numbers. The culprit wasn't lock contention (the classic suspect) but coherency cost: reads on unrelated tables failed because every in-flight transaction made every other one slower, matching Gunther's Universal Scalability Law where overhead grows as N(N-1). The fix was counterintuitive — drop the Vitess transaction pool cap to a few hundred and queue instead of erroring, which kept 60k queries/sec flowing through bursts with only one rejected transaction.",
+      "takeaway": "Past a critical concurrency point, admitting more requests reduces total throughput (retrograde scaling), so a bounded pool plus explicit queuing beats a raised cap — and Little's Law means ~200 in-flight slots can still carry 60k queries/sec at ~3ms each.",
+      "source": "Lobsters",
+      "source_url": "https://planetscale.com/blog/concurrency-vs-throughput-vitess-mysql",
+      "authors": [
+        "Liz van Dijk"
+      ],
+      "published_at": "2026-08-07T21:10:37Z",
+      "tags": [
+        "databases",
+        "systems",
+        "performance"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "lymphosat-sat-hyperspecialization",
+      "title": "Domain-specific hyperspecialization (for SAT)",
+      "dek": "LymphoSAT won the SAT Competition 2026 track with an ensemble of 126 domain-specialist solvers — mostly generated with LLM coding agents in days at ~$10k of token spend — instead of one general-purpose solver.",
+      "why": "A striking demonstration of AI-driven engineering: the specialists don't even implement classic SAT algorithms — one enumerates AVX-512 lookup-table circuits, another factors a hidden 64-bit product with Miller-Rabin and Pollard Rho, a third solves a sliding puzzle with IDA*. The post argues SAT is the LLVM IR of constraint problems and that hyperspecialization, exploiting structure per problem family, beat 27 other entrants including 10 AI-enhanced solvers.",
+      "takeaway": "When a problem class has exploitable structure, a fleet of cheap, generated specialists beats a single general solver — and frontier coding agents collapsed months of expert solver engineering into days of token expenditure.",
+      "source": "Lobsters",
+      "source_url": "https://c.mov/lymphosat/",
+      "authors": [],
+      "published_at": "2026-08-07T19:44:27Z",
+      "tags": [
+        "ai",
+        "solvers",
+        "systems"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "ddr-encrypted-dns-discovery",
+      "title": "How a device finds encrypted DNS by itself",
+      "dek": "DDR (Discovery of Designated Resolvers) lets a device ask its current resolver for encrypted endpoints — DoH, DoT, DoQ — via one reserved name, so IP-only devices like TVs and consoles can upgrade to encrypted DNS with zero configuration.",
+      "why": "A crisp explainer of a small mechanism with a big niche: a bare resolver IP carries no hostname, port, or protocol, so plain-DNS devices can't express an encrypted endpoint. The device queries _dns.resolver.arpa, the resolver replies with endpoints plus their IPs (saving a second plaintext lookup), and per-profile resolvers can tailor answers. The limits are stated honestly: the upgrade from plain DNS is opportunistic and strip-able by an on-path attacker, so direct configuration remains stronger.",
+      "takeaway": "DDR is an opportunistic upgrade, not a guarantee — the discovery exchange itself is unencrypted and can be rewritten — so treat it as the on-ramp for devices that can't be configured directly, and require certificate-verified endpoints where possible.",
+      "source": "Lobsters",
+      "source_url": "https://blog.dundns.eu/posts/ddr-encrypted-dns-discovery/",
+      "authors": [],
+      "published_at": "2026-08-07T14:02:47Z",
+      "tags": [
+        "networking",
+        "dns",
+        "security"
+      ],
+      "read_minutes": 4
+    },
+    {
+      "id": "pgrust-query-engine-300x",
+      "title": "Rebuilding Postgres for 300x faster analytics: batching, operator fusion, and SIMD",
+      "dek": "pgrust 0.2, a Postgres-compatible engine written in Rust, is 300x faster than Postgres on ClickBench analytics — the query engine alone accounts for ~10x via batching, operator fusion, and SIMD.",
+      "why": "A rare code-level walkthrough of why the Volcano model is slow: per-row virtual next() calls make a 500M-row SUM take ~20s in Postgres vs 358ms in a plain Rust loop. The post builds a miniature engine and shows each optimization's measured effect — batching to 1024-row buffers (1.3s to 480ms), operator fusion to skip buffer copies (to 358ms), and NEON/AVX SIMD accumulation (to 135ms, faster than the scalar loop) — while explaining why compilers won't auto-vectorize float reductions (non-associativity).",
+      "takeaway": "Query-engine speedup comes from eliminating per-row virtual dispatch and copies — batch, fuse, and SIMD — and the engine's ~10x compounds with storage-format and locking fixes to reach the full 300x.",
+      "source": "HN",
+      "source_url": "https://malisper.me/how-we-made-postgres-hundreds-of-times-faster-the-query-engine/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49208535",
+      "authors": [
+        "malisper"
+      ],
+      "published_at": "2026-08-07T11:00:35Z",
+      "tags": [
+        "databases",
+        "query-engines",
+        "performance"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "cloudflare-kitesurf-agent-browser",
+      "title": "Introducing Kitesurf: the agent-first browser that runs in V8 isolates on Cloudflare Workers",
+      "dek": "Cloudflare built Kitesurf, an agent-first browser that runs in V8 isolates on Workers — a headless engine optimized for tokens, isolation, and statelessness instead of pixels and tabs.",
+      "why": "For anyone building or paying for agent infrastructure: Chromium was built for humans, so giving every agent a full instance is prohibitively expensive. Kitesurf cuts CPU/memory drastically by dropping human-oriented features, using Rust compiled to Wasm via wasm-bindgen, funneling all network access through a single SandboxOutbound worker, and treating every page load as untrusted input. Twelve weeks old and built heavily with AI agents guided by Web Platform Tests, it's the first browser designed around the agent threat model (prompt injection, tool safety).",
+      "takeaway": "A browser for agents is a different product: structured content over visual fidelity, stateless components that can be killed and replayed, one egress choke point, and failures that degrade to a blank frame rather than a dead session.",
+      "source": "HN",
+      "source_url": "https://blog.cloudflare.com/kitesurf/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49208393",
+      "authors": [],
+      "published_at": "2026-08-07T10:42:07Z",
+      "tags": [
+        "systems",
+        "browsers",
+        "ai"
+      ],
+      "read_minutes": 13
+    },
+    {
+      "id": "woodpecker-distillation",
+      "title": "Woodpecker Distillation: Weak Models Diagnose Reasoning Bugs in Strong Models",
+      "dek": "A weak model's short local patches can diagnose and repair reasoning bugs in a stronger model, and contrastive distillation of those interventions beats direct imitation on math benchmarks.",
+      "why": "Reproducible weak-to-strong training research (code and datasets released): the authors show many reasoning failures are localized bugs, not global incompetence — inserting a weak-model patch mid-trajectory redirects the strong model to correct answers. The key finding is that fine-tuning on the patch text itself fails; the useful signal is how the patch reshapes the continuation distribution, captured by contrasting successful and unsuccessful patches at the same prefix and distilling the induced teacher distribution into the strong model.",
+      "takeaway": "When distilling from weak to strong, the corrective signal is distributional, not textual — contrast successful and failed local interventions at the same prefix, then distill the induced future-token distribution rather than imitating the patch.",
+      "source": "arXiv",
+      "source_url": "https://arxiv.org/abs/2608.05168",
+      "authors": [
+        "Dayu Wang",
+        "Jiaye Yang",
+        "Weikang Li",
+        "Jizhou Huang"
+      ],
+      "published_at": "2026-08-07T04:00:00Z",
+      "tags": [
+        "ai",
+        "research",
+        "reasoning"
+      ],
+      "read_minutes": 10
+    },
     {
       "id": "materialize-dictionary-compression",
       "title": "Dictionary Compression in Materialize",
       "dek": "Frank McSherry repurposes ~128 unused tag bytes in Materialize's row representation as a runtime dictionary, halving peak memory on a ~1TB live workload with no hydration-time penalty.",
       "why": "For databases engineers who care about in-memory storage cost: dictionary compression normally belongs to columnar engines that scan sequentially, but Materialize keeps its random-access, row-level storage while identifying hot values with a Misra-Gries streaming summary at load time. Measured on the internal 'context graph' (roughly 1TB of live state), peak memory dropped from 981 GiB to 428 GiB at the same instance size with hydration time essentially unchanged.",
-      "takeaway": "A Misra-Gries summary over a live column is enough to pick a good dictionary during ingest, and the ~128 spare tag bytes in Materialize's tagged row encoding are the free slot for it \u2014 but halving resources again turns the savings into an OOM loop, so compression benefit is a cliff, not a slope.",
+      "takeaway": "A Misra-Gries summary over a live column is enough to pick a good dictionary during ingest, and the ~128 spare tag bytes in Materialize's tagged row encoding are the free slot for it — but halving resources again turns the savings into an OOM loop, so compression benefit is a cliff, not a slope.",
       "source": "HN",
       "source_url": "https://materialize.com/blog/dictionary-compression-in-materialize/",
       "discussion_url": "https://news.ycombinator.com/item?id=49204508",
@@ -25,9 +138,9 @@
     {
       "id": "jane-street-asic-puzzle",
       "title": "Can you reverse engineer an ASIC?",
-      "dek": "Jane Street's new puzzle hands you only the GDS layout of a chip they designed \u2014 no netlist, no labels \u2014 and asks you to recover its function and find the output string, with a binary-adder warm-up to learn the tools.",
+      "dek": "Jane Street's new puzzle hands you only the GDS layout of a chip they designed — no netlist, no labels — and asks you to recover its function and find the output string, with a binary-adder warm-up to learn the tools.",
       "why": "A hands-on on-ramp to chip reverse engineering for anyone curious about hardware: the warm-up ships Verilog, a gate-level netlist, and the GDS for a real adder built on an open-source PDK, so KLayout or Magic VLSI will open everything; the main puzzle expects you to build a simulator to test your recovered netlist against sample inputs. Submissions close September 4, 2026.",
-      "takeaway": "A GDS file is the chip: every polygon on every layer encodes the full circuit, just unlabeled \u2014 recovery is layout to netlist to simulation to purpose, and the layout is physically arranged to hint at the functionality.",
+      "takeaway": "A GDS file is the chip: every polygon on every layer encodes the full circuit, just unlabeled — recovery is layout to netlist to simulation to purpose, and the layout is physically arranged to hint at the functionality.",
       "source": "HN",
       "source_url": "https://blog.janestreet.com/can-you-reverse-engineer-an-asic/",
       "discussion_url": "https://news.ycombinator.com/item?id=49200933",
@@ -45,7 +158,7 @@
       "title": "Zapscape (CVE-2026-64561): Guest-to-Host Escape in KVM/x86",
       "dek": "A use-after-free in KVM's shadow-MMU zap path lets a guest with nested virtualization run code as root on the host kernel; the embargo has ended and a full PoC is public.",
       "why": "The third in V4bel's 'KVM escape trilogy' (after ITScape and Januscape): a recursive zap during shadow-page reclamation skips a root_count guard, so guest-side actions alone corrupt host shadow pages and escalate to host kernel code execution. The writeup covers the affected range (July 2020 to July 2026), the AMD/Intel trigger difference (Intel requires EPT page-walk lengths 4 and 5 exposed), and why it is also an LPE on distributions with world-writable /dev/kvm.",
-      "takeaway": "Shadow-MMU reclamation is hostile attack surface: a UAF reachable purely from guest actions \u2014 independent of the VMM front-end \u2014 turns rented cloud instances into host compromise, so hypervisor patching must be continuous rather than incident-driven.",
+      "takeaway": "Shadow-MMU reclamation is hostile attack surface: a UAF reachable purely from guest actions — independent of the VMM front-end — turns rented cloud instances into host compromise, so hypervisor patching must be continuous rather than incident-driven.",
       "source": "HN",
       "source_url": "https://github.com/V4bel/Zapscape",
       "discussion_url": "https://news.ycombinator.com/item?id=49198843",
@@ -64,8 +177,8 @@
       "id": "agent-permission-game-stats",
       "title": "Humans missed 1 in 3 threats approving AI agent commands across 40k game runs",
       "dek": "Data from 40,000 plays and 409,000 approve/deny decisions in an agent-permission game: mean threat-detection accuracy was 66.3%, and payloads hidden behind familiar npm script names were missed about twice as often as other exfiltration-style attacks.",
-      "why": "Real measurements of human-in-the-loop supervision for AI coding agents, useful to anyone shipping or using them: obvious destructive commands were caught ~88% of the time, but exfiltration (curl to unknown APIs, typosquatted packages) and scope violations (cat ~/.aws/credentials) were missed about a third of the time \u2014 and 'npm run analyze' with an injected curl payload was approved 64.7% of the time even though the script contents were visible in the history log.",
-      "takeaway": "Command-level approval is weak as a safety control: a benign-sounding script name roughly doubles an attack's success even when the payload is displayed, and over-blocking (a benign npm registry change was blocked 59% of the time) breeds the fatigue that defeats the safeguard \u2014 sandboxing and credential separation beat asking humans to vet every command.",
+      "why": "Real measurements of human-in-the-loop supervision for AI coding agents, useful to anyone shipping or using them: obvious destructive commands were caught ~88% of the time, but exfiltration (curl to unknown APIs, typosquatted packages) and scope violations (cat ~/.aws/credentials) were missed about a third of the time — and 'npm run analyze' with an injected curl payload was approved 64.7% of the time even though the script contents were visible in the history log.",
+      "takeaway": "Command-level approval is weak as a safety control: a benign-sounding script name roughly doubles an attack's success even when the payload is displayed, and over-blocking (a benign npm registry change was blocked 59% of the time) breeds the fatigue that defeats the safeguard — sandboxing and credential separation beat asking humans to vet every command.",
       "source": "HN",
       "source_url": "https://scalex.dev/blog/ai-agent-permissions-stats/",
       "discussion_url": "https://news.ycombinator.com/item?id=49195468",
@@ -83,9 +196,9 @@
     {
       "id": "cursor-cloud-agent-environment",
       "title": "How we set up our cloud agent environment",
-      "dek": "Cursor documents turning their monorepo into a product for agents: a Linux-matching Dockerfile, an anydev CLI that collapses messy build commands, secret redaction in tool results, and a Cloud Doctor automation that self-heals environments \u2014 cloud agents now author over half of merged PRs.",
+      "dek": "Cursor documents turning their monorepo into a product for agents: a Linux-matching Dockerfile, an anydev CLI that collapses messy build commands, secret redaction in tool results, and a Cloud Doctor automation that self-heals environments — cloud agents now author over half of merged PRs.",
       "why": "A concrete field report on the 'environment as a product' problem for teams running agents on their own codebase: the security layer (network egress restrictions, scoped and proxied git remotes, secret scanning in commits and messages, and secret redaction in tool results so the agent cannot read secret values even if it tries), the choice of MCP for self-inspection tools, and the failure-analysis loop where Cloud Doctor reads traces to fix misleading skills or slow workflows.",
-      "takeaway": "Before agents can verify work end-to-end, the repo needs a simplified, footgun-free interface (anydev with a supervisor that restarts long-running builds) plus self-healing \u2014 and the security pattern is to give agents capabilities, never secret values.",
+      "takeaway": "Before agents can verify work end-to-end, the repo needs a simplified, footgun-free interface (anydev with a supervisor that restarts long-running builds) plus self-healing — and the security pattern is to give agents capabilities, never secret values.",
       "source": "Karakeep",
       "source_url": "https://cursor.com/blog/cloud-agent-environment",
       "authors": [
@@ -103,9 +216,9 @@
     {
       "id": "cloudflare-os-architecture-of-distrust",
       "title": "Cloudflare OS is an architecture of distrust",
-      "dek": "Reading the Cloudflare OS source, Jamie Lord traces its organizing principle: the agent is assumed confidently wrong, so Gatekeepers simulate unapproved actions, gadgets sandbox every document, and credentials never reach the agent \u2014 only capabilities.",
+      "dek": "Reading the Cloudflare OS source, Jamie Lord traces its organizing principle: the agent is assumed confidently wrong, so Gatekeepers simulate unapproved actions, gadgets sandbox every document, and credentials never reach the agent — only capabilities.",
       "why": "A source-level look at one of the most complete agent platforms yet, for anyone designing agent infrastructure: the gatekeeper contract tells authors to 'simulate' actions so the Session interface reflects state as if everything had been applied; every document runs in its own Dynamic Worker with its own SQLite; writes are provisional until a human commits them; and a decentralized information-flow control layer (docs/observers.md) refuses to understand identity, holding opaque tokens instead.",
-      "takeaway": "Treating the agent as untrusted moves safety out of application code and into the platform: per-document isolation makes a buggy 'gadget' un-leakable by construction, capability bindings replace bearer tokens, and simulated writes give the throughput of auto-approve while keeping the human as the commit \u2014 at the cost of capping what the agent can ever be trusted to do.",
+      "takeaway": "Treating the agent as untrusted moves safety out of application code and into the platform: per-document isolation makes a buggy 'gadget' un-leakable by construction, capability bindings replace bearer tokens, and simulated writes give the throughput of auto-approve while keeping the human as the commit — at the cost of capping what the agent can ever be trusted to do.",
       "source": "Karakeep",
       "source_url": "https://lord.technology/2026/08/05/cloudflare-os-is-an-architecture-of-distrust.html",
       "authors": [
@@ -155,7 +268,7 @@
         "Seth Karten",
         "Alex L. Zhang",
         "Kevin Thomas",
-        "Sebastian M\u00fcller"
+        "Sebastian Müller"
       ],
       "published_at": "2026-08-05T21:11:57Z",
       "tags": [
@@ -169,8 +282,8 @@
       "id": "cargo-vision",
       "title": "A Vision for Cargo",
       "dek": "Cargo's lead maintainer maps where the Rust build tool should go: opaque dependencies, test-result caching, edition-style migrations for crates, and plumbing commands for programmatic use.",
-      "why": "Ed Page lays out the workflow problems he wants Cargo to solve \u2014 dependency auditing, rebuild storms, lock contention on shared caches, and the missing dynamic-library story \u2014 and warns that a lack of team capacity previously forced a multi-year feature freeze.",
-      "takeaway": "Opaque dependencies (a package that hides its internals, no feature unification) are Cargo's path to faster links and cached builds \u2014 but they require the compiler to stop rebuilding everything from source.",
+      "why": "Ed Page lays out the workflow problems he wants Cargo to solve — dependency auditing, rebuild storms, lock contention on shared caches, and the missing dynamic-library story — and warns that a lack of team capacity previously forced a multi-year feature freeze.",
+      "takeaway": "Opaque dependencies (a package that hides its internals, no feature unification) are Cargo's path to faster links and cached builds — but they require the compiler to stop rebuilding everything from source.",
       "source": "Lobsters",
       "source_url": "https://epage.github.io/blog/2026/08/cargo-vision/",
       "authors": [
@@ -187,9 +300,9 @@
     {
       "id": "proxmox-ve-arm-support",
       "title": "Proxmox officially supports Arm, with some caveats",
-      "dek": "Proxmox VE 9.2 ships official arm64 support \u2014 officially for NVIDIA Grace Hopper and Vera, best-effort for other UEFI+ACPI ARMv9 boards, and not at all for device-tree SBCs like the Raspberry Pi.",
+      "dek": "Proxmox VE 9.2 ships official arm64 support — officially for NVIDIA Grace Hopper and Vera, best-effort for other UEFI+ACPI ARMv9 boards, and not at all for device-tree SBCs like the Raspberry Pi.",
       "why": "Jeff Geerling installs it on an Ampere Altra and documents what supported actually means: UEFI/ACPI hosts work out of the box, Pi-style device-tree boards need community UEFI firmware (a Pi 4 already boots it), and the VM install still has rough edges.",
-      "takeaway": "ARM virtualization is now a first-class Proxmox target on UEFI/ACPI servers, but SBCs remain unsupported \u2014 a Pi 5 can still work via the pftf UEFI project, strictly at your own risk.",
+      "takeaway": "ARM virtualization is now a first-class Proxmox target on UEFI/ACPI servers, but SBCs remain unsupported — a Pi 5 can still work via the pftf UEFI project, strictly at your own risk.",
       "source": "Lobsters",
       "source_url": "https://www.jeffgeerling.com/blog/2026/proxmox-ve-arm-official/",
       "authors": [
@@ -206,9 +319,9 @@
     {
       "id": "atlassian-rovo-exfiltration",
       "title": "Atlassian Rovo Exfiltrates Data, Bypassing Controls",
-      "dek": "PromptArmor shows indirect prompt injection exfiltrating Jira tickets and Confluence docs through Rovo's URL retrieval tool \u2014 even with web search disabled \u2014 and Atlassian has gone silent for two months since disclosure.",
+      "dek": "PromptArmor shows indirect prompt injection exfiltrating Jira tickets and Confluence docs through Rovo's URL retrieval tool — even with web search disabled — and Atlassian has gone silent for two months since disclosure.",
       "why": "A concrete agent-security failure: the disable-web-search setting doesn't remove the URL-opening tool, the agent can be manipulated to append sensitive data to an attacker-controlled URL, and insecure Markdown image rendering adds a second exfiltration channel.",
-      "takeaway": "Security toggles that only hide a capability (web search) but leave the underlying tool reachable are not controls \u2014 audit which tools an agent can actually invoke, not which settings are off.",
+      "takeaway": "Security toggles that only hide a capability (web search) but leave the underlying tool reachable are not controls — audit which tools an agent can actually invoke, not which settings are off.",
       "source": "HN",
       "source_url": "https://www.promptarmor.com/resources/atlassian-rovo-exfiltrates-data",
       "discussion_url": "https://news.ycombinator.com/item?id=49185983",
@@ -227,7 +340,7 @@
       "id": "celld-durable-objects",
       "title": "Celld: Self-hosted, distributed Durable Objects",
       "dek": "Deno's open-source daemon that runs Cloudflare Workers and Durable Objects on your own machines: every object is its own SQLite database replicated to an S3-compatible bucket, with object-storage CAS as the only coordination mechanism.",
-      "why": "A fascinating no-consensus design: nodes discover ownership via bucket leases, there is no membership protocol, failure detector, or consensus service, and the bucket is the durable source of truth \u2014 sharding and blast-radius isolation come from construction, not management.",
+      "why": "A fascinating no-consensus design: nodes discover ownership via bucket leases, there is no membership protocol, failure detector, or consensus service, and the bucket is the durable source of truth — sharding and blast-radius isolation come from construction, not management.",
       "takeaway": "An object store with compare-and-swap is enough to coordinate a distributed runtime: each cell as its own SQLite DB means sharding by construction and no shared-database contention, at the cost of treating bucket access as fleet-administrator access.",
       "source": "HN",
       "source_url": "https://github.com/denoland/celld",
@@ -246,7 +359,7 @@
       "title": "How Compiler Explorer Runs on AWS in 2026",
       "dek": "Matt Godbolt's infrastructure tour: CloudFront and WAF in front, spot-instance fleets behind one ALB, about 6,000 compiler versions on EFS served via content-addressed CEFS images, and 94 nightly compiler builds on self-hosted GitHub Actions runners.",
       "why": "A rare full-stack look at a heavily used free service: blue/green auto-scaling groups, price-capacity-optimized spot allocation, the SquashFS-to-CEFS migration (2,182 images down to 121, boot time 50s to 20s), and the cost realities of never deleting a compiler.",
-      "takeaway": "When every instance is disposable (state lives in EFS, S3, and DynamoDB), you can run almost entirely on spot capacity for a 60-90% saving \u2014 and the hard engineering problem becomes serving thousands of small header files over NFS fast enough.",
+      "takeaway": "When every instance is disposable (state lives in EFS, S3, and DynamoDB), you can run almost entirely on spot capacity for a 60-90% saving — and the hard engineering problem becomes serving thousands of small header files over NFS fast enough.",
       "source": "Lobsters",
       "source_url": "https://xania.org/202608/how-compiler-explorer-runs-on-aws",
       "authors": [
@@ -263,8 +376,8 @@
     {
       "id": "rust-llm-policy",
       "title": "rust-lang/rust is adopting an LLM policy",
-      "dek": "Five Rust teams adopt a written policy for LLM use in the rust-lang/rust monorepo: use LLMs to answer, analyze, refine, and review \u2014 but not to create; authors must disclose LLM-generated code.",
-      "why": "A concrete governance experiment from the inside: why polished PRs no longer signal effort, how 1,281 open PRs strain review bandwidth, and the policy's core trade-off \u2014 LLM use for analysis and refinement is allowed (sometimes with disclosure), creation is heavily restricted.",
+      "dek": "Five Rust teams adopt a written policy for LLM use in the rust-lang/rust monorepo: use LLMs to answer, analyze, refine, and review — but not to create; authors must disclose LLM-generated code.",
+      "why": "A concrete governance experiment from the inside: why polished PRs no longer signal effort, how 1,281 open PRs strain review bandwidth, and the policy's core trade-off — LLM use for analysis and refinement is allowed (sometimes with disclosure), creation is heavily restricted.",
       "takeaway": "Open-source maintainers are codifying LLM norms because signals inverted: a polished PR no longer implies understanding, so the policy shifts the burden to authors (disclosure) and gives reviewers an actionable rule for closing non-compliant PRs.",
       "source": "Lobsters",
       "source_url": "https://blog.rust-lang.org/inside-rust/2026/08/05/rust-langrust-is-adopting-an-llm-policy/",
@@ -285,7 +398,7 @@
       "title": "New ARR Formulas in AI SaaS",
       "dek": "Why AI application companies hit $100M ARR in months: a third growth slope of accounts x seats x consumption per seat, plus ARR definitions loose enough to flatter the number.",
       "why": "For engineers and founders sizing AI products' business reality: the essay decomposes the three-slope model with Cursor, Lovable, Replit, and Emergent as cases, then separates compounding growth from annualized usage spikes and subsidy-dependent unit economics.",
-      "takeaway": "AI SaaS ARR is accounts x seats x consumption x price-per-unit \u2014 when a reported number looks insane, ask how much is contractual versus annualized usage spikes, and what cohort retention says six months later.",
+      "takeaway": "AI SaaS ARR is accounts x seats x consumption x price-per-unit — when a reported number looks insane, ask how much is contractual versus annualized usage spikes, and what cohort retention says six months later.",
       "source": "Karakeep",
       "source_url": "https://arnav.tech/essays/new-arr-formulas-in-ai-saas/",
       "authors": [
@@ -302,9 +415,9 @@
     {
       "id": "json-is-lying-to-you",
       "title": "Your JSON Is Lying to You",
-      "dek": "JSON.stringify silently changes data: integers beyond 2^53 round, undefined properties vanish, Dates become strings, and NaN becomes null \u2014 while the output stays valid JSON.",
+      "dek": "JSON.stringify silently changes data: integers beyond 2^53 round, undefined properties vanish, Dates become strings, and NaN becomes null — while the output stays valid JSON.",
       "why": "A runnable, console-verified tour of every silent conversion at the JS/JSON boundary, useful to anyone shipping APIs or caches: it shows why large IDs lose precision before serialization even sees them, and how to define a wire representation that survives the trip.",
-      "takeaway": "JSON.parse(JSON.stringify(x)) is a conversion, not a clone \u2014 decide which information must survive before serializing, encode it explicitly (decimal strings for big ids, arrays for ordered data), and test the full producer-to-receiver path.",
+      "takeaway": "JSON.parse(JSON.stringify(x)) is a conversion, not a clone — decide which information must survive before serializing, encode it explicitly (decimal strings for big ids, arrays for ordered data), and test the full producer-to-receiver path.",
       "source": "Lobsters",
       "source_url": "https://blog.gaborkoos.com/posts/2026-08-03-Your-JSON-Is-Lying-to-You/",
       "authors": [],
@@ -320,8 +433,8 @@
       "id": "cpm386-386-protected-mode",
       "title": "CP/M-386: CP/M for 386 protected mode, derived from CP/M-68K",
       "dek": "A modern bring-up of CP/M into full 32-bit x86 protected mode: ring-3 TPA, bootable via a 1.44MB floppy MBR or GRUB multiboot, with VGA text and COM1 serial consoles.",
-      "why": "A concrete systems port for retro and OS folks: the repo shows how CP/M's flat address-space model is reimplemented on a paged 4GB space with the Transient Program Area running at ring 3, and it builds and boots under QEMU today. Very early \u2014 no storage drivers yet \u2014 but the architecture is real and reproducible.",
-      "takeaway": "Porting CP/M to 386 protected mode means abandoning the 64KB segment assumptions of classic CP/M for a paged flat space while keeping the TPA at ring 3 \u2014 and it fits in a floppy-bootable kernel with a serial console.",
+      "why": "A concrete systems port for retro and OS folks: the repo shows how CP/M's flat address-space model is reimplemented on a paged 4GB space with the Transient Program Area running at ring 3, and it builds and boots under QEMU today. Very early — no storage drivers yet — but the architecture is real and reproducible.",
+      "takeaway": "Porting CP/M to 386 protected mode means abandoning the 64KB segment assumptions of classic CP/M for a paged flat space while keeping the TPA at ring 3 — and it fits in a floppy-bootable kernel with a serial console.",
       "source": "Lobsters",
       "source_url": "https://github.com/johnsonjh/cpm386",
       "authors": [
@@ -338,9 +451,9 @@
     {
       "id": "rust-algebraic-float-ops",
       "title": "Faster floating point math with Rust's new API",
-      "dek": "Rust 1.98's algebraic arithmetic operators let the compiler reorder float math and unlock SIMD \u2014 a pairwise sum drops from 563 to 145 microseconds and beats NumPy.",
-      "why": "Itamar Turner-Trauring benchmarks the new operators (algebraic_add, algebraic_sub, algebraic_mul) with instruction counts, and shows the scoped pattern: strict ops where accuracy matters, algebraic ops where order doesn't \u2014 a pairwise sum runs ~4x faster than a naive loop with comparable precision.",
-      "takeaway": "Compilers won't touch float code by default because IEEE-754 addition isn't associative \u2014 opt in per-expression with algebraic operators so SIMD kicks in where order is irrelevant, and keep strict operators where it isn't.",
+      "dek": "Rust 1.98's algebraic arithmetic operators let the compiler reorder float math and unlock SIMD — a pairwise sum drops from 563 to 145 microseconds and beats NumPy.",
+      "why": "Itamar Turner-Trauring benchmarks the new operators (algebraic_add, algebraic_sub, algebraic_mul) with instruction counts, and shows the scoped pattern: strict ops where accuracy matters, algebraic ops where order doesn't — a pairwise sum runs ~4x faster than a naive loop with comparable precision.",
+      "takeaway": "Compilers won't touch float code by default because IEEE-754 addition isn't associative — opt in per-expression with algebraic operators so SIMD kicks in where order is irrelevant, and keep strict operators where it isn't.",
       "source": "Lobsters",
       "source_url": "https://pythonspeed.com/articles/faster-float-math-rust/",
       "authors": [
@@ -359,7 +472,7 @@
       "title": "How fast is C++26's std::hive?",
       "dek": "Daniel Lemire benchmarks the new C++26 std::hive container against vector and list for append, iteration, erase, and memory use.",
       "why": "Lemire measures hive on GCC 16.1 with nanoseconds, cycles, and instructions per element, so you can see exactly where the container's guarantees cost you instead of trusting marketing claims.",
-      "takeaway": "Hive is not a faster vector \u2014 it is a better list: stable references and O(1) scattered erase with only about a byte per element of overhead over a packed vector, but iteration stays latency-bound like a list.",
+      "takeaway": "Hive is not a faster vector — it is a better list: stable references and O(1) scattered erase with only about a byte per element of overhead over a packed vector, but iteration stays latency-bound like a list.",
       "source": "Lobsters",
       "source_url": "https://lemire.me/blog/2026/08/02/how-fast-is-c26s-stdhive/",
       "authors": [
@@ -374,10 +487,10 @@
     },
     {
       "id": "kakehashi-macos-linux-arm",
-      "title": "Show HN: Kakehashi \u2013 Experimental userspace to run macOS binaries on Linux ARM",
+      "title": "Show HN: Kakehashi – Experimental userspace to run macOS binaries on Linux ARM",
       "dek": "A userspace translation layer that loads Darwin Mach-O binaries on Linux aarch64 with a freestanding libSystem and BSD syscall translation.",
-      "why": "For systems engineers curious about running macOS CLI tools (7-Zip, curl) on cheap Linux arm64 CI runners without emulating the CPU \u2014 the README includes honest measured performance gaps and a cost comparison against macOS runners.",
-      "takeaway": "The overhead is at the syscall boundary, not the instructions: multi-file 7zz runs about 5.2x slower under kh, yet Linux arm64 CI minutes cost roughly 10\u201312x less than macOS, which is the actual motivation.",
+      "why": "For systems engineers curious about running macOS CLI tools (7-Zip, curl) on cheap Linux arm64 CI runners without emulating the CPU — the README includes honest measured performance gaps and a cost comparison against macOS runners.",
+      "takeaway": "The overhead is at the syscall boundary, not the instructions: multi-file 7zz runs about 5.2x slower under kh, yet Linux arm64 CI minutes cost roughly 10–12x less than macOS, which is the actual motivation.",
       "source": "HN",
       "source_url": "https://github.com/wie-project/kakehashi",
       "discussion_url": "https://news.ycombinator.com/item?id=49145937",
@@ -398,7 +511,7 @@
       "title": "Rooting, firmware analysis and persistent credentials of the TP-Link TL-841N",
       "dek": "A hands-on teardown of a $10 router: UART discovery, firmware dumps via tftp and a CH341A flash programmer, squashfs unpacking, and the hardcoded credentials inside.",
       "why": "A concrete end-to-end IoT hacking walkthrough demonstrating both firmware extraction routes on a real device, ending with plaintext admin credentials and an unsalted password hash.",
-      "takeaway": "Even budget consumer routers ship hardcoded admin creds (admin:admin, admin:1234) and unsalted MD5 password hashes in firmware \u2014 one credential survives a full factory reset.",
+      "takeaway": "Even budget consumer routers ship hardcoded admin creds (admin:admin, admin:1234) and unsalted MD5 password hashes in firmware — one credential survives a full factory reset.",
       "source": "HN",
       "source_url": "https://blog.juni-mp4.com/posts/42/rooting-the-tplink-tl841n-pt1/",
       "discussion_url": "https://news.ycombinator.com/item?id=49145883",
@@ -417,8 +530,8 @@
       "id": "sizeof-parsing-in-c",
       "title": "sizeof is surprisingly difficult to parse in C",
       "dek": "Why parsing sizeof's operand is a backtracking trap: compound literals and postfix operators blur the line between type names and expressions.",
-      "why": "A compact parser-design note for anyone working on C frontends \u2014 it covers the naive approach, the compound-literal case like sizeof(int){0}, and why merging cast and unary parsing breaks on sizeof(int)+1.",
-      "takeaway": "You cannot unify unary-expression and cast parsing for sizeof: sizeof(int)+1 is addition, not the size of a cast \u2014 and C2y's new _Countof inherits every one of the same cases.",
+      "why": "A compact parser-design note for anyone working on C frontends — it covers the naive approach, the compound-literal case like sizeof(int){0}, and why merging cast and unary parsing breaks on sizeof(int)+1.",
+      "takeaway": "You cannot unify unary-expression and cast parsing for sizeof: sizeof(int)+1 is addition, not the size of a cast — and C2y's new _Countof inherits every one of the same cases.",
       "source": "Lobsters",
       "source_url": "https://sebsite.pw/w/20260802-sizeof.html",
       "authors": [
@@ -437,7 +550,7 @@
       "title": "Go 1.27 Interactive Tour",
       "dek": "A hands-on, runnable tour of Go 1.27: generic methods, promoted-field struct literals, wider type inference, ML-DSA post-quantum signatures, and the json/v2 graduation.",
       "why": "More useful than the release notes: each feature ships with a working example plus links to the relevant CLs and proposals, and it flags the tradeoffs, such as interfaces still being unable to declare generic methods.",
-      "takeaway": "Go 1.27's center of gravity is the type system \u2014 generic methods and generalized function type inference land \u2014 alongside crypto/mldsa for post-quantum signatures and json/v2 becoming the default engine behind encoding/json.",
+      "takeaway": "Go 1.27's center of gravity is the type system — generic methods and generalized function type inference land — alongside crypto/mldsa for post-quantum signatures and json/v2 becoming the default engine behind encoding/json.",
       "source": "HN",
       "source_url": "https://victoriametrics.com/blog/go-1-27/index.html",
       "discussion_url": "https://news.ycombinator.com/item?id=49140218",
@@ -456,7 +569,7 @@
       "title": "Postmortem for Lean Kernel Soundness Bug #14576",
       "dek": "Lean's kernel had a soundness bug reachable via phantom parameters in nested inductive types; it surfaced through an AI-assisted 'disproof' of Collatz and was fixed within an hour.",
       "why": "A rare inside look at the Lean FRO's incident response: what the bug was, why the independent nanoda checker also missed it (a second, unrelated bug), and why restricting metaprogramming is the wrong fix.",
-      "takeaway": "Soundness cannot depend on an untrusted elaborator refusing to build bad terms \u2014 the kernel must reject ill-typed declarations itself \u2014 and independent proof checkers only help if you keep both implementations current.",
+      "takeaway": "Soundness cannot depend on an untrusted elaborator refusing to build bad terms — the kernel must reject ill-typed declarations itself — and independent proof checkers only help if you keep both implementations current.",
       "source": "Lobsters",
       "source_url": "https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/",
       "authors": [
@@ -474,7 +587,7 @@
       "id": "llms-wont-break-symmetric-crypto",
       "title": "LLMs won't break symmetric crypto",
       "dek": "JP Aumasson on Anthropic's Mythos cryptanalysis results and why symmetric primitives are structurally resistant to LLM-driven attacks.",
-      "why": "Contextualizes the real results \u2014 HAWK-512 reduced from a 128-bit target to at most 108 bits, and an improved key recovery on 7-round AES-128 \u2014 and argues why full-round AES, SHA-3, and BLAKE3 remain safe.",
+      "why": "Contextualizes the real results — HAWK-512 reduced from a 128-bit target to at most 108 bits, and an improved key recovery on 7-round AES-128 — and argues why full-round AES, SHA-3, and BLAKE3 remain safe.",
       "takeaway": "Symmetric crypto's deliberate lack of mathematical structure (XOR and modular addition each destroy the other's structure) leaves mostly well-explored differential cryptanalysis, so LLM effort is better spent on underanalyzed post-quantum candidates.",
       "source": "Lobsters",
       "source_url": "https://www.bfswa.blog/p/llms-wont-break-symmetric-crypto",
@@ -494,7 +607,7 @@
       "title": "Apple Screen Sharing Pre-Auth RCE",
       "dek": "A frame-length validation bug in screensharingd's SRP handler lets an unauthenticated attacker achieve root RCE; fixed in macOS 26.6.",
       "why": "A detailed root-cause writeup: the 'frame too large' error path returns the stale success status of the preceding read, the caller treats it as authentication complete, and the cleartext session's root file-copy protocol does the rest.",
-      "takeaway": "Error-path hygiene in auth code matters: returning a stale success code on a validation failure skips the entire SRP key exchange and cipher install, handing pre-auth root file read/write \u2014 and crontabs must be mode 0600 or cron silently ignores them.",
+      "takeaway": "Error-path hygiene in auth code matters: returning a stale success code on a validation failure skips the entire SRP key exchange and cipher install, handing pre-auth root file read/write — and crontabs must be mode 0600 or cron silently ignores them.",
       "source": "Lobsters",
       "source_url": "https://warez.sl0p.foo/apple-screensharing-rce/",
       "authors": [

@@ -1,6 +1,12 @@
 {
-  "last_published_at": "2026-08-07T02:38:30Z",
+  "last_published_at": "2026-08-08T02:35:35.846659Z",
   "published_urls": [
+    "https://planetscale.com/blog/concurrency-vs-throughput-vitess-mysql",
+    "https://c.mov/lymphosat/",
+    "https://blog.dundns.eu/posts/ddr-encrypted-dns-discovery/",
+    "https://malisper.me/how-we-made-postgres-hundreds-of-times-faster-the-query-engine/",
+    "https://blog.cloudflare.com/kitesurf/",
+    "https://arxiv.org/abs/2608.05168",
     "https://chipsandcheese.com/p/nvidias-vera-whitepaper-has-a-thread",
     "https://www.primeintellect.ai/blog/prime-agent",
     "https://epage.github.io/blog/2026/08/cargo-vision/",
