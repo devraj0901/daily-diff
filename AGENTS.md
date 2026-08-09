@@ -14,7 +14,8 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
 8. Preserve the canonical source URL. Add a discussion URL only when the candidate provides one (usually Hacker News).
 9. Update `site/data/stories.json` and `publisher-state.json` atomically enough that a failed run does not mark unpublished items as seen.
 10. If there are no genuinely good new items, make no content commit. A quiet edition is better than filler.
-11. If content changed, run the validation commands below, then commit and push to `main`.
+11. Keep the run bounded: make one Karakeep search covering the cutoff, fetch full content for no more than 4 promising Karakeep bookmarks, and do not retry a stalled source indefinitely. If Karakeep or a primary page is unavailable, continue with the other candidates and report the skipped source.
+12. If content changed, run the validation commands below, then commit and push to `main`.
 
 ## Story schema
 
