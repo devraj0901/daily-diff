@@ -1,7 +1,138 @@
 {
-  "edition_date": "2026-08-09",
-  "generated_at": "2026-08-09T02:35:23.261908Z",
+  "edition_date": "2026-08-10",
+  "generated_at": "2026-08-10T02:44:02.459836Z",
   "stories": [
+    {
+      "id": "pgo-in-go",
+      "title": "Profile-guided optimization in Go",
+      "dek": "Daniel Lemire measures Go's PGO on real JSON parsing workloads: training on one document usually helps the others too, but the gains stay modest at 2–5%.",
+      "why": "A careful, reproducible measurement of Go's profile-guided optimization for anyone deciding whether it is worth enabling. Lemire parses three very different JSON documents (nested small objects, one giant float array, numeric-key nesting) with encoding/json and shows the whole workflow is three commands: build, collect a CPU profile with runtime/pprof, rebuild with -pgo. The result is a balanced picture — matched profiles gain up to +4.7%, unmatched training helps irregularly, and untrained workloads can slightly regress, though Go's modest optimization level makes it less likely to backfire than in other compilers.",
+      "takeaway": "Go PGO mainly pays off by inlining hot call sites and devirtualizing interface calls, so the gains are workload-specific and small (2–5%) — but the three-command cost is near zero, so it is a cheap win when the profile is collected on a representative workload.",
+      "source": "Lobsters",
+      "source_url": "https://lemire.me/blog/2026/08/09/profile-guided-optimization-in-go/",
+      "authors": [
+        "Daniel Lemire"
+      ],
+      "published_at": "2026-08-10T00:58:44Z",
+      "tags": [
+        "go",
+        "compilers",
+        "performance"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "nixpkgs-multiverse",
+      "title": "nixpkgs-multiverse: every version that ever existed",
+      "dek": "One flake input that exposes every version of every package ever shipped in Nixpkgs — 1,393 revisions indexed in 5.18 MB of JSON, fetched lazily so evaluation stays flat.",
+      "why": "For Nix users tired of pinning multiple nixpkgs inputs to hold one package at an old version, this project makes the entire history addressable: `nix run 'github:fzakaria/nixpkgs-multiverse#versions.python3.\"3.6.2\"'`. The design is the interesting part — a flake with deliberately zero inputs, 1,393 revisions resolved lazily via builtins.fetchTree pinned by narHash, and a sparse index that stores only the newest revision per (attribute, version) pair so the JSON stays small (289,521 pairs in 5.18 MB).",
+      "takeaway": "Cost is per revision touched, not per package: by fetching Nixpkgs revisions on demand instead of declaring them as eager inputs, a flake can index 1,393 revisions and still evaluate in ~0.2s where five unused pinned inputs cost 26s.",
+      "source": "Lobsters",
+      "source_url": "https://fzakaria.com/2026/08/09/nixpkgs-multiverse-every-version-that-ever-existed",
+      "authors": [
+        "Farid Zakaria"
+      ],
+      "published_at": "2026-08-09T23:06:03Z",
+      "tags": [
+        "nix",
+        "nixpkgs",
+        "systems"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "commit-message-test-plans",
+      "title": "Commit message test plans",
+      "dek": "Waleed Khan embeds executable scrut test plans directly in commit messages, so a stack of commits can be re-validated end to end with `git test`.",
+      "why": "A practical workflow for engineers using stacked diffs: instead of descriptive test plans, put executable ```scrut``` blocks in the commit message body, then a small `git-test-message` script runs them in the working tree. Wired into branchless's `git test`, the plan becomes the default test command for an entire commit stack — re-validating after rebases and making it trivial to bisect the first broken commit. Includes patterns for bazel (redirect stdout to stderr), ad-hoc differential testing with expected exit codes, and the complete shell script.",
+      "takeaway": "An executable test plan in the commit message turns validation into a first-class artifact of the patch: configure it as your branchless `git test` alias and any regression in a stack is caught at commit granularity, with a built-in bisect path.",
+      "source": "Lobsters",
+      "source_url": "https://blog.waleedkhan.name/commit-message-test-plans/",
+      "authors": [
+        "Waleed Khan"
+      ],
+      "published_at": "2026-08-09T18:38:22Z",
+      "tags": [
+        "testing",
+        "git",
+        "tooling"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "reviving-remarkable-2",
+      "title": "Reviving a four year old reMarkable 2",
+      "dek": "A reMarkable 2 that failed cloud sync and updates comes back via SSH: a drifted clock breaks TLS, one update silently disables SSH over Wi-Fi, and journalctl exposes the rest.",
+      "why": "A concrete hardware-recovery walkthrough with genuinely reusable Linux debugging moves: 'error 0' turned out to be a wrong system clock (timedatectl set-time before TLS would work), the updater never retried after booting before DNS was up (restart swupdate.service and update-engine.service), and since firmware 3.22 SSH over Wi-Fi is silently disabled — re-enable with `rm-ssh-over-wlan on`. Ends with using the built-in web interface (WebInterfaceEnabled=true) to back up and upload PDFs over USB when cloud sync stays broken.",
+      "takeaway": "On locked-down devices, check the clock and the service states before blaming the cloud: expired-TLS-style sync errors are often an RTC drift problem, and a one-line journalctl for the relevant units beats guessing at opaque error codes.",
+      "source": "HN",
+      "source_url": "https://oskrim.github.io/hardware/2026/08/09/remarkable-over-ssh.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49230514",
+      "authors": [
+        "Oskari Mantere"
+      ],
+      "published_at": "2026-08-09T11:39:25Z",
+      "tags": [
+        "hardware",
+        "linux",
+        "debugging"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "ddisasm",
+      "title": "ddisasm: a fast and accurate disassembler",
+      "dek": "GrammaTech's ddisasm treats disassembly as a Datalog program — Soufflé rules over decoded instruction facts produce reassemblable assembly via the GTIRB intermediate representation.",
+      "why": "A deep look at a production disassembler built on declarative logic programming rather than hand-coded heuristics. ddisasm decodes a superset of possible instructions into Datalog facts, then rules identify code locations, symbols, and function boundaries, emitting GTIRB for rewriting; the pretty-printer regenerates assembly that the compiler can reassemble, enabling binary rewriting workflows. Supports ELF and PE across x86, ARM, and MIPS, with the Datalog Disassembly approach peer-reviewed at USENIX Security 2020 and extended in a 2025 IEEE S&P paper (disassembly as weighted interval scheduling).",
+      "takeaway": "Disassembly rules expressed as Datalog constraints beat ad-hoc heuristics for accuracy — and routing results through a proper IR (GTIRB) makes the disassembly reassemblable, which is what unlocks safe binary rewriting.",
+      "source": "GitHub",
+      "source_url": "https://github.com/GrammaTech/ddisasm",
+      "authors": [
+        "GrammaTech"
+      ],
+      "published_at": "2026-08-09T11:28:08Z",
+      "tags": [
+        "security",
+        "reverse-engineering",
+        "compilers"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "zsh-history-truncation-bug",
+      "title": "Tracking down a Zsh history data loss bug",
+      "dek": "Michael Stapelberg chases a two-year-old Zsh data-loss bug through inotify, fatrace, bpftrace, and a crash-on-truncation patch — landing on a SIGINT race that truncates .zsh_history, fixed in Zsh 5.9.2.",
+      "why": "A masterclass in systems debugging. The symptoms were years of randomly truncated shell history; the investigation layers inotify (history file is rewritten via .new + rename), fatrace (which PID is responsible), a permanently-running bpftrace tracing every open/read/write/lseek/rename, and finally a patched Zsh that deliberately segfaults after writing a suspiciously short history so systemd-coredump captures a backtrace. The root cause: SIGINT aborts readhistfile mid-read, but savehistfile never checks for interruption, so logout writes the truncated history. Bonus: an appendix evaluates today's frontier and open-weight LLMs on finding the same bug from the bpftrace evidence.",
+      "takeaway": "When a rare race corrupts data, make the program fail loudly instead of guessing: a temporary crash-on-bad-state patch plus a core dump converted a once-a-week data loss into a debuggable backtrace — and the same evidence set doubles as a sharp eval for LLM debugging skill.",
+      "source": "Lobsters",
+      "source_url": "https://michael.stapelberg.ch/posts/2026-08-09-zsh-history-truncation-bug/",
+      "authors": [
+        "Michael Stapelberg"
+      ],
+      "published_at": "2026-08-09T08:16:46Z",
+      "tags": [
+        "debugging",
+        "shell",
+        "linux"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "my-server-is-a-phone-now",
+      "title": "my server is a phone now",
+      "dek": "A CMF Phone 1 running stock Android with Termux, runit, rooted chroots, Tailscale, and a Cloudflare Tunnel replaces a Hetzner VPS — with everything declared in Ansible.",
+      "why": "A thoughtful homelab deep-dive for anyone priced out of VPSs or mini-PCs: keep Android (working drivers for everything) and treat Termux as the host control plane, supervise services with runit, and run Linux workloads in real chroots after proot's userspace translation proved too slow for a browser workload. Ingress is an outbound-only Cloudflare Tunnel plus Tailscale always-on VPN, so the server follows the phone across networks; secrets stay in Ansible Vault behind a 1Password SSH-agent challenge. Honest about limits: chroots are compatibility layers, not security boundaries.",
+      "takeaway": "A rooted ARM64 phone is a viable quiet, battery-backed homelab host — Android owns the drivers, Termux + runit own supervision, and real chroots (not proot) close the performance gap; just treat the trust model accordingly and keep off-device backups for anything irreplaceable.",
+      "source": "Lobsters",
+      "source_url": "https://seg6.space/posts/phone-server/",
+      "published_at": "2026-08-09T03:39:26Z",
+      "tags": [
+        "homelab",
+        "linux",
+        "networking"
+      ],
+      "read_minutes": 10
+    },
     {
       "id": "dithered-qr-codes",
       "title": "How to make error-diffused QR codes",
