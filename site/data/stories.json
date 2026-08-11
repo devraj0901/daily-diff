@@ -1,7 +1,165 @@
 {
-  "edition_date": "2026-08-10",
-  "generated_at": "2026-08-10T02:44:02.459836Z",
+  "edition_date": "2026-08-11",
+  "generated_at": "2026-08-11T02:39:21.235170Z",
   "stories": [
+    {
+      "id": "cache-read-costs",
+      "title": "Watch out for cache read costs",
+      "dek": "Martin Alderson runs the arithmetic on agentic LLM sessions and shows cache reads, not fresh input or output tokens, are the dominant cost driver — and grow quadratically with the number of tool-call turns.",
+      "why": "For anyone running agentic workloads, the pricing tables are now the wrong thing to scan: with long context windows, every turn re-reads the entire growing context, so cumulative cost scales with turns squared. Alderson walks through concrete sessions (20 vs 100 turns across DeepSeek, Claude Opus, and GPT), explains how compressed KV caches let providers offload 1–5 GB of cache to system RAM and NVMe, and surfaces OpenAI's 272k-token re-pricing cliff — a mid-session jump that rate cards never show.",
+      "takeaway": "Minimize tool-call turns per agent run — cutting turns by 10% cuts cost around 16% — and price long sessions with cache-read arithmetic plus provider re-pricing cliffs, not headline per-token rates.",
+      "source": "Lobsters",
+      "source_url": "https://martinalderson.com/posts/watch-out-for-cache-read-costs/",
+      "authors": [
+        "Martin Alderson"
+      ],
+      "published_at": "2026-08-10T22:33:28Z",
+      "tags": [
+        "ai",
+        "llms",
+        "cost",
+        "agents"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "bazel-stage0-toolchain",
+      "title": "A C++ toolchain from 357 bytes, in Bazel",
+      "dek": "Farid Zakaria packages a stage0 bootstrap chain — from the 357-byte hex0 seed through M2-Planet, Mes, tcc, musl, GCC, and Clang — as a hermetic Bazel C++ toolchain that builds Abseil and GoogleTest unpatched.",
+      "why": "Bazel and rules_cc don't ship a hermetic toolchain, and most users silently depend on prebuilt compilers. Zakaria's stage0-bazel module lets a Bazel build compile cc_binary targets with a toolchain whose entire ancestry lives in the repository, verified by an audit report built on Bazel aspects that fails if any action executes a program outside the output tree. All 236 Abseil and GoogleTest tests pass against the bootstrap-built Clang 22.1.8.",
+      "takeaway": "Bazel aspects turn a bootstrap chain into a mechanically checkable trust boundary: an aspect-walking audit that fails on any out-of-tree executable gives you a verifiable hermetic-toolchain claim — though genrule's hardcoded absolute /bin/sh path remains a listed seed binary.",
+      "source": "Lobsters",
+      "source_url": "https://fzakaria.com/2026/08/01/a-c++-toolchain-from-357-bytes-in-bazel",
+      "authors": [
+        "Farid Zakaria"
+      ],
+      "published_at": "2026-08-10T19:18:34Z",
+      "tags": [
+        "build-systems",
+        "bazel",
+        "bootstrap",
+        "reproducibility"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "hyperbezier-curves",
+      "title": "The mathematical beauty of hyperbezier curves",
+      "dek": "Raph Levien proposes a curve family defined by a Cesàro equation that contains Euler spirals, circular arcs, superellipse-like corners, and hyperbolas, as a candidate to replace cubic Béziers in 2D vector graphics.",
+      "why": "Linebender's Raph Levien has spent decades looking for a curve family better than cubic Béziers for interactive design; the hyperbezier's curvature is a rational function of arc length, and it unifies several analytic curves that Béziers only approximate while keeping a Bézier-like control-point editing scheme. Interactive demos throughout let you compare curvature combs, squircle corners, and hyperbola asymptotes directly, and the integral/derivative math comes out cleanly for curve fitting.",
+      "takeaway": "A curve family parameterized by its Cesàro equation (curvature vs arc length) can keep Bézier editing ergonomics while offering exact Euler-spiral, circular-arc, and hyperbolic segments — the 1.5 exponent in the denominator is what makes the integrals come out cleanly.",
+      "source": "Lobsters",
+      "source_url": "https://linebender.org/blog/hyperbezier/",
+      "authors": [
+        "Raph Levien"
+      ],
+      "published_at": "2026-08-10T18:31:12Z",
+      "tags": [
+        "graphics",
+        "math",
+        "vector"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "mvt-point-clouds",
+      "title": "We're not done with point clouds",
+      "dek": "Clayton Ramsey reimplements the multilevel voxel table (MVT), a voxel-based collision-checking structure for robot motion planning, in Rust — beating his own CAPT tree by eliminating quadratic construction cost and duplicated point storage.",
+      "why": "A few years ago Ramsey proposed the CAPT, a SIMD-parallel kd-tree-style structure for sphere-vs-point-cloud collision checking, but dense clouds force heavy point duplication and O(n²) construction. Chen and Yeh's MVT ditches the tree for a sparse three-level voxel grid with no duplicated points; Ramsey's Rust port flattens the pointer-laced C++ into Box<[]> buffers, adds a mutable variant, and shows MVT beating CAPT on query throughput and construction time while often beating even ground-truth primitive geometry on end-to-end planning time.",
+      "takeaway": "For collision checking against dense point clouds, a sparse multilevel voxel table beats nearest-neighbor trees: no point duplication, SIMD batch checks per voxel, flat SoA layout in Rust — but occlusion handling (octomap-style) remains unsolved, so safe beats fast is still a tradeoff.",
+      "source": "Lobsters",
+      "source_url": "https://claytonwramsey.com/blog/mvt/",
+      "authors": [
+        "Clayton Ramsey"
+      ],
+      "published_at": "2026-08-10T18:21:20Z",
+      "tags": [
+        "robotics",
+        "data-structures",
+        "rust",
+        "algorithms"
+      ],
+      "read_minutes": 11
+    },
+    {
+      "id": "coding-agent-language-evals",
+      "title": "What's the best programming language for coding agents?",
+      "dek": "Dan Luu runs his own evals — including a full zstd decoder built from the RFC — and finds the widely cited claim that dynamic languages are more token-efficient for coding agents does not survive larger, realistic problems.",
+      "why": "Luu walks through why the original evals are misleading — trivial problems, a broken test path, and a symlink bug that invalidates a whole comparison — then pre-registers guesses and runs a zstd-decoder-scale eval at medium and ultra effort. The 2–3x token gaps vanish on real problems, no language family consistently wins, and language popularity correlates with correctness and cost, meaning mainstream languages beat obscure dense ones for normal LLM users.",
+      "takeaway": "Token-efficiency differences between mainstream languages largely wash out on real problems — what predicts agent success is language popularity and the RL/synthetic-data effort AI labs put into it, so choosing an obscure 'efficient' language is a losing bet unless you train a model for it.",
+      "source": "HN",
+      "source_url": "https://danluu.com/pl-tokens/",
+      "authors": [
+        "Dan Luu"
+      ],
+      "published_at": "2026-08-10T16:28:58Z",
+      "tags": [
+        "ai",
+        "llms",
+        "evaluation",
+        "programming-languages"
+      ],
+      "read_minutes": 15
+    },
+    {
+      "id": "smm-long-interrupt",
+      "title": "Exploiting System Management Mode with a very long interrupt",
+      "dek": "Christopher Domas breaks x86 SMM's all-cores rendezvous with a single MMIO read that stalls for over a second — one core stays outside SMM while another executes SMM code, no physical access required.",
+      "why": "SMM's security model requires every core to enter SMM together, enforced by a 1-second rendezvous timeout in EDK2's MpService. Domas' PoC pins one core inside a wide vmovdqu load from a slow MMIO address (tuned to a Zen 3 Ryzen 7 5800H) so it stays uninterruptible past the timeout, then storms port 0xb2 SMIs from another core. The result: the all-cores-in-SMM invariant is broken from software, and dormant SMM CVEs become exploitable — with no clear mitigation, since the timeout itself is load-bearing.",
+      "takeaway": "An instruction that runs longer than the SMM rendezvous timeout breaks the all-cores-in-SMM invariant — and because the timeout can't simply be removed (hangs) or lengthened (kills performance), this race class has no obvious fix, so treat any long-running instruction as a potential SMM break.",
+      "source": "HN",
+      "source_url": "https://github.com/xoreaxeaxeax/smiiiiiiiiiiiiiiii",
+      "authors": [
+        "Christopher Domas"
+      ],
+      "published_at": "2026-08-10T16:03:14Z",
+      "tags": [
+        "security",
+        "x86",
+        "firmware",
+        "smm"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "gha-oidc-audience-constraints",
+      "title": "GitHub Actions needs OIDC audience constraints",
+      "dek": "William Woodruff argues GitHub Actions' id-token: write permission lets any job mint OIDC tokens for any audience, turning a compromised workflow step into a pivot across every service you federate with.",
+      "why": "Trusted Publishing and Sigstore both rely on GitHub OIDC tokens, but unlike GitLab — where the audience is declared statically per job — GitHub lets workflows request any audience at runtime. That means any third-party code in a job with id-token: write can mint tokens for audiences it was never meant to reach (e.g. aud: sts.amazonaws.com from a PyPI-publishing job). Woodruff proposes statically constrained audiences with a small YAML change and explains why Trusted Publishing's workflow-name-in-subject constraint doesn't cover all integrations.",
+      "takeaway": "The aud claim is the defense-in-depth that stops stolen OIDC tokens from pivoting across services — if the CI platform lets the job choose aud at runtime, that defense is worthless, so constrain audiences statically in the workflow.",
+      "source": "Lobsters",
+      "source_url": "https://blog.yossarian.net/2026/08/10/github-actions-needs-oidc-audience-constraints",
+      "authors": [
+        "William Woodruff"
+      ],
+      "published_at": "2026-08-10T13:30:18Z",
+      "tags": [
+        "security",
+        "oidc",
+        "ci-cd",
+        "github-actions"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "c89-implicit-decl-ambiguity",
+      "title": "An ambiguity in C89 that will never be fixed",
+      "dek": "sebsite pokes at a C89 loophole where a single added newline makes GCC and Clang disagree on whether a program is legal — because 'innermost block' was never defined for implicit function declarations.",
+      "why": "C89's implicit function declarations — removed in C99, so never disambiguated — let calls to unknown identifiers silently declare them. This post finds a one-character difference that flips gcc (error) vs clang (accepts), then reverses the outcome with a second example: the divergence comes down to which scope the implicit declaration lands in, a question the standard never answers. A compact look at how standards ambiguity becomes permanent compiler divergence.",
+      "takeaway": "Parentheses change semantics in C89 — f() declares f implicitly while (f)() does not — and 'innermost block' was never specified, so GCC and Clang resolve the same prototype-scope case in opposite directions with no standard left to settle it.",
+      "source": "Lobsters",
+      "source_url": "https://sebsite.pw/w/20260810-c89ambiguity.html",
+      "authors": [
+        "sebsite"
+      ],
+      "published_at": "2026-08-10T07:56:03Z",
+      "tags": [
+        "c",
+        "compilers",
+        "standards"
+      ],
+      "read_minutes": 4
+    },
     {
       "id": "pgo-in-go",
       "title": "Profile-guided optimization in Go",
