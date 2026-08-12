@@ -1,7 +1,170 @@
 {
-  "edition_date": "2026-08-11",
-  "generated_at": "2026-08-11T02:39:21.235170Z",
+  "edition_date": "2026-08-12",
+  "generated_at": "2026-08-12T02:43:31.563978Z",
   "stories": [
+    {
+      "id": "text-watermarking-non-academics",
+      "title": "Text Watermarking for Non-Academics",
+      "dek": "Gabor Koos explains statistical text watermarking from first principles — how a model's token-selection freedom hides a recoverable statistical pattern in plain text, and what a detector actually can and cannot prove.",
+      "why": "With Anthropic announcing how Claude marks AI-generated content, this is the clearest non-academic walkthrough of the mechanism: natural-language redundancy as an encoding channel, why accumulated small choices beat a fixed hidden message, and why stylometry means the technique predates LLMs. It also spells out the limits — a detector shows a pattern is present, not who requested or edited the text — which matters for anyone reasoning about AI provenance in policy or product decisions.",
+      "takeaway": "A text watermark is a statistical bias across many token-selection choices, not a hidden string — so copying preserves it, editing weakens it, and a positive detection licenses no claim about authorship or intent.",
+      "source": "Lobsters",
+      "source_url": "https://blog.gaborkoos.com/posts/2026-08-12-Text-Watermarking-for-Non-Academics/",
+      "authors": [
+        "Gabor Koos"
+      ],
+      "published_at": "2026-08-12T00:29:31Z",
+      "tags": [
+        "ai",
+        "llms",
+        "watermarking",
+        "security"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "yy-dtoa-fastest-double-to-string",
+      "title": "The fastest double-to-string algorithm you've never heard of",
+      "dek": "Victor Zverovich tours yy, the yyjson dtoa routine that beats classic Schubfach with a single multiplication by a precomputed power of 10 — visualized step by step at E4M3 precision.",
+      "why": "yy has no paper and no name beyond the file yy_double.c, yet it is one of the fastest shortest-round-trip double-to-string converters. The post derives its core trick — expressing the half-ULP rounding band as a shifted p10 table entry, so δ needs no second multiplication — and then walks a boundary case where fixed-point truncation almost emits a digit too many, showing how the parity-bias term η_c quietly fixes an off-by-one. An interactive E4M3 explorer makes the whole pipeline inspectable.",
+      "takeaway": "In the Schubfach family, the rounding-interval bounds can be derived from the same precomputed power of 10 as the scaled value — one 192-bit multiplication instead of three — with small parity biases implementing round-half-to-even at exact ties.",
+      "source": "Lobsters",
+      "source_url": "https://vitaut.net/posts/2026/yy-dtoa/",
+      "authors": [
+        "Victor Zverovich"
+      ],
+      "published_at": "2026-08-11T16:42:55Z",
+      "tags": [
+        "performance",
+        "algorithms",
+        "numeric"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "simd-alignment-performance",
+      "title": "Performance impact of Alignment",
+      "dek": "Emanuel benchmarks SIMD load/store alignment on x64 with AVX-512 and the JDK Vector API: misaligned accesses that cross cacheline boundaries cost up to 50%, and aligning stores alone recovers most of it.",
+      "why": "A concrete, measured answer to a question every vectorizer hits: does alignment still matter on modern CPUs? Crossing a 64-byte cacheline splits one access into two in the memory unit, so impact ranges from negligible in compute-bound code to half throughput when memory units are the bottleneck. The post includes exact Vector API benchmarks across JDK 25/26, shows why the compiler refuses to auto-vectorize without an aliasing runtime check, and notes aarch64 Neoverse N1's separate 16-byte store penalty.",
+      "takeaway": "Vectorize first, align second: misalignment that doesn't cross a cacheline is usually free, but when accesses split across 64-byte boundaries you can lose up to 50% — and if you can only fix one side, aligning stores beats aligning loads.",
+      "source": "Lobsters",
+      "source_url": "https://eme64.github.io/blog/2026/01/12/Alignment-Performance.html",
+      "authors": [
+        "Emanuel"
+      ],
+      "published_at": "2026-08-11T16:00:14Z",
+      "tags": [
+        "performance",
+        "simd",
+        "jvm"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "msword-x64-port",
+      "title": "msword: a native x64 port of Microsoft Word 1.1a",
+      "dek": "jmarshall23 builds the original Microsoft Word for Windows 1.1a source (codename Opus) as a native 64-bit executable — translating 16-bit assembly and segmented memory, not emulating them.",
+      "why": "For anyone interested in how 16-bit Windows software survives: the original C and resources remain authoritative while a compatibility layer translates the assembly entry points to fixed-width C/C++, maps segmented double-indirect handles onto an x64-safe runtime, and reimplements the historical build tools in CMake. The test suite covers typed text, selection, formatting, dialogs, and saving against the original algorithms, making this a clean case study in source-preserving portability.",
+      "takeaway": "A faithful x64 port keeps the original source as the implementation and confines all platform work to a translation layer — the 16-bit assembly is inventoried as reference but never compiled, and every translated routine gets a behavioral test.",
+      "source": "GitHub",
+      "source_url": "https://github.com/jmarshall23/msword",
+      "authors": [
+        "jmarshall23"
+      ],
+      "published_at": "2026-08-11T14:20:29Z",
+      "tags": [
+        "retrocomputing",
+        "windows",
+        "systems"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "stealing-reasoning-traces",
+      "title": "Stealing Reasoning Traces from Proprietary LLM APIs",
+      "dek": "Eight researchers show that the encrypted chain-of-thought blocks Anthropic, OpenAI, and Google return to API clients can be replayed into a weaker sibling model and transcribed in plaintext — in two API calls.",
+      "why": "Providers don't store reasoning server-side; they hand the client an encrypted block that travels back on the next turn, and all models in a family share the same key. The authors take a trace from a frontier model, attach it to a request for a weaker sibling, jailbreak that sibling, and recover the strong model's hidden reasoning — never triggering anti-distillation guards on the model that produced it. Decoding 315,320 blocks from 6,708 public agent trajectories surfaced 704 real privacy artifacts (62 API keys, 33 passwords), 64 of which appeared nowhere in the visible session. All providers have since acknowledged the report, but the class of attack — and its prompt-injection variant — is the story.",
+      "takeaway": "Encrypting reasoning at the client boundary is not a confidentiality boundary: if every model in a family shares the encryption key and weaker siblings are jailbreakable, hidden chain-of-thought — including secrets and hazardous instructions — is recoverable plaintext.",
+      "source": "HN",
+      "source_url": "https://stolen-thoughts.com/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49257876",
+      "authors": [
+        "Alexander Panfilov",
+        "David Schmotz",
+        "Ilia Shumailov",
+        "Luca Beurer-Kellner",
+        "Joachim Schaeffer",
+        "Ameya Prabhu",
+        "Jonas Geiping",
+        "Maksym Andriushchenko"
+      ],
+      "published_at": "2026-08-11T13:22:00Z",
+      "tags": [
+        "security",
+        "ai",
+        "llms",
+        "privacy"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "noob-learns-fft",
+      "title": "A noob learns FFT",
+      "dek": "kqr goes from zero time-frequency knowledge to building spectrograms of a year of real growth data — discovering spectral leakage, windowing, impulse filtering, and Nyquist limits by hand in R.",
+      "why": "A genuinely educational journey rather than a reference dump: starting from a pure sine wave and building up through truncated signals, noise, square-wave harmonics, and a real measurement series, each step motivated by a question the author actually hit. The payoff — using the insight that impulses contribute to all frequencies to subtract table-bump artifacts from real data, then spotting weekly cycles and their harmonics in a spectrogram — shows the FFT as an intuition tool, not a black box.",
+      "takeaway": "The FFT decomposes any finite window into sine+cosine components, so truncation smears clean peaks (spectral leakage) — windowing trades resolution for cleanliness, and impulses show up as a flat noise floor you can subtract away.",
+      "source": "Lobsters",
+      "source_url": "https://entropicthoughts.com/fft",
+      "authors": [
+        "kqr"
+      ],
+      "published_at": "2026-08-11T12:41:37Z",
+      "tags": [
+        "math",
+        "signal-processing",
+        "tutorial"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "cursor-codebase-indexing",
+      "title": "How Cursor actually indexes your codebase",
+      "dek": "Kenneth Leung walks Cursor's codebase RAG pipeline end to end: tree-sitter AST chunking, custom embeddings with obfuscated path metadata, a vector store that never sees source code, and Merkle-tree sync that re-indexes only changed files.",
+      "why": "A concrete look at what a production coding-agent index really does, for anyone building or tuning similar tooling: code is chunked on syntax-tree boundaries (functions, classes, blocks) rather than arbitrary splits, file paths are treated as sensitive metadata and masked client-side with a secret key plus nonce, embeddings live in Turbopuffer while raw code stays local until inference time, and a Merkle tree of file hashes lets the server diff and refresh only the affected files on five-minute syncs.",
+      "takeaway": "Codebase RAG splits on syntax-tree structure, not tokens — and the privacy trick is storing only embeddings plus obfuscated paths server-side, resolving actual code locally at inference time, with Merkle-tree hashing making incremental re-indexing cheap.",
+      "source": "Karakeep",
+      "source_url": "https://towardsdatascience.com/how-cursor-actually-indexes-your-codebase/",
+      "authors": [
+        "Kenneth Leung"
+      ],
+      "published_at": "2026-08-11T09:11:07Z",
+      "tags": [
+        "ai",
+        "coding-agents",
+        "rag",
+        "search"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "reviewing-code-is-a-skill",
+      "title": "Reviewing code is a skill",
+      "dek": "typesanitizer argues code review is a teachable, improvable skill — three near-miss bugs his reviews caught that high-end LLM reviewers missed — and dissects the memes around review's real purpose.",
+      "why": "A grounded counterpoint to the 2025–26 'review is the bottleneck' discourse, built on actual incidents: a cross-process lock dependency reintroducing a latency regression, and other subtle state bugs that LLM reviews (run with high-end coding models in June 2026) did not catch. It reviews the Google and research literature on what review actually provides — education, norms, gatekeeping, accident prevention — and closes with concrete experiments for getting better, plus a resilience-engineering framing.",
+      "takeaway": "Review's value is mostly not bug-finding — it's understanding, norm enforcement, and accident prevention — so evaluate reviews by what they teach, and treat review skill as trainable with practice, not a fixed talent LLMs have already replaced.",
+      "source": "Lobsters",
+      "source_url": "https://typesanitizer.com/blog/code-review.html",
+      "authors": [
+        "typesanitizer"
+      ],
+      "published_at": "2026-08-11T05:37:40Z",
+      "tags": [
+        "engineering",
+        "code-review",
+        "practices"
+      ],
+      "read_minutes": 10
+    },
     {
       "id": "cache-read-costs",
       "title": "Watch out for cache read costs",
