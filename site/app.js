@@ -22,13 +22,17 @@ function visibleStories() {
 function storyCard(story, index) {
   const tags = (story.tags || []).map(tag => `<span class="tag">${esc(tag)}</span>`).join("");
   const discussion = story.discussion_url ? `<a href="${esc(story.discussion_url)}" target="_blank" rel="noreferrer">Discuss ↗</a>` : "";
+  const sourceLabel = story.source === "GitHub Trending" ? "GitHub" : (story.source || "Other");
   return `<article class="card">
-    <div class="card-top"><span class="source">${esc(story.source || "Other")}</span><span>${String(index + 1).padStart(2, "0")} · ${formatDate(story.published_at)}</span></div>
-    <h2><a href="${esc(story.source_url)}" target="_blank" rel="noreferrer">${esc(story.title)}</a></h2>
-    <p class="dek">${esc(story.dek)}</p>
-    <p class="why">${esc(story.why)}</p>
-    <div class="takeaway"><strong>Takeaway</strong>${esc(story.takeaway)}</div>
-    <div class="card-bottom"><div class="tags">${tags}</div><div class="card-links"><a href="${esc(story.source_url)}" target="_blank" rel="noreferrer">Read ↗</a>${discussion}</div></div>
+    <div class="card-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</div>
+    <div class="card-body">
+      <div class="card-top"><span class="source">${esc(sourceLabel)}</span><span>${formatDate(story.published_at || story.discovered_at)}</span></div>
+      <h2><a href="${esc(story.source_url)}" target="_blank" rel="noreferrer">${esc(story.title)}</a></h2>
+      <p class="dek">${esc(story.dek)}</p>
+      <p class="why"><strong>Why read</strong>${esc(story.why)}</p>
+      <div class="takeaway"><strong>Try this idea</strong>${esc(story.takeaway)}</div>
+      <div class="card-bottom"><div class="tags">${tags}</div><div class="card-links"><a href="${esc(story.source_url)}" target="_blank" rel="noreferrer">Read ↗</a>${discussion}</div></div>
+    </div>
   </article>`;
 }
 function render() {

@@ -9,7 +9,7 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
 3. Read Karakeep as a separate high-signal source. Use the Karakeep MCP search tool with `is:link` plus an `after:YYYY-MM-DD` cutoff based on `last_published_at`, sorted newest first. Search enough results to cover the interval, then fetch the full markdown for promising bookmarks with the bookmark-content tool. Do not assume the RSS collector includes Karakeep; it does not.
 4. Publish **only** candidates newer than the last published edition and not already in `published_urls`. For Karakeep, use the bookmark creation timestamp as the freshness timestamp and its canonical bookmarked URL as `source_url`.
 5. Use web extraction/search or the Karakeep bookmark content to read the primary article before writing copy. Do not infer technical details from a title or short summary alone.
-6. Select at most 8 items across all sources. Prefer deep technical writing, reproducible research, important open-source internals, systems work, security, databases, programming languages, and practical AI engineering. Exclude press releases, generic listicles, shallow opinion, duplicate coverage, and marketing copy. Karakeep items are eligible, not automatic inclusions.
+6. Select at most **5 items** across all sources. The default edition should be application-oriented: useful tools, project write-ups, workflows, implementation lessons, self-hosted systems, practical AI engineering, and discussions that generate build ideas. Use Reddit and GitHub Trending as discovery sources, then read the linked primary project/article before accepting it. Keep excellent deep technical work eligible, but do not let academic papers, C++, compiler internals, or low-level performance pieces dominate the edition unless they have a clear practical payoff. A healthy mix is usually 2–3 practical/application items, 1 strong technical essay, and 0–2 wildcard ideas. Exclude press releases, generic listicles, shallow opinion, duplicate coverage, and marketing copy. Karakeep items are eligible, not automatic inclusions.
 7. Write concise, factual copy. `dek` is one sentence. `why` is 1–2 sentences explaining who benefits and what the reader will learn. `takeaway` is one concrete engineering insight. Never invent metrics, authors, dates, or claims.
 8. Preserve the canonical source URL. Add a discussion URL only when the candidate provides one (usually Hacker News).
 9. Update `site/data/stories.json` and `publisher-state.json` atomically enough that a failed run does not mark unpublished items as seen.
@@ -26,7 +26,7 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
   "dek": "One-sentence description.",
   "why": "Why this is worth a focused read.",
   "takeaway": "One concrete engineering takeaway.",
-  "source": "HN | arXiv | Lobsters | Karakeep | Blog | GitHub | Other",
+  "source": "HN | arXiv | Lobsters | Reddit | GitHub Trending | Karakeep | Blog | GitHub | Other",
   "source_url": "https://...",
   "discussion_url": "https://...",
   "authors": ["Author"],
@@ -37,6 +37,8 @@ You are the scheduled publisher for `devraj0901/daily-diff`. Work directly in th
 ```
 
 `discussion_url`, `authors`, `tags`, and `read_minutes` may be omitted or empty when unavailable. Keep all stories in the `stories` array, newest first. Set `generated_at` and `edition_date` on every successful content update.
+
+Collector candidates from GitHub Trending may contain `discovered_at` instead of `published_at`; treat that as the freshness of the trending signal, but use the repository's real release/publication date in the final story when it is available.
 
 ## State schema
 

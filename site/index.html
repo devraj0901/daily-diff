@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A daily, opinionated reading list for engineers.">
+  <meta name="description" content="Five practical technical reads and build ideas, every day.">
   <title>The Daily Diff</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="masthead">
     <div class="shell masthead-inner">
-      <a class="wordmark" href="./">THE DAILY <span>DIFF</span></a>
+      <a class="wordmark" href="./"><span class="wordmark-mark">✳</span> THE DAILY <strong>DIFF</strong></a>
       <div class="mast-meta">
         <span id="edition-label">Loading edition…</span>
         <a href="https://github.com/devraj0901/daily-diff" rel="noreferrer">GitHub ↗</a>
@@ -19,24 +19,24 @@
   </header>
 
   <main class="shell">
-    <section class="intro">
-      <p class="eyebrow">Papers · systems · tools · ideas</p>
-      <h1>Worth your <em>focused</em> attention.</h1>
-      <p class="lede">A quiet, curated stream of technical work. No breaking-news treadmill. Just the pieces that repay a careful read.</p>
+    <section class="intro typeset typeset-reading">
+      <p class="eyebrow">A daily shortlist for builders</p>
+      <h1>Five things worth <em>trying</em>.</h1>
+      <p class="lede">Practical tools, useful workflows, project write-ups, and the occasional deep technical piece that pays for its reading time.</p>
     </section>
 
     <section class="toolbar" aria-label="Filter stories">
-      <label class="search-wrap"><span class="sr-only">Search</span><input id="search" type="search" placeholder="Search the diff…" autocomplete="off"></label>
+      <label class="search-wrap"><span class="search-icon" aria-hidden="true">⌕</span><span class="sr-only">Search</span><input id="search" type="search" placeholder="Search stories…" autocomplete="off"></label>
       <div id="filters" class="filters" role="list"></div>
     </section>
 
-    <section id="stories" class="story-grid" aria-live="polite"></section>
+    <section id="stories" class="story-list typeset typeset-docs" aria-live="polite"></section>
     <p id="empty" class="empty" hidden>No stories match the selected filters.</p>
   </main>
 
   <footer class="shell footer">
-    <span>Published daily at 08:00 IST.</span>
-    <span>Built for people who still read the docs.</span>
+    <span>Published daily at 08:00 IST · max five reads</span>
+    <span>Built for people who turn reading into projects.</span>
   </footer>
   <script src="app.js"></script>
 </body>

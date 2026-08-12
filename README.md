@@ -1,14 +1,14 @@
 # The Daily Diff
 
-A small, opinionated daily reading list for engineers: papers, technical essays, and unusually good project write-ups.
+A small, opinionated daily reading list for builders: useful tools, project write-ups, practical engineering lessons, and the occasional deep technical piece that pays for its reading time.
 
 Live site: https://devraj0901.github.io/daily-diff/
 
 ## Editorial rule
 
-The site publishes only items that are new since the previous edition and worth a focused read. Each item must link to the primary source, explain why it matters, and avoid hype or invented claims.
+The site publishes at most five items that are new since the previous edition and worth a focused read. Application-oriented work is preferred: something to try, build, operate, or learn from. Each item must link to the primary source, explain why it matters, and avoid hype or invented claims.
 
-The publisher runs daily at **08:00 IST**. It gathers candidates from technical RSS feeds, reviews them, updates `site/data/stories.json`, and pushes the change. GitHub Pages deploys automatically on every push to `main`.
+The publisher runs daily at **08:00 IST**. It gathers candidates from technical RSS feeds plus Reddit and GitHub Trending discovery feeds, reviews the linked primary sources, updates `site/data/stories.json`, and pushes the change. GitHub Pages deploys automatically on every push to `main`.
 
 ## Local preview
 
@@ -22,6 +22,6 @@ Then open http://localhost:8000.
 
 - `site/` — dependency-free static site
 - `site/data/stories.json` — published editions and story metadata
-- `scripts/collect_candidates.py` — RSS candidate collector used by the scheduled publisher
+- `scripts/collect_candidates.py` — deterministic collector for RSS, Reddit, and GitHub Trending candidates
 - `AGENTS.md` — publishing contract for the scheduled agent
 - `.github/workflows/pages.yml` — GitHub Pages deployment
