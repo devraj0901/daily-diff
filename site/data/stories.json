@@ -1,7 +1,104 @@
 {
-  "edition_date": "2026-08-12",
-  "generated_at": "2026-08-12T02:43:31.563978Z",
+  "edition_date": "2026-08-13",
+  "generated_at": "2026-08-13T02:45:37.616535+00:00",
   "stories": [
+    {
+      "id": "needle-2-14mb-agentic-llm",
+      "title": "Needle 2: a 14 MB agentic LLM for tiny devices",
+      "dek": "Cactus Compute's open 45M-parameter model for tool calling, device use, and structured extraction ships as a 14 MB binary that runs in 28 MB of RAM.",
+      "why": "Needle 2 is a clean case study in matching model design to task: by reframing the problem as mapping a sentence onto typed tool calls instead of open-ended chat, 45M parameters are enough to match or beat models 5-6x larger on device-action function-calling benchmarks. The architecture backs the bet — a Walsh-Hadamard MLP replaces dense projections, an 'engram' moves world knowledge into hashed n-gram tables, and 2-bit quantization is trained end-to-end rather than applied post-hoc. The single dependency-free C++ binary probes the CPU at startup and picks kernels, with the model, tokenizer, and schema-compiled grammar sealed inside, so one artifact runs from Cortex-M to x86 to WebAssembly.",
+      "takeaway": "Co-designing quantization and inference with training keeps a 2-bit, 45M-parameter model useful: on-device quality is a function of task formulation, not just parameter count.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/cactus-compute/needle",
+      "authors": [
+        "Cactus Compute"
+      ],
+      "published_at": "2026-08-12T19:35:38Z",
+      "tags": [
+        "ai",
+        "edge",
+        "llms",
+        "tiny-ml"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "sqlite-wal-reset-bug",
+      "title": "Tailscale Traces Database Corruption to a 16-Year-Old SQLite WAL-Reset Bug",
+      "dek": "A six-month hunt through 19 database-corruption incidents ends at a race between a write transaction and a WAL reset in SQLite, present since 2010 and fixed in 3.51.3.",
+      "why": "A first-rate systems forensics writeup with a rare and useful arc: no reproducible trigger, months of passive telemetry, a purpose-built transaction-log replay pipeline, and a funded SQLite VFS shim that finally caught the race red-handed. The trigger was operational — Tailscale takes manual control of checkpointing to run fast, consistent backups, stepping off SQLite's well-trodden path. The post is honest about the sequence of theories ruled out and the two-month wait to confirm the fix, making it a strong model for how to debug unreproducible, rare corruption.",
+      "takeaway": "Even 'boring technology' has rare failure modes when operated non-standardly: the WAL-Reset race only bites when a checkpoint and a write transaction collide, and Tailscale's manual checkpointing regime is exactly the configuration that made it likely.",
+      "source": "HN",
+      "source_url": "https://tailscale.com/blog/sqlite-wal-reset-bug",
+      "discussion_url": "https://news.ycombinator.com/item?id=49272832",
+      "authors": [
+        "Alex Chan"
+      ],
+      "published_at": "2026-08-12T00:00:00Z",
+      "tags": [
+        "databases",
+        "sqlite",
+        "systems",
+        "debugging"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "tiny-jpegs-look-different-chrome",
+      "title": "Why Tiny JPEGs Look Different in Chrome",
+      "dek": "A 15px logo rendering thicker in Chrome turns out to be a JPEG decoding optimization: at small scales Skia skips high-frequency DCT coefficients instead of decoding the full image.",
+      "why": "A compact, satisfying root-cause story about an optimization most people don't know exists: libjpeg-turbo's partial IDCT scaling decodes only the low-frequency coefficients when the target size is small enough (fractions with denominator 8), so a 1/8-scale render keeps only the constant component of each 8x8 block. It explains both the visual artifact — edges and gradients gone, so icons look thicker — and the trade-off (less memory, faster decode, subtly different output). The correction noting the scaling algorithm also plays a role is a good honesty touch.",
+      "takeaway": "Browsers don't always fully decode images before scaling: for small renders Chrome decodes only low-frequency JPEG coefficients, which is why tiny JPEGs look different from other browsers — use SVG for icons.",
+      "source": "HN",
+      "source_url": "https://guillaumetech.github.io/posts/jpg-scaling-chrome/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49272549",
+      "authors": [
+        "Guillaume Técher"
+      ],
+      "published_at": "2026-08-12T00:00:00Z",
+      "tags": [
+        "browsers",
+        "images",
+        "rendering"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "my-homelab-got-hacked",
+      "title": "My Homelab Got Hacked — A Postmortem",
+      "dek": "A Forgejo instance is popped via CVE-2026-60004, a Gitea diffpatch RCE: how the attacker got in, what the crypto-miner payload did, and what changed afterward.",
+      "why": "A first-person, low-stakes incident postmortem that walks the whole chain: a scripted attacker signed up (open registrations), pushed a repo with a malicious git hook, and triggered the diffpatch endpoint three times. The writeup diff's the in-the-wild exploit against the published PoC, decodes the obfuscated second-stage miner script, and traces the attack through gateway logs. The two self-inflicted mistakes — leaving signups open and pinning Forgejo v13 six months past EOL because the project offers no 'latest' tag — are exactly the failure modes every self-hoster should check, and the 3-2-1 backups saved the day.",
+      "takeaway": "For projects without 'latest' image tags, EOL tracking is on you: pin-and-forget left this Forgejo exposed to a patched RCE, while daily 3-2-1 backups and quick detection made the breach recoverable.",
+      "source": "Lobsters",
+      "source_url": "https://phunky.cafe/my-homelab-got-hacked/",
+      "authors": [],
+      "published_at": "2026-08-10T00:00:00Z",
+      "tags": [
+        "homelab",
+        "security",
+        "selfhosted"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "github-stacks-in-jujutsu",
+      "title": "GitHub Stacks in Jujutsu",
+      "dek": "A hands-on primer for driving GitHub's new stacked PR feature from Jujutsu (jj): bookmark-per-commit workflows, revset aliases, and an honest critique of the developer experience.",
+      "why": "GitHub shipped stacked PRs into public preview on 2026-07-30, and this guide shows exactly how to use them from jj — the one bookmark per commit, the gh stack link/push subcommands that matter in a jj repo, and a config override for bookmark-advance-to. The writeup is grounded in real usage: adding commits to the top works, adding to the middle requires deleting and recreating the stack. It also gives a balanced verdict — the feature builds on GitHub's existing PR model rather than fixing it, so set expectations low and it works.",
+      "takeaway": "GitHub's stacking implementation requires a branch per change and offers no automatic submit, so jj users manage bookmarks by hand and recreate stacks for mid-stack edits — usable, but an unambitious take on prior art.",
+      "source": "Lobsters",
+      "source_url": "https://alan.norbauer.com/articles/github-stacks-with-jujutsu/",
+      "authors": [
+        "Alan Norbauer"
+      ],
+      "published_at": "2026-08-08T00:00:00Z",
+      "tags": [
+        "git",
+        "jujutsu",
+        "workflow"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "text-watermarking-non-academics",
       "title": "Text Watermarking for Non-Academics",
