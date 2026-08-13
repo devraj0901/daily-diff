@@ -1,7 +1,107 @@
 {
   "edition_date": "2026-08-13",
-  "generated_at": "2026-08-13T02:45:37.616535+00:00",
+  "generated_at": "2026-08-13T13:48:04.102290+00:00",
   "stories": [
+    {
+      "id": "pi-permission-sandbox-auto-review",
+      "title": "A Pi setup with permission, sandbox, and auto-review",
+      "dek": "A practical host-based security boundary for Pi that combines deterministic permissions, OS sandboxing, and narrowly reviewed host commands.",
+      "why": "This is a useful implementation guide for anyone running a permissive coding agent against real projects. It separates hard-deny rules for secrets and paths, sandboxed Bash for routine work, and automatic review for network or host-IPC exceptions, then gives concrete fixtures to test each boundary.",
+      "takeaway": "Use deterministic policy for actions that must never happen, and reserve model or human review for narrow exceptions instead of asking an LLM to replace the security boundary.",
+      "source": "Lobsters",
+      "source_url": "https://ptgamr.substack.com/p/a-pi-setup-with-permission-sandbox",
+      "published_at": "2026-08-13T11:11:09Z",
+      "authors": [
+        "Anh Trinh"
+      ],
+      "tags": [
+        "agents",
+        "security",
+        "sandboxing",
+        "selfhosted"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "unsloth-local-models-hermes",
+      "title": "Unsloth brings local model training and serving into an agent workflow",
+      "dek": "Unsloth combines local model running, fine-tuning, deployment, and agent integrations in a desktop and web workflow that includes Hermes and OpenClaw launch paths.",
+      "why": "The repository is worth inspecting if you want a practical route from a local model to an agent toolchain rather than a notebook-only setup. Its documented surfaces cover GGUF and other exports, an OpenAI-compatible API, MCP, remote access, and commands for starting Hermes or OpenClaw against local models.",
+      "takeaway": "A local-model workflow becomes more useful when training, export, serving, and agent handoff are treated as one operational path instead of separate experiments.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/unslothai/unsloth",
+      "published_at": "2026-08-13T13:42:21.303739Z",
+      "authors": [
+        "Unsloth team"
+      ],
+      "tags": [
+        "local-ai",
+        "llms",
+        "agents",
+        "mcp"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "obsidian-agent-skills-open-formats",
+      "title": "Obsidian skills teach agents to work with open knowledge formats",
+      "dek": "A portable skill collection covers Obsidian Markdown, Bases, JSON Canvas, the Obsidian CLI, and clean page extraction for compatible coding agents.",
+      "why": "This is a compact example of turning a familiar application into an agent-operable workspace without hiding the data behind a proprietary API. The repository documents reusable skills for Markdown, structured Bases, canvas files, CLI operations, and Defuddle-based extraction, with compatibility across Claude Code, Codex, OpenCode, OpenClaw, and Hermes.",
+      "takeaway": "Skills are most reusable when they target inspectable file formats and a small canonical CLI rather than one agent's private memory or UI.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/kepano/obsidian-skills",
+      "published_at": "2026-08-13T13:42:21.303763Z",
+      "authors": [
+        "Kepano and contributors"
+      ],
+      "tags": [
+        "agents",
+        "knowledge-management",
+        "markdown",
+        "skills"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "modly-local-image-to-3d",
+      "title": "Modly turns images into 3D meshes locally",
+      "dek": "An open-source desktop app runs image-to-3D generation on the user's GPU and exposes model extensions plus an agent-facing CLI for reproducible workflows.",
+      "why": "Modly is a concrete local-AI application rather than a model demo: it packages image-to-mesh generation, smoothing and decimation, installable model extensions, and a CLI that can start workflows, poll runs, and export GLB files. The extension boundary is especially useful to study if you are designing a self-hosted AI tool with replaceable models.",
+      "takeaway": "A model tool becomes easier to automate when the UI workflow and the agent API share explicit run, status, cancel, and export concepts.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/lightningpixel/modly",
+      "published_at": "2026-08-13T13:42:21.303779Z",
+      "authors": [
+        "Lightning Pixel"
+      ],
+      "tags": [
+        "local-ai",
+        "3d",
+        "desktop",
+        "automation"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "diagram-design-editorial-agent-skill",
+      "title": "Diagram Design gives agents an editorial vocabulary for technical diagrams",
+      "dek": "A Claude Code-compatible skill ships 27 diagram types as self-contained HTML and SVG, with semantic patterns and optional motion instead of generic Mermaid output.",
+      "why": "The project treats diagrams as a design system rather than a one-off image-generation prompt. Its repository includes static variants, reusable layout primitives, brand onboarding, accessibility-minded semantic patterns, and a redraw path for existing draw.io or Mermaid sources—useful ideas for technical documentation and architecture work.",
+      "takeaway": "Separating semantic patterns from visual layout lets an agent reuse a small set of tested diagram primitives without turning every request into a new template.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/cathrynlavery/diagram-design",
+      "published_at": "2026-08-13T13:42:21.303687Z",
+      "authors": [
+        "Cathryn Lavery and contributors"
+      ],
+      "tags": [
+        "agents",
+        "documentation",
+        "diagrams",
+        "design-systems"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "needle-2-14mb-agentic-llm",
       "title": "Needle 2: a 14 MB agentic LLM for tiny devices",
