@@ -1,7 +1,100 @@
 {
-  "edition_date": "2026-08-13",
-  "generated_at": "2026-08-13T13:48:04.102290+00:00",
+  "edition_date": "2026-08-14",
+  "generated_at": "2026-08-14T03:24:13.796431+00:00",
   "stories": [
+    {
+      "id": "agents-md-progressive-disclosure-guide",
+      "title": "A Complete Guide to AGENTS.md",
+      "dek": "How to keep an AGENTS.md file small, focused, and effective for AI coding agents.",
+      "why": "Anyone running coding agents (or maintaining repos they act in) hits the AGENTS.md bloat problem: rules accumulate until the file wastes tokens on every request and confuses the agent. This guide explains the instruction budget, progressive disclosure, and what actually belongs in the root file.",
+      "takeaway": "Keep the root AGENTS.md to a one-sentence project description, package manager, and non-standard build commands; move domain rules into separate files, nested AGENTS.md, or agent skills loaded on demand.",
+      "source": "Karakeep",
+      "source_url": "https://www.aihero.dev/a-complete-guide-to-agents-md",
+      "authors": [
+        "Matt Pocock"
+      ],
+      "published_at": "2026-08-13T17:19:18Z",
+      "tags": [
+        "agents",
+        "documentation",
+        "workflow"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "pi-compaction-internals",
+      "title": "How Compaction Works in Pi",
+      "dek": "A look inside how the Pi coding agent summarizes long conversations to fit the LLM context window.",
+      "why": "Coding agents compact constantly, but most users never see the mechanics. This post walks through Pi's implementation: the token-budget cut point, the dedicated summarization prompt, prompt-cache breakage, and the trade-offs involved - useful for anyone tuning an agent loop or building one.",
+      "takeaway": "Compaction trades prompt-cache reuse for context: Pi keeps roughly 20k recent tokens intact, summarizes older turns with a structured handoff-briefing prompt, and stores the summary as plain text so it stays model-portable.",
+      "source": "HN",
+      "source_url": "https://earendil.com/posts/compaction-in-pi/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49289654",
+      "authors": [
+        "Earendil Engineering"
+      ],
+      "published_at": "2026-08-13T00:00:00Z",
+      "tags": [
+        "agents",
+        "llm",
+        "systems"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "ai-at-home-box-of-scraps",
+      "title": "AI At Home Part 1: A Box Of Scraps",
+      "dek": "Building a home AI inference box from e-waste: four AMD V620 GPUs, an X299 board, and llama.cpp.",
+      "why": "A practical, garage-built homelab AI server made from cheap server GPUs and salvaged parts, with real details on BIOS quirks (Resizable BAR / MMIO High Size), 3D-printed fan shrouds, and an Arduino fan controller. Great fuel for a build-your-own-inference-box project.",
+      "takeaway": "The binding constraints are not the GPUs but the motherboard's PCIe memory settings and cooling: enable Resizable BAR and MMIO High Size or a 2017 board won't POST with four cards, and server GPUs ship fanless.",
+      "source": "HN",
+      "source_url": "https://jdagostino.github.io/ai-pt1-box-o-scraps/index.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49288293",
+      "published_at": "2026-08-13T00:00:00Z",
+      "tags": [
+        "homelab",
+        "ai",
+        "hardware"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "np-overrated",
+      "title": "NP-overrated",
+      "dek": "NP-hard problems are routinely solved in practice - the worst case rarely shows up.",
+      "why": "A corrective to the reflexive 'it's NP-hard, give up' response: dependency resolution, type checking, scheduling, and SAT/SMT are all solved at scale with real algorithms. The post is short, concrete, and cites a 450-billion-fold algorithmic speedup - useful for anyone arguing feasibility.",
+      "takeaway": "Worst-case complexity bounds rarely bind on real inputs; treat NP-hardness as a timeout-and-error-handling concern, not an impossibility proof.",
+      "source": "HN",
+      "source_url": "https://gruhn.me/blog/2026-08-13/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49291268",
+      "published_at": "2026-08-13T00:00:00Z",
+      "tags": [
+        "algorithms",
+        "theory",
+        "engineering"
+      ],
+      "read_minutes": 4
+    },
+    {
+      "id": "nvidia-switchyard-llm-routing",
+      "title": "Switchyard: route LLM traffic across models and providers",
+      "dek": "A Rust proxy and library that routes LLM requests across providers while preserving OpenAI and Anthropic API compatibility.",
+      "why": "Point Claude Code or Codex at an open-weight model: Switchyard translates between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats, so agents keep their native API while being served by vLLM, Ollama, or NIM. Pre-alpha, but a solid reference for multi-provider routing, A/B benchmarking, and fallback.",
+      "takeaway": "Protocol translation at the proxy layer decouples agent clients from model backends; routing strategies like LLM-classifier and stage-router let cost/quality trade-offs live in config instead of code.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/NVIDIA-NeMo/Switchyard",
+      "authors": [
+        "NVIDIA NeMo"
+      ],
+      "published_at": "2026-05-19T19:06:33Z",
+      "tags": [
+        "ai",
+        "llm",
+        "routing",
+        "rust"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "pi-permission-sandbox-auto-review",
       "title": "A Pi setup with permission, sandbox, and auto-review",
