@@ -1,7 +1,104 @@
 {
-  "edition_date": "2026-08-14",
-  "generated_at": "2026-08-14T03:24:13.796431+00:00",
+  "edition_date": "2026-08-15",
+  "generated_at": "2026-08-15T03:12:40.540826+00:00",
   "stories": [
+    {
+      "id": "mole-deep-research-agent",
+      "title": "Mole – Deep research agent for your terminal",
+      "dek": "A terminal deep-research agent that enforces a dollar or token budget, verifies every claim against a verbatim quote, and keeps local data off the wire.",
+      "why": "For builders running research agents, the pain points are real: cost blowouts, hallucinated citations, and local data leaking into prompts. Mole addresses all three in one static binary — the budget is reserved before each model call against a non-negative ledger, claims without a verbatim source quote are discarded at extraction, and CSV/folder analysis runs deterministic SQL with only aggregates leaving the machine. It also speaks MCP, so a coding agent can drive it.",
+      "takeaway": "Budget enforcement via a non-negative ledger in the database schema gives a measured 0% overshoot; grounding is enforced at extraction time (claims must quote their source verbatim), not patched up afterwards.",
+      "source": "HN",
+      "source_url": "https://github.com/lajosdeme/mole",
+      "discussion_url": "https://news.ycombinator.com/item?id=49303046",
+      "authors": [
+        "lajosdeme"
+      ],
+      "published_at": "2026-08-14T18:52:48Z",
+      "tags": [
+        "ai",
+        "agents",
+        "cli"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "going-dark-ai-bug-hunting",
+      "title": "Everything is about to “go dark”",
+      "dek": "Matthew Green argues that AI bug-hunting is about to exhaust remotely-exploitable vulnerabilities, ending the era of law-enforcement hacking.",
+      "why": "A sharp security essay from a well-known cryptographer: as AI-driven vulnerability scanning is folded into CI pipelines, the stock of usable bugs is likely to collapse within a couple of years, and the old 'exceptional access' debate will re-ignite. Worth reading for anyone building security tooling, deploying AI scanners, or thinking about where the vulnerability market goes next.",
+      "takeaway": "Treat AI vulnerability scanning as a supply-side shock to the bug market: defenders may soon run out of remotely-exploitable bugs in major software, shifting pressure toward intentional backdoors.",
+      "source": "HN",
+      "source_url": "https://blog.cryptographyengineering.com/2026/08/14/everything-is-about-to-go-dark/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49304447",
+      "authors": [
+        "Matthew Green"
+      ],
+      "published_at": "2026-08-14T20:52:44Z",
+      "tags": [
+        "security",
+        "ai",
+        "crypto"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "static-html-comment-section",
+      "title": "My comment section is static HTML",
+      "dek": "A Hugo blog with comments compiled into the static page at build time; writing is the only dynamic step.",
+      "why": "A clean, opinionated comment-system design for static sites: readers get plain HTML with zero third-party scripts, and a small Phoenix server (Popsicle Boat) only handles the write path — identity, spam defense, and a build hook. If the server is down, the build simply renders the last comments; the conversation lives in your generated pages, not on a widget's infrastructure.",
+      "takeaway": "Separate the read path from the write path: static comments make readers cost nothing and keep the conversation durable, while a tiny server handles auth and spam only at the moment of writing.",
+      "source": "Lobsters",
+      "source_url": "https://jva.lol/weblog/my-comment-section-is-static-html/",
+      "authors": [
+        "jvalol"
+      ],
+      "published_at": "2026-08-14T23:58:27Z",
+      "tags": [
+        "static-sites",
+        "web",
+        "self-hosted"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "curl-performance-suite",
+      "title": "curl performance",
+      "dek": "Daniel Stenberg stands up a public, continuously-run performance test suite for curl.",
+      "why": "curl now has a public performance dashboard (curl.se/perf): a script builds curl from git every 20 minutes, runs 24 tests in about six minutes, and publishes box-and-whisker distributions plus trend lines. The post is honest about methodology — no shared cloud infra, per-test 'stakes' thresholds, LTTB downsampling for long-term graphs — and shows how visibility alone triggered quick fixes.",
+      "takeaway": "You don't need Grafana to catch regressions: a cron-driven build-and-bench loop with gnuplot output, per-test stake thresholds, and Mann-Kendall trend detection is enough to surface performance drift.",
+      "source": "Lobsters",
+      "source_url": "https://daniel.haxx.se/blog/2026/08/14/curl-performance-2/",
+      "authors": [
+        "Daniel Stenberg"
+      ],
+      "published_at": "2026-08-14T11:33:57Z",
+      "tags": [
+        "performance",
+        "tooling",
+        "testing"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "github-spec-kit",
+      "title": "Spec Kit: spec-driven development for AI coding agents",
+      "dek": "GitHub's open-source toolkit for writing executable specs and driving 30+ AI coding agents from them.",
+      "why": "For teams using AI coding agents, spec-kit offers a ready-made spec-driven workflow: /speckit.* slash commands walk from constitution to spec to plan to tasks to implementation, with a specify CLI under the hood. It is agent-agnostic (Copilot, Codex, Claude Code and 30+ others), MIT-licensed, and shipping releases almost daily (v0.16.4 on 2026-08-14).",
+      "takeaway": "Specs become executable: define what and why first, generate a technical plan from your stack choices, then let the agent implement — /speckit.converge checks the codebase against the spec and appends remaining work as new tasks.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/github/spec-kit",
+      "authors": [
+        "GitHub"
+      ],
+      "published_at": "2026-08-15T02:59:26.793856Z",
+      "tags": [
+        "ai",
+        "agents",
+        "workflow"
+      ],
+      "read_minutes": 7
+    },
     {
       "id": "agents-md-progressive-disclosure-guide",
       "title": "A Complete Guide to AGENTS.md",
