@@ -1,7 +1,107 @@
 {
-  "edition_date": "2026-08-15",
-  "generated_at": "2026-08-15T03:12:40.540826+00:00",
+  "edition_date": "2026-08-16",
+  "generated_at": "2026-08-16T02:36:24.711780+00:00",
   "stories": [
+    {
+      "id": "codex-auto-research-qr-kernel",
+      "title": "Auto-research with codex: how Codex hit a 232x faster GPU kernel",
+      "dek": "A GPU Mode contest write-up on running Codex through a benchmark–profile–verify loop to push a batched Householder QR kernel 232x past baseline.",
+      "why": "For builders who want agents on tightly-scoped optimization problems, this is one of the most concrete auto-research walkthroughs yet: 1,500+ submissions over 14 days, with AGENTS.md and problem_statement.md as the program, the popcorn CLI for submit-and-bench feedback, /goal for quantitative targets, and /btw questions for human oversight mid-loop. It is honest about limits too — domain expertise still mattered at the top of the leaderboard, and the fastest solutions aggressively removed library calls.",
+      "takeaway": "Optimization is a tight feedback loop: give an agent a verifier, profiler access, and a numeric goal and it will hill-climb a kernel — but you must inject idea diversity (multiple algorithm routes, not just variants) to escape local maxima.",
+      "source": "HN",
+      "source_url": "https://sankalp.bearblog.dev/autoresearch/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49309549",
+      "authors": [
+        "Sankalp"
+      ],
+      "published_at": "2026-08-15T11:00:02Z",
+      "tags": [
+        "ai",
+        "agents",
+        "gpu",
+        "performance"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "runescape-56k-dialup-protocol",
+      "title": "How 2004 RuneScape fit a multiplayer RPG into 56k dial-up",
+      "dek": "A byte-level tour of the 2004 RuneScape protocol, traced from a decompiled client, showing how a browser Java applet ran an MMO at ~5 KB/s.",
+      "why": "For anyone who designs wire protocols or games under hard constraints: the post follows a single walk click into a seven-byte packet and unpacks the shared-knowledge tricks — client and server running the same pathfinder so only path corners are sent, deltas instead of absolute coordinates, one-bit 'didn't change' flags, five-bit positions, and a bitmask standing in for a schema. The closing argument about when tight co-design beats loose coupling is worth the read on its own.",
+      "takeaway": "Every byte not sent is knowledge both ends share without transmitting: a data model and wire format co-designed into one artifact, with the client running the same algorithms as the server so only deltas cross the wire.",
+      "source": "Lobsters",
+      "source_url": "https://jkm.dev/posts/how-2004-runescape-fit-a-multiplayer-rpg-into-56k-dialup/",
+      "authors": [],
+      "published_at": "2026-05-28T00:00:00Z",
+      "tags": [
+        "networking",
+        "protocols",
+        "games",
+        "systems"
+      ],
+      "read_minutes": 11
+    },
+    {
+      "id": "tla-model-checking-depot-registry",
+      "title": "Improving system safety with TLA+",
+      "dek": "Depot model-checks its OCI registry garbage collector with TLA+, finds a race its tests missed, and lands on S3 versioning as a delete fence.",
+      "why": "A practical, modern TLA+ case study: an agent translates the Go/MySQL/S3 implementation into a spec while humans review the invariants, and TLC exhaustively explores 14.3M states in ~21 minutes to prove 10 safety invariants and 2 liveness properties. The concrete payoff is the S3 versioning pattern — versioning isn't for history when blobs are content-addressed; it turns 'delete this key' into 'delete exactly the bytes I inspected', making deletion safe to race against a concurrent re-upload.",
+      "takeaway": "Tests check the interleavings you thought of; a model checker checks the ones you didn't. For content-addressable stores that garbage-collect, S3 versioning is a cheap delete fence when no transaction spans the reference store and the object store.",
+      "source": "Lobsters",
+      "source_url": "https://depot.dev/blog/tla-verification",
+      "authors": [
+        "Wito Delnat"
+      ],
+      "published_at": "2026-07-20T00:00:00Z",
+      "tags": [
+        "distributed-systems",
+        "verification",
+        "storage"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "cli-anything-agent-native-software",
+      "title": "CLI-Anything: making software agent-native",
+      "dek": "A fast-growing open-source project that generates CLIs and skills for arbitrary applications so AI agents can drive any software, with a public registry of ready-made harnesses.",
+      "why": "For builders wiring agents into real tools: the methodology turns an application's codebase into an agent-operable CLI plus a SKILL.md, and the CLI-Hub registry ships harnesses for Obsidian, Joplin, Calibre, QGIS, LibreOffice and more, each with test baselines and E2E evidence. 47K+ stars, near-daily merges, and a technical report (arXiv 2606.03854) describing the approach — a useful reference for designing agent-native interfaces rather than per-agent integrations.",
+      "takeaway": "A CLI plus a SKILL.md is the portable unit of agent-native software: keep the data format canonical and the interface minimal, and any agent framework can drive the tool without proprietary integrations.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/HKUDS/CLI-Anything",
+      "authors": [
+        "Yuhao Yang",
+        "Tianyu Fan",
+        "Chao Huang"
+      ],
+      "published_at": "2026-08-16T02:31:47Z",
+      "tags": [
+        "ai",
+        "agents",
+        "cli",
+        "open-source"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "viofosync-dashcam-selfhosted",
+      "title": "viofosync: self-hosted Viofo dashcam backup",
+      "dek": "A single-container web app that syncs dashcam footage over Wi-Fi to your NAS, maps journeys from on-camera GPS traces, edits video in the browser, and reports to Home Assistant over MQTT.",
+      "why": "A genuinely local-first answer to cloud dashcam apps: the camera joins your home Wi-Fi, clips queue and copy automatically, GPS traces are parsed into journey maps with stops detected, and exports (joined front/rear, picture-in-picture, edited cuts) run in the browser with optional hardware acceleration. Well documented for a homelab deploy — Docker or bare Python, first-run setup wizard, camera-settings control, and MQTT auto-discovery. The Reddit thread adds sharp failure-mode feedback (partial clips after power loss during copy).",
+      "takeaway": "For Wi-Fi backup pipelines, copy to a temp name, verify size/hash, then promote — a partial MP4 can look like a completed backup — and don't rely on filenames alone for dedupe once the camera wraps its card.",
+      "source": "Reddit",
+      "source_url": "https://github.com/RobXYZ/viofosync",
+      "discussion_url": "https://www.reddit.com/r/selfhosted/comments/1vowl11/selfhosted_docker_app_for_viofo_dashcams_with/",
+      "authors": [
+        "RobXYZ"
+      ],
+      "published_at": "2026-08-15T07:40:31Z",
+      "tags": [
+        "self-hosted",
+        "docker",
+        "automation"
+      ],
+      "read_minutes": 6
+    },
     {
       "id": "mole-deep-research-agent",
       "title": "Mole – Deep research agent for your terminal",
