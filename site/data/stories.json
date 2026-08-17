@@ -1,7 +1,107 @@
 {
-  "edition_date": "2026-08-16",
-  "generated_at": "2026-08-16T02:36:24.711780+00:00",
+  "edition_date": "2026-08-17",
+  "generated_at": "2026-08-17T02:43:40.838336+00:00",
   "stories": [
+    {
+      "id": "qwen-38-27b-local-overthinking",
+      "title": "Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things",
+      "dek": "Simon Willison's hands-on review of the Apache-2.0 Qwen 3.8 27B: a 17GB local model that codes, drives agents, and draws — as long as you switch its default overthinking off.",
+      "why": "For anyone running local LLMs: concrete numbers on a 27B Q4_K_M build on a MacBook Pro and DGX Spark, including the failure mode of the default xhigh reasoning effort (21 minutes and 22,276 thinking tokens to draw a pelican SVG), working bounding-box vision output, and a full coding-agent session. It also shows a ~72% inference speedup from llama.cpp's MTP speculative decoding.",
+      "takeaway": "Check a model's default reasoning-effort setting before benchmarking it — Qwen 3.8's xhigh default is tuned for benchmark heroics, not consumer hardware; run low or no reasoning first and raise it per-task, and enable MTP speculative decoding for a large throughput win on dense models.",
+      "source": "HN",
+      "source_url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49324985",
+      "authors": [
+        "Simon Willison"
+      ],
+      "published_at": "2026-08-16T23:45:09Z",
+      "tags": [
+        "ai",
+        "llm",
+        "local-models"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "ponys-arena-allocator",
+      "title": "Pony's Arena Allocator",
+      "dek": "Pony replaces its global per-size-class allocator with an snmalloc-inspired region/arena design: thread-owned arenas, bitmap free tracking, batched cross-thread frees, and idle memory return.",
+      "why": "A rare allocator write-up with before/after measurements: unbounded growth under mixed-size workloads (0.49s at 4K blocks to 39.6s at 16K), fixed by thread-local arenas where a bitmap replaces merge logic entirely, cross-thread frees batched instead of one atomic per free, and idle threads returning 105 MiB down to 6.5 MiB resident. The 'no failing tests means solid system' framing — randomized swarm testing surfaced the bugs — is a lesson for any runtime project.",
+      "takeaway": "Adjacency in memory is adjacency in a per-arena bitmap, so coalescing disappears as a separate mechanism; the cost of reclaiming is a tradeoff exposed as a --ponymemoryprofile knob from 1 (aggressive return) to 10 (throughput).",
+      "source": "Lobsters",
+      "source_url": "https://www.ponylang.io/blog/2026/08/ponys-arena-allocator/",
+      "authors": [],
+      "published_at": "2026-08-16T23:48:45Z",
+      "tags": [
+        "systems",
+        "memory",
+        "allocators",
+        "performance"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "models-getting-dumber-on-purpose",
+      "title": "Models Are Getting Dumber on Purpose",
+      "dek": "An essay on the deliberate knowledge-for-reasoning trade in small models: labs are shrinking fact storage in weights and pushing it into retrieval harnesses.",
+      "why": "For builders using LLMs in agents: the essay argues that factual recall is being traded for reasoning skill (SimpleQA leader at 53%, small models hallucinating 80–82% on knowledge benchmarks) because facts rot between training runs while procedures don't. The practical reframe — model reasons, harness carries knowledge — matches how serious agent designs already work.",
+      "takeaway": "If facts live outside the weights (retrieval, docs, tools), a wrong answer has an address you can edit and regression-test; a wrong fact baked into weights is unfindable until the next training run.",
+      "source": "HN",
+      "source_url": "https://w4g1.dev/blog/models-are-getting-dumber-on-purpose",
+      "discussion_url": "https://news.ycombinator.com/item?id=49322695",
+      "authors": [
+        "Walter van der Giessen"
+      ],
+      "published_at": "2026-08-16T19:04:26Z",
+      "tags": [
+        "ai",
+        "llm",
+        "agents",
+        "retrieval"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "kindle-eink-homelab-dashboard",
+      "title": "An E-Ink Homelab Dashboard on a Jailbroken Kindle",
+      "dek": "Turning a retired Kindle into an e-ink homelab dashboard: the server renders a 600×800 grayscale PNG and the Kindle just downloads and draws it.",
+      "why": "For homelabbers with dead e-readers: the split keeps the dumb device dumb — a Flask container in an LXC collects Uptime Kuma/Proxmox/weather/Immich data, renders with Pillow, and the Kindle runs a five-minute fetch loop with eips. The engineering thinking is the highlight: SMART errors are read from the SnapRAID log instead of polling disks (so they stay spun down), dashboard tiles for metrics that never change are dropped, and the exact jailbreak sequence (WinterBreak → Hotfix → KUAL → USBNetwork) is documented with pitfalls.",
+      "takeaway": "Serve a finished image to a dumb display instead of rendering on-device: one HTTP GET and one framebuffer write per refresh means nothing on the panel can break, and it stays reusable across any screen.",
+      "source": "Reddit",
+      "source_url": "https://mxd.codes/articles/an-e-ink-homelab-dashboard-on-a-jailbroken-kindle",
+      "discussion_url": "https://www.reddit.com/r/selfhosted/comments/1vq2gey/old_kindle_as_an_eink_homelab_dashboard/",
+      "authors": [
+        "Max Dietrich"
+      ],
+      "published_at": "2026-08-16T17:05:37Z",
+      "tags": [
+        "self-hosted",
+        "homelab",
+        "hardware",
+        "dashboard"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "reproducible-builds-pypi",
+      "title": "What's missing to have reproducible builds on PyPI",
+      "dek": "Brett Cannon on the two missing pieces for reproducible Python builds — recording the source location and the build toolchain — plus a verifier-feedback idea for PyPI.",
+      "why": "For Python maintainers and supply-chain-conscious users: the post identifies precisely what the specs lack (source location isn't in sdist or wheel metadata; sdists have no SBOM mechanism where wheels do via PEP 770) and sketches a low-friction path where build backends record their own environments so distribution producers do nothing. The PyPI 'independently reproduced by' verifier concept is a concrete, buildable feature.",
+      "takeaway": "Reproducible builds on PyPI need two recorded facts — which source produced the artifact and which toolchain built it — and [build-system] in pyproject.toml is already the replay entry point; sdists need a v2 format to carry the metadata.",
+      "source": "Lobsters",
+      "source_url": "https://snarky.ca/whats-missing-to-have-reproducible-builds-on-pypi/",
+      "authors": [
+        "Brett Cannon"
+      ],
+      "published_at": "2026-08-16T03:41:17Z",
+      "tags": [
+        "python",
+        "packaging",
+        "supply-chain",
+        "security"
+      ],
+      "read_minutes": 5
+    },
     {
       "id": "codex-auto-research-qr-kernel",
       "title": "Auto-research with codex: how Codex hit a 232x faster GPU kernel",

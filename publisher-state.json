@@ -1,6 +1,11 @@
 {
-  "last_published_at": "2026-08-16T02:36:24.711780+00:00",
+  "last_published_at": "2026-08-17T02:43:40.838336+00:00",
   "published_urls": [
+    "https://simonwillison.net/2026/Aug/16/qwen-38-27b/",
+    "https://www.ponylang.io/blog/2026/08/ponys-arena-allocator/",
+    "https://w4g1.dev/blog/models-are-getting-dumber-on-purpose",
+    "https://mxd.codes/articles/an-e-ink-homelab-dashboard-on-a-jailbroken-kindle",
+    "https://snarky.ca/whats-missing-to-have-reproducible-builds-on-pypi/",
     "https://sankalp.bearblog.dev/autoresearch/",
     "https://jkm.dev/posts/how-2004-runescape-fit-a-multiplayer-rpg-into-56k-dialup/",
     "https://depot.dev/blog/tla-verification",
