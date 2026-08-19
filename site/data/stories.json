@@ -1,7 +1,105 @@
 {
-  "edition_date": "2026-08-18",
-  "generated_at": "2026-08-18T02:39:43.379020Z",
+  "edition_date": "2026-08-19",
+  "generated_at": "2026-08-19T02:39:09.277221Z",
   "stories": [
+    {
+      "id": "solo-so-loader-static-binaries",
+      "title": "SoLo: a .so loader for static Linux binaries",
+      "dek": "SoLo gives a fully static musl executable a dlopen()-style API backed by its own ELF loader and a glibc ABI bridge, so it can load the host's unmodified glibc-built GPU drivers at runtime — no container, no AppImage, no second libc in the process.",
+      "why": "For anyone who ships static binaries but needs host hardware access: the repo includes an end-to-end Vulkan proof (a static executable that loads Mesa radv/radeonsi and NVIDIA drivers, runs a compute shader, writes a PNG), an ELF loader covering TLS/TLSDESC/IFUNC/RELRO, and a glibc-over-musl ABI shim — with CI loading the shared objects of the 1,000 most-installed Debian packages on both x86-64 and aarch64.",
+      "takeaway": "SoLo deliberately does not load glibc: it maps DSOs itself and resolves glibc imports (e.g. malloc@GLIBC_2.2.5) to ABI-correct adapters over the existing musl runtime, with loud stubs for unimplemented symbols — so a static binary and its loaded drivers share one libc, one TLS world, and one exception machinery.",
+      "source": "HN",
+      "source_url": "https://github.com/pg83/solo",
+      "discussion_url": "https://news.ycombinator.com/item?id=49354613",
+      "authors": [
+        "pg83"
+      ],
+      "published_at": "2026-08-18T23:51:49Z",
+      "tags": [
+        "elf",
+        "linux",
+        "systems"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "python-str-lower-idna-cve",
+      "title": "When str.lower() is a security vulnerability in Python",
+      "dek": "Python's IDNA 2003 codec (str.encode('idna')) called str.lower(), which applies the interpreter's Unicode 17.0 case-folding instead of the Unicode 3.2.0 tables StringPrep requires — a spec-vs-implementation gap now tracked as CVE-2026-17084.",
+      "why": "A precise, small case study in why protocol implementations must pin the data tables they depend on: one stdlib function produced different domain-name encodings than RFC 3454 mandates, and the fix enumerates every codepoint where modern Unicode case-folding diverges from 3.2.0 to keep IDNA consistent.",
+      "takeaway": "Python ships unicodedata.ucd_3_2_0 specifically for StringPrep/IDNA, so the fix builds exception tables that make str.lower() behave as Unicode 3.2.0 for those algorithms — 'lowercase it' is not a stable operation across Unicode versions.",
+      "source": "Lobsters",
+      "source_url": "https://sethmlarson.dev/when-str-lower-is-a-security-vulnerability",
+      "authors": [
+        "Seth Larson"
+      ],
+      "published_at": "2026-08-18T22:57:00Z",
+      "tags": [
+        "python",
+        "security",
+        "unicode"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "dgit-git-forge-durable-objects",
+      "title": "dgit: a git forge where every repository is a Durable Object",
+      "dek": "littledivy's dgit implements git in TypeScript — pkt-line framing, packfile parsing, streaming SHA-1 pack generation — so each repository is a Durable Object with its own SQLite database, speaking git smart HTTP to stock clients and rendering a cgit-style web UI.",
+      "why": "For builders interested in platform-scale self-hosting: no origin server or filesystem in the critical path, repositories shard by construction (one hot repo can't slow another), pushes stream in as the client's original packfile, and it deploys to Cloudflare Workers or self-hosts on celld with SQLite replication to your own S3 bucket.",
+      "takeaway": "The design preserves the client's compression instead of re-deriving it: a push stores the received packfile verbatim with an object-id → pack/offset/delta-base index, and a clone copies those stored bytes into the outgoing pack — compression work happens once, at push time.",
+      "source": "Lobsters",
+      "source_url": "https://github.com/littledivy/dgit",
+      "discussion_url": "https://news.ycombinator.com/item?id=49345541",
+      "authors": [
+        "littledivy"
+      ],
+      "published_at": "2026-08-18T17:41:00Z",
+      "tags": [
+        "git",
+        "selfhosted",
+        "typescript"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "ai-memory-agent-longterm-memory",
+      "title": "ai-memory: durable, cross-vendor memory for coding agents",
+      "dek": "A Rust daemon that gives Claude Code, Codex, Cursor, and a dozen other agent CLIs a shared long-term memory: lifecycle hooks capture sanitized observations, sessions compile into a markdown wiki in a git repo, and the next agent starts with a bounded handoff — switch vendors mid-task without re-explaining the architecture.",
+      "why": "For anyone running agentic coding workflows: memory lives in plain markdown (grep-able, Obsidian-openable, rsync-backable) with no vector database to babysit, support spans 15+ harnesses via hook installers and MCP config, and recent releases add homelab deployment docs (Docker, bearer auth, Caddy/Let's Encrypt recipes) plus multi-user attribution.",
+      "takeaway": "The architecture is 'compile, don't retrieve': instead of stuffing raw transcripts into an embedding store, each session's observations are condensed into a summary at session end and injected as a handoff at the next session start — context transfer without a search index.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/akitaonrails/ai-memory",
+      "authors": [
+        "Fabio Akita"
+      ],
+      "published_at": "2026-08-18T16:27:38Z",
+      "tags": [
+        "ai-agents",
+        "memory",
+        "rust"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "mojo-open-source",
+      "title": "Mojo is now open source (Apache 2.0, compiler included)",
+      "dek": "Modular open-sourced the entire Mojo compiler and toolchain under Apache 2.0 with LLVM exceptions, weeks after Mojo hit 1.0 — the repo builds the compiler from source with a single Bazel command.",
+      "why": "For anyone curious about a Python-superset language aimed at GPUs and AI accelerators: the announcement includes the exact build path (./bazelw run --config=build-mojo KGEN:mojo -- run hello.mojo), how to run the full stdlib test suite against your own compiler build, and the license structure that lets you build and distribute Mojo-compiled binaries.",
+      "takeaway": "The open-source strategy was staged — stdlib and kernels first, compiler now — with compiler contributions deliberately gated until end of 2026: small design teams shaped the language before the toolchain opened.",
+      "source": "Lobsters",
+      "source_url": "https://www.modular.com/blog/mojo-open-source",
+      "discussion_url": "https://news.ycombinator.com/item?id=49348079",
+      "authors": [
+        "Modular Team"
+      ],
+      "published_at": "2026-08-18T16:23:24Z",
+      "tags": [
+        "programming-languages",
+        "compilers",
+        "ai"
+      ],
+      "read_minutes": 6
+    },
     {
       "id": "spinifex-selfhosted-aws",
       "title": "Spinifex: an open-source, AWS-compatible cloud you run yourself",

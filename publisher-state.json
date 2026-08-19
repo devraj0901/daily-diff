@@ -1,5 +1,5 @@
 {
-  "last_published_at": "2026-08-18T02:39:43.379020Z",
+  "last_published_at": "2026-08-19T02:39:09.277221Z",
   "published_urls": [
     "https://github.com/mulgadc/spinifex",
     "https://duckdb.org/2026/08/17/duckdb-20-highlights",
@@ -98,6 +98,11 @@
     "https://victoriametrics.com/blog/go-1-27/index.html",
     "https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/",
     "https://www.bfswa.blog/p/llms-wont-break-symmetric-crypto",
-    "https://warez.sl0p.foo/apple-screensharing-rce/"
+    "https://warez.sl0p.foo/apple-screensharing-rce/",
+    "https://github.com/pg83/solo",
+    "https://sethmlarson.dev/when-str-lower-is-a-security-vulnerability",
+    "https://github.com/littledivy/dgit",
+    "https://github.com/akitaonrails/ai-memory",
+    "https://www.modular.com/blog/mojo-open-source"
   ]
 }
