@@ -1,7 +1,104 @@
 {
-  "edition_date": "2026-08-19",
-  "generated_at": "2026-08-19T02:39:09.277221Z",
+  "edition_date": "2026-08-20",
+  "generated_at": "2026-08-20T02:38:05.576448Z",
   "stories": [
+    {
+      "id": "reclaim-the-terminal-tty",
+      "title": "Reclaim the terminal",
+      "dek": "Why `less` and `fzf` still take keyboard input when their stdin is a pipe: they open /dev/tty, the controlling terminal, as a fresh descriptor instead of reading keystrokes from stdin.",
+      "why": "For anyone who builds interactive CLIs or has wondered how piped tools get the keyboard back: the post includes a minimal Rust program (one binary piped into itself four times) demonstrating stage detection via IsTerminal, pipe-EOF handoff, and the /dev/tty re-open, plus a real macOS caveat where kqueue needs the concrete tty device.",
+      "takeaway": "Keystrokes never 'go to stdin' — they go to the terminal, and fd 0 is just the usual pointer to it; any process in the foreground group can open its controlling terminal directly via /dev/tty whenever it wants input.",
+      "source": "Lobsters",
+      "source_url": "https://nishantjosh.dev/blogs/reclaim-the-terminal/",
+      "authors": [
+        "Nishant Joshi"
+      ],
+      "published_at": "2026-08-19T22:10:12Z",
+      "tags": [
+        "unix",
+        "terminal",
+        "rust"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "dflash2-parallel-drafting",
+      "title": "DFlash 2: Keep Drafting Parallel",
+      "dek": "DFlash 2 extends block-diffusion speculative decoding with a lightweight path selector and a two-tap dynamic convolution, adding roughly 20% accepted tokens per verify pass for ~1% added latency while keeping the output provably unchanged.",
+      "why": "For anyone serving LLMs: drafters for Qwen3.8-27B and Muse Glimmer ship today on Hugging Face and run in SGLang, vLLM, llama.cpp, Ollama, and oMLX, with runnable configs in the post — 2.7-3.4x the throughput of autoregressive decoding at batch size 1.",
+      "takeaway": "The win is 'choose, don't predict': the drafter's top-16 candidates already contain the right token 99.5% of the time at position 0, so a cheap pairwise-scored path selection (+2M params, +0.6% latency) beats autoregressive correction heads (DSpark, +77.8M params, +9.6%) at raising acceptance length.",
+      "source": "HN",
+      "source_url": "https://inco.ai/blog/dflash2/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49366792",
+      "authors": [
+        "Inco AI"
+      ],
+      "published_at": "2026-08-19T20:28:43Z",
+      "tags": [
+        "ai",
+        "inference",
+        "systems"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "sing-song-encoding",
+      "title": "Sing-song: a speakable encoding for long numbers and keys",
+      "dek": "Sing-song is a reversible encoding of byte strings as pronounceable CV syllables — 16 consonants x 4 vowels, exactly 6 bits per syllable — with prefix stability, self-sizing complete forms, and 16 optional mask-based variants.",
+      "why": "For builders who need keys or IDs that humans must read, say, or type (Nostr npubs, wire keys): the draft spec is complete with test vectors, a reference Python implementation, error-healing rules (0→o, 1→l, e→i), and a worked Nostr-username example.",
+      "takeaway": "The whole trade is regular grammar over dense spelling: hex carries 4 bits/char and Base58 about 5.9, but Sing-song trades written density for spoken density with a positionally parseable CV grammar that localizes transcription errors to a display group.",
+      "source": "Lobsters",
+      "source_url": "https://blog.vrypan.net/2026/08/19/260819-sing-song/",
+      "authors": [
+        "vrypan"
+      ],
+      "published_at": "2026-08-19T20:28:07Z",
+      "tags": [
+        "encoding",
+        "spec"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "onecli-agent-harness",
+      "title": "Launch HN: OneCLI (YC S26) – OSS sandboxed agent harness for teams",
+      "dek": "OneCLI is an Apache-2.0 self-hostable agent harness for teams: each employee gets a sandboxed personal agent whose credentials are injected by a Rust gateway at request time, so the agent never holds or sees a real secret.",
+      "why": "For anyone running agents (Hermes, OpenClaw, etc.) who worries about prompt injection stealing API keys: the repo details the architecture — outbound-only runner with no inbound ports, MITM gateway matching host/path patterns, AES-256-GCM secret store, per-agent VMs, deterministic human-in-the-loop approvals, and Bitwarden/1Password on-demand injection.",
+      "takeaway": "Enforcement happens outside the model: policies run at the network layer in the gateway, so even if an LLM is tricked into calling an endpoint, the gateway decides whether the call is authorized and which credential (if any) gets attached.",
+      "source": "HN",
+      "source_url": "https://github.com/onecli/onecli",
+      "discussion_url": "https://news.ycombinator.com/item?id=49363710",
+      "authors": [
+        "OneCLI"
+      ],
+      "published_at": "2026-08-19T16:29:02Z",
+      "tags": [
+        "ai-agents",
+        "security",
+        "selfhosted"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "gralhix004-cuda-geolocation",
+      "title": "Geolocating a random island using geometry and CUDA programming",
+      "dek": "An OSINT writeup that locates a drone photo of a coral-cay resort by fingerprinting the triangle geometry of three islands and matching it against 80.7 million candidate triples built from OpenStreetMap coastline polygons — one CUDA thread per triple, ~204ms kernel time.",
+      "why": "A genuinely hands-on pipeline worth studying: tropical bounding boxes and local-density filters shrink 141k land polygons to 23.5k clusters, stratified sampling keeps triple generation tractable, and every later filter (compactness, oval fill ratio, NDVI vegetation, DEM elevation) is explained down to the final answer at 7.36°N 151.76°E.",
+      "takeaway": "When a search space explodes combinatorially, the fix is cheap geometric pre-filters plus stratified sampling to bound the input, then brute-force parallelism — 80.7M triples in 204ms — instead of a smarter sequential search.",
+      "source": "HN",
+      "source_url": "https://yassa9.github.io/osint/gralhix-004/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49360545",
+      "authors": [
+        "yassa9"
+      ],
+      "published_at": "2026-08-16T00:00:00Z",
+      "tags": [
+        "osint",
+        "gpu",
+        "geometry"
+      ],
+      "read_minutes": 12
+    },
     {
       "id": "solo-so-loader-static-binaries",
       "title": "SoLo: a .so loader for static Linux binaries",
