@@ -3,8 +3,10 @@
 
 This is deliberately deterministic. Editorial selection and summarisation happen
 in the scheduled agent after it reads the primary sources. The source mix is
-intentionally broader than academic feeds: practical Reddit discussions and
-GitHub Trending projects are useful idea-discovery signals, not automatic picks.
+intentionally broader than academic feeds: practical Reddit discussions gathered
+through Camofox MCP and GitHub Trending projects are useful idea-discovery signals,
+not automatic picks. Reddit is intentionally not fetched here; Camofox MCP is the
+sole Reddit adapter.
 """
 from __future__ import annotations
 import datetime as dt
@@ -23,10 +25,7 @@ STATE_PATH = ROOT / "publisher-state.json"
 FEEDS = [
     ("HN", "https://hnrss.org/frontpage?points=50"),
     ("Lobsters", "https://lobste.rs/rss"),
-    ("Reddit", "https://www.reddit.com/r/selfhosted/.rss?limit=25"),
-    ("Reddit", "https://www.reddit.com/r/LocalLLaMA/.rss?limit=25"),
-    ("Reddit", "https://www.reddit.com/r/SideProject/.rss?limit=25"),
-    ("Reddit", "https://www.reddit.com/r/webdev/.rss?limit=25"),
+
     ("arXiv", "https://export.arxiv.org/rss/cs.AI"),
     ("arXiv", "https://export.arxiv.org/rss/cs.LG"),
     ("arXiv", "https://export.arxiv.org/rss/cs.DB"),
@@ -207,7 +206,8 @@ def main() -> int:
             if dt.datetime.fromisoformat(freshness.replace("Z", "+00:00")) <= last_dt:
                 continue
         unique[canonical] = item
-    # Keep discovery sources in the candidate set. GitHub Trending has a
+    # Keep discovery sources in the candidate set. Reddit is supplied by the
+    # scheduled agent through Camofox MCP; GitHub Trending has a
     # discovery timestamp rather than an article publication timestamp, so it
     # is still eligible for the publisher's new-only cutoff.
     ordered = sorted(
