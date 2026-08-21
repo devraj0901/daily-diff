@@ -1,7 +1,101 @@
 {
-  "edition_date": "2026-08-20",
-  "generated_at": "2026-08-20T02:38:05.576448Z",
+  "edition_date": "2026-08-21",
+  "generated_at": "2026-08-21T02:38:13.744656+00:00",
   "stories": [
+    {
+      "id": "spacetime-short-technical-review",
+      "title": "SpacetimeDB: A short technical review",
+      "dek": "A former PlanetScale engineer takes apart SpacetimeDB 2.0's storage engine and finds an in-memory store wrapped in a single parking_lot RWMutex, with user Wasm reducers running inside the exclusive write critical section.",
+      "why": "For anyone evaluating new databases or shipping one: the review separates the honest technical core (reducers and views as app logic living next to the data, an async WAL flushed every 50ms) from the misleading benchmarks, and explains why the product is really 'a more powerful Redis' rather than a competitor to distributed relational databases.",
+      "takeaway": "When application logic runs inside the database's critical section, QPS benchmarks are meaningless against network-separated competitors — access your data in-memory and honestly explain the trade-offs, as Turbopuffer does, instead of drinking competitors' tears.",
+      "source": "HN",
+      "source_url": "https://strn.cat/posts/spacetime/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49378933",
+      "published_at": "2026-08-20T19:19:53Z",
+      "tags": [
+        "databases",
+        "systems",
+        "review"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "midi-autocomplete-piano",
+      "title": "Training a 125M-parameter model to autocomplete piano",
+      "dek": "A 125M transformer that autocompletes MIDI piano performances in real time (~108 notes/sec on an iPhone 15), where the biggest wins came from the MIDI representation, aggressive data cleaning, scheduled sampling, and DPO post-training.",
+      "why": "A genuinely practical ML project write-up: it walks through tokenizing music (the winning NOTE(pitch, delta, duration, velocity) representation with five categorical fields summed into one embedding), why note-on/note-off representations drift, how cleaning beat scaling the dataset 5x, and how Gemini pairwise judging built the DPO preference set.",
+      "takeaway": "Representation and data quality beat model scale: the large model gained little over the medium one, and 5x more noisy data made results worse — while DPO on pairwise preferences improved continuation quality even when it hurt validation loss.",
+      "source": "HN",
+      "source_url": "https://simedw.com/2026/08/20/midi-autocomplete/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49373456",
+      "authors": [
+        "SimEdw"
+      ],
+      "published_at": "2026-08-20T12:04:38Z",
+      "tags": [
+        "ai",
+        "ml",
+        "music",
+        "ios"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "aliexpress-webaudio-fingerprinting",
+      "title": "AliExpress runs silent WebAudio fingerprinting that breaks Bluetooth multipoint",
+      "dek": "Two obfuscated Alibaba security scripts on the AliExpress homepage silently create WebAudio graphs (oscillator through a zero-gain node to the audio destination) as part of a broad browser fingerprint — which on one setup kept the PC's Bluetooth audio path alive and blocked multipoint headphone switching.",
+      "why": "A crisp browser-security investigation with a concrete fix: the author instruments AudioContext/AudioNode to catch the hidden graphs, explains why tab mute does nothing (no media element exists), lists the fingerprint vectors, and gives two uBlock Origin rules that block collina.js and fireyejs.js.",
+      "takeaway": "A zero-gain AudioContext still counts as live audio processing for the browser and OS — so silent fingerprinting can own the system audio path; block the scripts and close existing tabs, because blocking a script does not shut down an AudioContext it already created.",
+      "source": "HN",
+      "source_url": "https://blog.laserphile.com/2026/08/aliexpress-webpage-keeping-multipoint.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49372583",
+      "published_at": "2026-08-20T10:08:52Z",
+      "tags": [
+        "privacy",
+        "security",
+        "browser"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "arrayref-supply-chain-attack",
+      "title": "Supply chain attack on arrayref",
+      "dek": "The popular arrayref crate was maliciously republished (0.3.10) to depend on a deleted build-time payload crate; the Rust Security Response Team removed the malicious versions, unyanked the ones the attacker had yanked, and locked the author's account.",
+      "why": "A real incident postmortem with actionable guidance for every Rust user: the exact malicious versions and their online windows (arrayref@0.3.10 was up for 86 minutes), and a one-liner find command to check ~/.cargo/registry/cache for any of the six compromised crates.",
+      "takeaway": "A compromised maintainer account can republish a popular crate with a build-time payload and then yank the safe versions — pin your dependencies, and audit your cargo cache with the provided find command rather than trusting that crates.io versions are what you think they are.",
+      "source": "Lobsters",
+      "source_url": "https://blog.rust-lang.org/2026/08/20/supply-chain-attack-on-arrayref/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49374269",
+      "authors": [
+        "Manish Goregaokar (Rust Security Response Team)"
+      ],
+      "published_at": "2026-08-20T10:46:56Z",
+      "tags": [
+        "security",
+        "supply-chain",
+        "rust"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "hp-laser-1008a-claude-session",
+      "title": "HP Laser 1008a → native macOS printing: a Claude Code session",
+      "dek": "A ~4-hour Claude Code session, rendered as it happened, goes from 'install the drivers' to reverse-engineering an SPL3 laser by reading its own error pages, beating the macOS USB sandbox, and running HP's real codec in a container.",
+      "why": "For anyone who runs coding agents and wonders what a long autonomous debugging session actually looks like: the transcript shows the full arc — discovering the printer is Samsung SPL3/QPDL rather than PCL, building splix, the USB backend fights, the containerized codec, and the final launchd daemon — with the failures kept in.",
+      "takeaway": "Agent debugging sessions are most useful when the write-up preserves the dead ends: the honest account of the SpliX 2.0.2 investigation and the unresolved cleaner-encoder question is what makes the public repo (github.com/Kuberwastaken/hp-laser-1008a-macos) worth reading.",
+      "source": "Karakeep",
+      "source_url": "https://cdn.kuber.studio/chat/hp-laser-1008a-driver",
+      "authors": [
+        "Kuberwastaken"
+      ],
+      "published_at": "2026-08-20T18:39:10Z",
+      "tags": [
+        "ai-agents",
+        "macos",
+        "reverse-engineering"
+      ],
+      "read_minutes": 12
+    },
     {
       "id": "reclaim-the-terminal-tty",
       "title": "Reclaim the terminal",
