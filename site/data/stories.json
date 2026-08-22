@@ -1,7 +1,99 @@
 {
-  "edition_date": "2026-08-21",
-  "generated_at": "2026-08-21T02:38:13.744656+00:00",
+  "edition_date": "2026-08-22",
+  "generated_at": "2026-08-22T02:36:33.867290+00:00",
   "stories": [
+    {
+      "id": "no-reason-software-slow",
+      "title": "There's no reason for software to be slow anymore",
+      "dek": "Dan Luu argues that LLM agents have collapsed the cost of performance work, demonstrating it with agent-driven experiments on a regex engine and his own ripgrep workload — workload-specific optimization that once took person-weeks now takes minutes of typing.",
+      "why": "For anyone who has written off performance work as too expensive or too specialist: this shows what a bounded optimization problem looks like when a capable agent does the surgery, with concrete numbers (2x-4x on long simple queries, ~7% on representative holdouts). It also names the current limit honestly — agents still need a human to set up benchmarking and guard against overfitting.",
+      "takeaway": "The economics of optimization have inverted: with a roughly 1000x drop in human time, workload-specific, overfit-to-your-data optimization is now worth doing even for personal projects — but the agent needs a benchmark harness and a holdout set, because unguided it will overfit.",
+      "source": "HN",
+      "source_url": "https://danluu.com/perf-opt/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49395628",
+      "authors": [
+        "Dan Luu"
+      ],
+      "published_at": "2026-08-22T01:06:17Z",
+      "tags": [
+        "performance",
+        "ai",
+        "agents"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "qwen3-tts-sub50ms",
+      "title": "How we made a text-to-speech model respond in sub-50 ms",
+      "dek": "Nari Labs tuned Qwen3-TTS 1.7B serving to sub-50 ms p95 time-to-first-audio at 10 RPS on a single H100 — one scheduler coordinating the Talker, Code Predictor and Codec, plus CUDA graphs and a state-cached codec — and open-sourced the implementation and benchmark.",
+      "why": "A practical-AI read with real numbers: it benchmarks four serving engines under Poisson load, shows which knobs actually move TTFA (leading-silence trim, frame-accumulation ramps), and explains the scheduling design that holds sub-50 ms through 10 RPS with zero underruns. The cost math (~$2/1M characters vs ~$100/1M for ElevenLabs) makes the payoff concrete.",
+      "takeaway": "Streaming latency is a scheduling problem, not just a model problem: split the three TTS modules into independently schedulable tasks, anchor urgent first-audio requests in each batch, and cache codec state so sustained playback never re-decodes history.",
+      "source": "HN",
+      "source_url": "https://nari-labs.com/blog/qwen3-tts-speed-cost-frontier/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49389952",
+      "published_at": "2026-08-21T15:51:10Z",
+      "tags": [
+        "ai",
+        "tts",
+        "inference",
+        "serving"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "cobalt-kobo-apps",
+      "title": "Kobo can run apps now",
+      "dek": "Cobalt is an open-source app platform for Kobo e-readers: a launcher, a signed app store, a Rust SDK, and a runtime that runs each app as its own unprivileged ARM binary, installed once over USB and updated over Wi-Fi.",
+      "why": "A well-executed embedded project with real engineering: capability-gated access to network, storage, audio and frontlight; signed manifests verified before launch; recovery-safe updates; and browser/runtime simulators. If you've wanted a cheap e-ink panel for dashboards, readers, or agent notifications, the SDK makes an app roughly one Rust file.",
+      "takeaway": "Treat the device as a capability server rather than a sandbox to escape: each app asks for resources, the runtime gates them, and the launcher always keeps a path back to the stock reader — a clean model for shipping apps onto locked-down consumer hardware.",
+      "source": "HN",
+      "source_url": "https://bandarlabs.github.io/Cobalt/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49390427",
+      "published_at": "2026-08-21T16:25:25Z",
+      "tags": [
+        "hardware",
+        "rust",
+        "ereader",
+        "opensource"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "cassandra-6-accord-transactions",
+      "title": "The road to ACID transactions in Cassandra 6",
+      "dek": "Phil Eaton walks Cassandra's transaction history — atomic batches, single-partition LWT, and now Accord — by running a 3-node Cassandra 6.0 cluster through an accounting workload, and finds an isolation bug in the pre-release Accord implementation that Apple's C. Scott Andreas confirms.",
+      "why": "A rare reproducible test of a distributed database's transactional guarantees before release: the Monastery assertion harness pins down exactly what each mechanism does and doesn't guarantee (plain updates violate isolation 939/1500 times; LWT cannot span partitions; Accord's final result stays correct but shows a possible concurrent-isolation bug). A good model for how to probe a consensus protocol you're about to depend on.",
+      "takeaway": "When evaluating a new distributed transaction protocol, test the guarantees you actually need — isolation during concurrency, not just final correctness — with a deterministic assertion harness; the author found a real pre-release bug a happy-path test would never have caught.",
+      "source": "Lobsters",
+      "source_url": "https://theconsensus.dev/p/2026/08/16/transactions-in-cassandra.html",
+      "authors": [
+        "Phil Eaton"
+      ],
+      "published_at": "2026-08-16T00:00:00Z",
+      "tags": [
+        "databases",
+        "distributed-systems",
+        "transactions"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "openlogi-local-first-logitech",
+      "title": "OpenLogi: a local-first Logitech Options+ alternative in Rust",
+      "dek": "OpenLogi is a native, open-source replacement for Logitech Options+ that remaps buttons, DPI, SmartShift and lighting over HID++ with a plain TOML config — no account, no telemetry, with first-class Linux support and a real CLI.",
+      "why": "If you use a Logitech MX mouse or keyboard and dislike the proprietary Options+ stack, this is a builder-friendly drop-in: HID++ protocol work, a GPUI desktop app plus a headless agent and CLI, packaged for macOS/Linux/Windows. The TOML config means your setup is version-controllable and diffable.",
+      "takeaway": "A peripheral config tool doesn't need a cloud account or telemetry: the whole feature set is reachable over HID++, and putting bindings in a plain text file makes the config scriptable and portable — the same local-first pattern applies to most 'vendor app' categories.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/AprilNEA/OpenLogi",
+      "published_at": "2026-08-21T06:49:31Z",
+      "tags": [
+        "rust",
+        "hardware",
+        "local-first",
+        "linux"
+      ],
+      "read_minutes": 6
+    },
     {
       "id": "spacetime-short-technical-review",
       "title": "SpacetimeDB: A short technical review",
