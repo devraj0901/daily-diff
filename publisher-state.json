@@ -1,6 +1,11 @@
 {
-  "last_published_at": "2026-08-22T02:36:33.867290+00:00",
+  "last_published_at": "2026-08-23T02:34:56.812714+00:00",
   "published_urls": [
+    "https://forum.level1techs.com/t/why-your-local-llm-feels-dumber-than-it-is/253917",
+    "https://blog.wybxc.cc/blog/rust-gui-survey-2026/",
+    "https://typesanitizer.com/blog/performance-issues.html",
+    "https://blog.modelcontextprotocol.io/posts/mcp-roadmap/",
+    "https://github.com/Tencent/AI-Infra-Guard",
     "https://danluu.com/perf-opt/",
     "https://nari-labs.com/blog/qwen3-tts-speed-cost-frontier/",
     "https://bandarlabs.github.io/Cobalt/",
