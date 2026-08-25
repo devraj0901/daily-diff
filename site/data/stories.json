@@ -1,7 +1,109 @@
 {
-  "edition_date": "2026-08-24",
-  "generated_at": "2026-08-24T02:36:35.862198+00:00",
+  "edition_date": "2026-08-25",
+  "generated_at": "2026-08-25T02:36:17.074606+00:00",
   "stories": [
+    {
+      "id": "llm-inference-engine-attack-surface",
+      "title": "LLMs could control their host machines by exploiting inference engines",
+      "dek": "An essay on attacking the inference engine instead of the agent sandbox: a malicious model emits token sequences that a parser mistakes for instructions, and the concrete evidence is CVE-2025-9141, a vLLM XML tool-parser bug that passed nearly every tool-call argument to eval(), allowing arbitrary code execution on the GPU host.",
+      "why": "For anyone running vLLM or SGLang locally or in a datacenter, this reframes where the trust boundary sits: LLM output is untrusted input to parser code that was rarely written with security review in mind. The essay surveys real parser bugs (including one force-merged over a Gemini-flagged critical warning), argues open-weight models on less-scrutinized engines make this realistic, and proposes separating the GPU host from the token parser.",
+      "takeaway": "Inference engines are token parsers first: converting arbitrary model output into structured chat/tool calls is complex, and a parsing bug there can mean code execution on the machine holding model weights — treat parser code as a security boundary and the data it emits as untrusted.",
+      "source": "HN",
+      "source_url": "https://boydkane.com/essays/llms-could-control-their-host-machines-by-exploiting-inference-engines",
+      "discussion_url": "https://news.ycombinator.com/item?id=49424387",
+      "authors": [
+        "Boyd Kane"
+      ],
+      "published_at": "2026-08-24T19:03:06Z",
+      "tags": [
+        "ai",
+        "security",
+        "llm",
+        "inference"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "jpeg-xl-intent-to-ship",
+      "title": "Intent to Ship: JPEG XL",
+      "dek": "Mozilla announced it will ship JPEG XL in Firefox, built on jxl-rs, a Rust decoder Google Research wrote after Mozilla challenged them to replace the 100,000-line C++ decoder it had deemed too large an attack surface — with progressive rendering as a headline feature that AVIF lacks.",
+      "why": "Web developers get a practical format decision: JPEG XL lands across major browsers before the end of the year, and this post gives concrete size comparisons (at lossless quality, 1.45 MB JPEG XL vs 1.76 MB AVIF on one example) plus guidance on when each format wins. It is also a clean case study in how decoder implementation language became a shipping criterion for browser image formats.",
+      "takeaway": "The 100k-line C++ decoder was the blocker; a compact Rust decoder meeting performance and compatibility bars unblocked shipping — decoder attack surface is now a first-class consideration for image format adoption in browsers.",
+      "source": "Lobsters",
+      "source_url": "https://hacks.mozilla.org/2026/08/intent-to-ship-jpeg-xl/",
+      "authors": [
+        "Jake Archibald"
+      ],
+      "published_at": "2026-08-24T16:25:08Z",
+      "tags": [
+        "web",
+        "image-formats",
+        "rust",
+        "browsers"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "ms-paint-guid-watermark",
+      "title": "Microsoft Paint and Photos embed server-issued GUIDs as invisible watermarks in locally generated images",
+      "dek": "Reverse engineering of Watermarker.dll shows Paint and Photos embed a 16-byte GUID into the pixels of locally generated AI images: the prompt goes to a remote moderation endpoint, the server returns a watermarkId, and a content-adaptive SVD-style quantizer hides it in the image — a separate setting from the visible Copilot logo.",
+      "why": "For anyone doing forensics, provenance tooling, or just running Windows AI features: the walkthrough shows exactly how the invisible watermark works (18-byte payload with checksum, block-domain quantization, minimum three placements per bit), what Microsoft discloses (C2PA metadata) versus what it does not (a prompt-linked GUID in the pixels, tied to moderation), and that Paint fails the whole generation if watermarking fails.",
+      "takeaway": "Local AI generation is not offline: the prompt still travels to Microsoft's moderation endpoint, and the returned GUID is baked into pixels as the pixel-level half of a two-layer provenance system whose file-level half is the C2PA manifest.",
+      "source": "HN",
+      "source_url": "https://xusheng.dev/posts/reversing/mspaint_invisible_watermark/main/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49421158",
+      "authors": [
+        "Xusheng Li"
+      ],
+      "published_at": "2026-08-24T15:28:04Z",
+      "tags": [
+        "security",
+        "reverse-engineering",
+        "watermarking",
+        "ai"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "self-sqlite-executable",
+      "title": "Your executable is a SQLite database",
+      "dek": "Farid Zakaria's SELF format replaces ELF with SQLite: the chmod +x file is a database with load segments as BLOBs and symbols as rows, loaded through binfmt_misc and a small C interpreter — so strip becomes a DELETE plus VACUUM, patchelf an UPDATE, and LD_PRELOAD a table row.",
+      "why": "A wildcard that rewards the read: it reframes ELF as a hand-rolled database (string interning, indexes, foreign keys done manually) and shows what falls out of a self-describing format — dynamic linking answered with SQL joins, an atomic whole-userland LD_PRELOAD, and 723 executables packed into one 612 MiB queryable file.",
+      "takeaway": "ELF already reinvents database primitives by hand; in a SQLite-based format those come for free, and every tool that modifies binaries becomes a transaction instead of fragile offset surgery.",
+      "source": "Lobsters",
+      "source_url": "https://fzakaria.com/2026/08/23/your-executable-is-a-sqlite-database",
+      "authors": [
+        "Farid Zakaria"
+      ],
+      "published_at": "2026-08-24T07:32:45Z",
+      "tags": [
+        "formats",
+        "sqlite",
+        "linux",
+        "tooling"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "apache-maka-agent-workspace",
+      "title": "Apache Maka: a local-first agent workspace built on an append-only event log",
+      "dek": "Maka (Apache incubating) is a local-first AI agent workspace where model messages, tool calls, tool results, permission decisions, and termination events are recorded as an append-only execution log; desktop, TUI, and CLI all run through one Runtime Host, with tools that leave the sandbox boundary requiring approval.",
+      "why": "For builders running local agents or writing agent harnesses: Maka's architecture is the interesting part — the session record is the source of truth, the UI and the next model call are projections of it, interrupted turns can resume, and an eval harness runs the same Runtime Host. It is early (no Apache release yet, Apple Silicon desktop only), but the event-sourcing design is directly stealable.",
+      "takeaway": "Model the agent runtime as event sourcing: persisting every message, tool call, and permission decision as append-only facts gives you context reconstruction, branching, recovery, and reproducible evaluation as projections over the record — not features bolted onto a chat loop.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/apache/maka",
+      "authors": [
+        "Apache Software Foundation"
+      ],
+      "published_at": "2026-05-27T15:46:05Z",
+      "tags": [
+        "agents",
+        "local-first",
+        "event-sourcing",
+        "self-hosted"
+      ],
+      "read_minutes": 9
+    },
     {
       "id": "qwen38-reverse-engineering",
       "title": "I gave Qwen 3.8 27B a reverse-engineering job and it finished in 30 minutes",

@@ -1,6 +1,11 @@
 {
-  "last_published_at": "2026-08-24T02:36:35.862198+00:00",
+  "last_published_at": "2026-08-25T02:36:17.074606+00:00",
   "published_urls": [
+    "https://boydkane.com/essays/llms-could-control-their-host-machines-by-exploiting-inference-engines",
+    "https://hacks.mozilla.org/2026/08/intent-to-ship-jpeg-xl/",
+    "https://xusheng.dev/posts/reversing/mspaint_invisible_watermark/main/",
+    "https://fzakaria.com/2026/08/23/your-executable-is-a-sqlite-database",
+    "https://github.com/apache/maka",
     "https://www.xda-developers.com/qwen-3-8-27b-reverse-engineering-job-frontier-model/",
     "https://malisper.me/jit-compiling-code-in-5-us/",
     "https://hister.org/",
