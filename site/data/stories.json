@@ -1,7 +1,107 @@
 {
-  "edition_date": "2026-08-25",
-  "generated_at": "2026-08-25T02:36:17.074606+00:00",
+  "edition_date": "2026-08-26",
+  "generated_at": "2026-08-26T02:37:33.710765Z",
   "stories": [
+    {
+      "id": "c2pa-cameras-android-attestation",
+      "title": "C2PA Cameras Do Not Survive Contact with Reality",
+      "dek": "David Buchanan (retr0id) breaks Android's C2PA camera attestation: root LPEs (including CVE-2026-43499, a one-click root on fully patched Pixels) and low-cost hardware fault injection let anyone ask StrongBox to sign arbitrary media, so 'Captured with a camera' badges certify nothing.",
+      "why": "For anyone building provenance tooling or trusting C2PA metadata: this attacks the strongest mobile implementation (Pixel Camera at Assurance Level 2) end-to-end and ships a working keystork tool that signs any file as the camera app via the KeyStore API. It also documents that Google's VRP explicitly excludes the most obvious C2PA attack vector, so the platform-level fix is not coming from that program.",
+      "takeaway": "Key attestation proves the bootloader state at boot, not the app's integrity at signing time: once an LPE grants root, StrongBox will sign arbitrary payloads with the app's keys, so hardware-backed signing keys without per-signature user consent cannot ground a provenance chain.",
+      "source": "HN",
+      "source_url": "https://www.da.vidbuchanan.co.uk/blog/android-c2pa.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49439499",
+      "authors": [
+        "David Buchanan"
+      ],
+      "published_at": "2026-08-25T19:38:24Z",
+      "tags": [
+        "security",
+        "c2pa",
+        "android",
+        "attestation"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "ai-at-home-part2-multi-gpu-drifting",
+      "title": "AI At Home Part 2: Multi GPU Drifting",
+      "dek": "Part 2 of the e-waste AI server series measures layer-parallel vs tensor-parallel splitting across four AMD V620 GPUs on a PCIe 3.0 x8 bus and lands working llama.cpp configurations: DeepSeek V4 Flash at 22 tok/s, Gemma 4 31B at 45 tok/s, Qwen 3.8 27B at 35 tok/s, with spec-draft models and tensor-split tuning.",
+      "why": "For anyone running multi-GPU local inference: the post quantifies why layer-parallel caps you at one GPU's memory bandwidth (512 GB/s) while tensor-parallel's inter-GPU traffic can eat its theoretical 4x gain on a slow shared bus, and it includes the exact llama-server flags that worked on the rig. The appendix commands are directly copyable for similar hardware.",
+      "takeaway": "On a bandwidth-starved multi-GPU rig, pick the split mode per model: layer-parallel for huge MoEs like DeepSeek V4 Flash (284B-A13B), tensor-parallel only when per-layer sync cost is smaller than the bandwidth gain, and always set the context size manually or the model spills into system RAM and crawls.",
+      "source": "Lobsters",
+      "source_url": "https://jdagostino.github.io/ai-pt2-multi-gpu-drifting/index.html",
+      "discussion_url": "https://lobste.rs/s/qc6pjd",
+      "published_at": "2026-08-25T18:20:38Z",
+      "tags": [
+        "llm",
+        "gpu",
+        "self-hosted",
+        "llama-cpp"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "latticedb-embedded-graph-vector-db",
+      "title": "LatticeDB: an embedded single-file graph database with vector and full-text search",
+      "dek": "LatticeDB is an embedded, single-file property-graph database that unifies Cypher-style graph traversal, HNSW vector similarity, and BM25 full-text search behind one query language, with a WAL-backed changefeed aimed at Graph RAG, agent memory, and local knowledge tools.",
+      "why": "For builders prototyping local AI features: it replaces the usual Neo4j + vector DB + FTS stack with one portable file and no server, with Python, TypeScript, and Go bindings. The README carries reproducible benchmarks (0.13 us node lookups, 0.83 ms 10-NN at 1M vectors with 100% recall) and is explicit about the limits: single-writer, single-machine, no OPTIONAL MATCH yet.",
+      "takeaway": "One storage engine can serve graph traversal, vector similarity, and lexical search through a single query layer when all three are built over the same WAL and B+Tree, and publishing explicit 'when not to use this' boundaries is what makes the claim credible.",
+      "source": "HN",
+      "source_url": "https://github.com/jeffhajewski/latticedb",
+      "discussion_url": "https://news.ycombinator.com/item?id=49437049",
+      "authors": [
+        "Jeff Hajewski"
+      ],
+      "published_at": "2026-08-25T16:52:05Z",
+      "tags": [
+        "databases",
+        "vector-search",
+        "graphs",
+        "rag"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "cursor-git-at-any-scale",
+      "title": "Git at any scale: why Git hosting is hard and how a WAL in S3 fixes it",
+      "dek": "A distributed-systems walkthrough of hosting Git at scale: why packfiles and the commit DAG defeat filesystem- and object-store-based replication, how GitHub's Spokes used three-phase commit on reference transactions, and how Cursor's Origin replaces quorum entirely with an S3-backed write-ahead log, rendezvous-hashing primaries, and gossip UDP catch-up.",
+      "why": "For anyone who has wondered why Git hosting is hard or who designs replicated storage: Vicent Marti (ex-GitHub, worked on Spokes) documents each failed approach — distributed filesystems, DRBD, object-level DHTs — with its concrete failure mode, then shows the WAL-in-S3 design that lets Cursor sustain 120+ pushes/s on S3 Standard and 300+/s on S3 Express One Zone with stateless replicas.",
+      "takeaway": "Make the immutable write-ahead log the source of truth instead of the on-disk repository: with CAS on S3 for linearization, replicas can be stateless, primaries need no election, and reads become ETag-conditional GETs — quorum, routing tables, and consistency checks all disappear.",
+      "source": "Karakeep",
+      "source_url": "https://cursor.com/blog/git-at-any-scale",
+      "authors": [
+        "Vicent Marti"
+      ],
+      "published_at": "2026-08-25T13:47:53Z",
+      "tags": [
+        "distributed-systems",
+        "git",
+        "storage",
+        "s3"
+      ],
+      "read_minutes": 18
+    },
+    {
+      "id": "go-runtime-netpoll-32bit-bug",
+      "title": "Hunting Down a Go Runtime Bug on 32-bit Embedded Systems",
+      "dek": "A customer's long-running Go app crashes sporadically on 32-bit ARM embedded Linux; sigma-star traces it to netpoll storing both a raw &netpollEventFd pointer and tagged pollDesc pointers in the same 8-byte epoll data field — on 32-bit little-endian, the fdseq tag in the low word aliases the eventfd address once ~3M descriptors are recycled.",
+      "why": "A model debugging essay: the fatal 'netpoll: eventfd ready for something unexpected' error, a two-year-old unresolved Go issue, an LLM-assisted source review that finds the aliasing, a standalone reproducer that crashes in minutes, and an upstream fix (store a tagged nil pollDesc instead of a raw pointer). Great for anyone debugging runtime or unsafe code on 32-bit targets.",
+      "takeaway": "When one word packs a pointer and a tag, never distinguish the sentinel by address comparison on 32-bit: make the sentinel a tagged nil pointer so the comparison semantics are identical on every word size.",
+      "source": "Lobsters",
+      "source_url": "https://sigma-star.at/blog/2026/08/go-runtime-netpoll-bug/",
+      "authors": [
+        "sigma-star"
+      ],
+      "published_at": "2026-08-25T12:26:40Z",
+      "tags": [
+        "go",
+        "debugging",
+        "embedded",
+        "runtime"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "llm-inference-engine-attack-surface",
       "title": "LLMs could control their host machines by exploiting inference engines",
