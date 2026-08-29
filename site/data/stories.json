@@ -1,7 +1,108 @@
 {
-  "edition_date": "2026-08-28",
-  "generated_at": "2026-08-28T02:34:51.747721+00:00",
+  "edition_date": "2026-08-29",
+  "generated_at": "2026-08-29T09:49:44.151540+00:00",
   "stories": [
+    {
+      "id": "same-model-different-harness",
+      "title": "Same Model, Different Harness: Different Coding-Agent Results",
+      "dek": "A coding-agent study shows the harness - not just the model - determines outcomes: with identical model weights and tasks, a closed-loop harness that shortens old tool results under context pressure and mechanically responds to stalled work raised mean per-task fail-to-pass on SWE-bench Verified from 28% to 49% and complete solutions from 43 to 72 on a 169-task tight-window cohort.",
+      "why": "For anyone building or operating coding agents: concrete paired evidence that context-window management and stall handling are part of the solver, not plumbing - the same frozen treatment also improved three additional models without retuning, so evaluations should treat the model and harness together as the tested unit.",
+      "takeaway": "An agent's working view does not have to be its permanent record: keeping a durable run archive while rebuilding a shorter, pressure-aware model-visible context - plus fixed responses to repeated or stalled work - beats growing one chronological transcript until it overflows the window.",
+      "source": "arXiv",
+      "source_url": "https://arxiv.org/abs/2608.26218",
+      "authors": [
+        "Sydney Lewis"
+      ],
+      "published_at": "2026-08-29T04:00:00Z",
+      "tags": [
+        "coding-agents",
+        "llm",
+        "benchmarks",
+        "evaluation"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "lemmalog-datalog-llm-memory",
+      "title": "I accidentally turned LLM memory into program analysis",
+      "dek": "A vulnerability researcher built Lemmalog, a Datalog engine that maintains an LLM agent's knowledge as facts and rules, so when a debugger observation changes the conclusions derived from it are retracted automatically and every belief carries a provenance chain.",
+      "why": "For anyone running long-horizon LLM agents: instead of growing the context window, split the fuzzy part (the LLM extracts structured facts from prose, source, and debugger output) from the deterministic part (Datalog derives consequences), which stops agents from resurrecting disproven hypotheses hours later - Lemmalog scores 0.463 F1 on LongMemEval and 0.533 on LoCoMo, roughly doubling its first standardized LongMemEval configuration.",
+      "takeaway": "Retracting consequences is harder than deleting facts: Lemmalog tracks derivation support so a conclusion backed by two observations survives the removal of either one - a subtlety that naive delete-and-recompute memory systems get wrong.",
+      "source": "HN",
+      "source_url": "https://pwning.systems/posts/llm-memory-program-analysis/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49485416",
+      "published_at": "2026-08-28T23:27:45Z",
+      "tags": [
+        "llm",
+        "agents",
+        "datalog",
+        "memory"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "rumour-of-bug-is-the-exploit",
+      "title": "Just a rumour of a bug is enough to find a security exploit these days",
+      "dek": "OCaml maintainer Anil Madhavapeddy documents how opening a public PR for a cohttp path-traversal fix drew exploit probes against his live server within about ten minutes, and argues agentic exploit generation has inverted the OSS security timeline - mean time to exploit is now negative.",
+      "why": "For open-source maintainers and anyone shipping software: a first-hand account of a modern security report (private Slack report via Jane Street, an agent producing an exploit in under a minute from a rough description, automated watchers probing public repos within minutes of a PR) with concrete adaptations - private patch development, microupdates, and shifting effort to defender remediation throughput.",
+      "takeaway": "Embargo secrecy no longer buys time because the direction of search is the exploit: given a CVE description, agent exploit success jumps from 7% to 87% (Fang et al.), so defense shifts from hiding bugs to raising maintainer triage and release throughput.",
+      "source": "HN",
+      "source_url": "https://anil.recoil.org/notes/rumour-is-the-exploit",
+      "discussion_url": "https://news.ycombinator.com/item?id=49480466",
+      "authors": [
+        "Anil Madhavapeddy"
+      ],
+      "published_at": "2026-08-28T15:58:46Z",
+      "tags": [
+        "security",
+        "llm",
+        "open-source",
+        "exploits"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "guis-should-be-keyboard-driven",
+      "title": "GUIs should be fully keyboard-driven",
+      "dek": "An essay arguing the 'TUIs are better because they are keyboard-driven' argument does not hold up: GUI frameworks fully support keyboard navigation - GNOME's Human Interface Guidelines require every action to be reachable from the keyboard - so full keyboard coverage is a matter of developer intent, not feasibility.",
+      "why": "For developers choosing between TUI and GUI for their next tool: a concise counterpoint to the terminal-purity position, noting that mouse dexterity remains preferable for some tasks while keyboard coverage is an achievable, budgetable requirement for every GUI action.",
+      "takeaway": "Keyboard-driven operation is a property of the application, not of the interface paradigm - the GNOME HIG already mandates full keyboard reachability, so a GUI can match or beat a TUI when the developer treats it as a requirement.",
+      "source": "HN",
+      "source_url": "https://ckardaris.com/blog/2026/08/28/keyboard-driven-guis.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49479837",
+      "authors": [
+        "Charalampos Kardaris"
+      ],
+      "published_at": "2026-08-28T15:17:09Z",
+      "tags": [
+        "gui",
+        "tui",
+        "ux",
+        "keyboard"
+      ],
+      "read_minutes": 4
+    },
+    {
+      "id": "htmx-4-0-release",
+      "title": "htmx 4.0.0 has been released",
+      "dek": "htmx 4.0 rewrites the library's internals from XMLHttpRequest to fetch(), makes attribute inheritance opt-in via :inherited suffixes, standardizes events into htmx:phase:action names, stops using localStorage for history caching, and ships morph swaps, hx-partial tags, streaming extensions, and an upgrade-check CLI.",
+      "why": "For anyone building server-rendered web apps: 4.0 keeps 2.x behavior largely intact (2.x stays 'latest' on npm until early 2027) while fixing the three most confusing parts of the library - implicit attribute inheritance, organically grown event names, and localStorage snapshot corruption - and ships agent skills for upgrading.",
+      "takeaway": "Making implicit behavior explicit is a design decision, not just cleanup: htmx 2's CSS-like attribute inheritance was powerful but hard to reason about, so 4.x requires an explicit :inherited suffix - the same trade-off shows up in any library where convenience magic becomes a maintenance tax.",
+      "source": "HN",
+      "source_url": "https://four.htmx.org/announcements/2026-08-28-htmx-4.0.0-is-released",
+      "discussion_url": "https://news.ycombinator.com/item?id=49478178",
+      "authors": [
+        "htmx team"
+      ],
+      "published_at": "2026-08-28T13:28:56Z",
+      "tags": [
+        "web",
+        "htmx",
+        "javascript",
+        "frontend"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "prewalk-trajectory-not-plan",
       "title": "You only need the frontier model for one single edit",

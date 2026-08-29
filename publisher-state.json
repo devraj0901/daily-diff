@@ -1,6 +1,11 @@
 {
-  "last_published_at": "2026-08-27T17:56:46Z",
+  "last_published_at": "2026-08-29T09:49:44Z",
   "published_urls": [
+    "https://arxiv.org/abs/2608.26218",
+    "https://pwning.systems/posts/llm-memory-program-analysis/",
+    "https://anil.recoil.org/notes/rumour-is-the-exploit",
+    "https://ckardaris.com/blog/2026/08/28/keyboard-driven-guis.html",
+    "https://four.htmx.org/announcements/2026-08-28-htmx-4.0.0-is-released",
     "https://stencil.so/blog/prewalk",
     "https://code.ffmpeg.org/FFmpeg/FFmpeg/issues/24290",
     "https://blog.cloudflare.com/dns-cache-memory-optimization-1111/",
