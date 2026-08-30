@@ -1,7 +1,105 @@
 {
-  "edition_date": "2026-08-29",
-  "generated_at": "2026-08-29T09:49:44.151540+00:00",
+  "edition_date": "2026-08-30",
+  "generated_at": "2026-08-30T02:33:36.854886+00:00",
   "stories": [
+    {
+      "id": "domain-driven-agents",
+      "title": "Domain-Driven Agents",
+      "dek": "A software engineer describes applying domain-driven design to make LLM coding agents work on brownfield codebases: each repo declares a .workflow.json manifest naming its bounded contexts and a CONTEXT.md glossary, agents handle the cheap tactical half of changes, and a generator derives a portfolio-wide context map that mechanically flags disagreements between contexts.",
+      "why": "For anyone who has watched LLM coding agents flail on legacy code: the failure mode is concrete (the model invents a fourth spelling of a concept that already exists three times because the codebase never decided which one was real) and the fix is a small, replicable workflow - declare the domain in the repo, give agents the glossary, and let a scripted map keep context boundaries honest.",
+      "takeaway": "An agent needs the system's meaning, not just its code: when a repo names its bounded contexts and the vocabulary each context owns, the model stops guessing - the context map and glossary are the missing documentation that turns an agent from a guesser into an implementer.",
+      "source": "HN",
+      "source_url": "https://coldtake.dev/blog/domain-driven-agents",
+      "discussion_url": "https://news.ycombinator.com/item?id=49492584",
+      "published_at": "2026-08-29T19:28:28Z",
+      "tags": [
+        "agents",
+        "ddd",
+        "llm",
+        "ai-engineering"
+      ],
+      "read_minutes": 11
+    },
+    {
+      "id": "omnipresent-availability-risks",
+      "title": "Omnipresent availability risks in cloud software",
+      "dek": "Lorin Hochstein synthesizes recent cloud incidents into a taxonomy of omnipresent availability risks - saturation, networking failures, security systems that deny valid access, uncommon changes like mitigations and migrations, and the essential complexity that reliability subsystems themselves add - arguing none of them can be engineered away.",
+      "why": "For anyone operating cloud software: a structured checklist of the failure classes that keep recurring across major incidents (GitHub, Buildkite, Azure, Cloudflare, OpenAI), each tied to a concrete example, which is more useful for pre-mortems than a pile of postmortems.",
+      "takeaway": "Reliability subsystems obey Ashby's Law: every autoscaler, circuit breaker, and failover increases the complexity of the controller and introduces novel failure modes, so the only availability risk you can genuinely improve is your incident-response capability - prepare for inevitability instead of elimination.",
+      "source": "Lobsters",
+      "source_url": "https://surfingcomplexity.blog/2026/08/29/omnipresent-availability-risks-in-cloud-software/",
+      "authors": [
+        "Lorin Hochstein"
+      ],
+      "published_at": "2026-08-29T22:17:35Z",
+      "tags": [
+        "reliability",
+        "incidents",
+        "cloud",
+        "sre"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "glimmer-gtk4-clojure",
+      "title": "Wrapping GTK4 in 800 lines of Clojure with Jolt",
+      "dek": "Yogthos shows how the glimmer-gtk backend wraps GTK4 in under 800 lines of Clojure via the Jolt FFI, bringing Reagent-style reactive atoms to native widgets - no VDOM, no browser engine, no C shim - with a counter example that reads exactly like its React counterpart.",
+      "why": "For anyone who wants native desktop UIs with web-style ergonomics: the whole backend contract between the reactive core and the toolkit is eight functions (create, apply-props, child operations, schedule, run), so binding a different toolkit is a bounded task, and the post explains the tricky FFI details - the blocking main loop, GObject enum nicks, and synchronous signal re-entrancy.",
+      "takeaway": "Reactive state tracking makes a VDOM unnecessary: because Reagent-style atoms know exactly which component changed, glimmer renders directly to live GTK widgets and patches them in place, skipping the diff-and-reconcile machinery that exists in React only because it has no change tracking.",
+      "source": "Lobsters",
+      "source_url": "https://yogthos.net/posts/2026-08-29-glimmer-ui.html",
+      "authors": [
+        "Yogthos"
+      ],
+      "published_at": "2026-08-29T19:56:09Z",
+      "tags": [
+        "clojure",
+        "gui",
+        "gtk",
+        "ffi"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "workweave-model-router",
+      "title": "workweave/router: a per-action model router for agentic systems",
+      "dek": "A drop-in, self-hostable proxy for Claude Code, Codex, Cursor, and other agents that picks the best model for every request in under 50 ms using an in-process ONNX embedder and a cluster scorer derived from the Avengers-Pro routing research, speaking Anthropic, OpenAI, and Gemini APIs behind one endpoint.",
+      "why": "For anyone paying for coding agents: the router sits between client and providers, keeps API keys on your box (BYOK), exports OTLP traces, and claims 40-70% cost cuts - and the mechanism is inspectable, with a /v1/route endpoint that returns the routing decision without proxying, plus an optional HMM policy sidecar.",
+      "takeaway": "Routing per action rather than per turn is where the savings come from: a request that needs the frontier model gets it while routine calls fall back to cheap models, and because the decision is exposed as an API call you can audit the policy before trusting the proxy.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/workweave/router",
+      "authors": [
+        "Weave"
+      ],
+      "published_at": "2026-08-30T02:30:56Z",
+      "tags": [
+        "llm",
+        "ai-infra",
+        "routing",
+        "self-hosted"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "gods-eye-view",
+      "title": "God's Eye View: an open-source spy-satellite simulator with real data",
+      "dek": "Bilawal Sidhu open-sourced God's Eye View, the viral spy-satellite simulator: a Cesium-based photorealistic 3D globe that fuses live public feeds - aircraft transponders, ship beacons, orbital elements, seismographs, and public cameras - with voice control, sensor-style render modes, and a detection overlay, all from open signals.",
+      "why": "For anyone curious about geospatial and spatial-intelligence engineering: it is a working example of fusing many public real-time feeds into one coherent 3D interface, with honest labeling of modeled vs live layers, a documented cost model (one metered Google Maps key, free tiers for most layers), and a stated line that person-tracking features won't be built.",
+      "takeaway": "The present is the cheap part: rendering live telemetry layers is easy, but tiling, serving, and scrubbing historical data at real resolution is where cost and compute explode - the project's own note that real-time is the affordable direction is the most useful engineering takeaway for anyone building spatial data products.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/bilawalsidhu/gods-eye-view",
+      "authors": [
+        "Bilawal Sidhu"
+      ],
+      "published_at": "2026-08-30T02:30:56Z",
+      "tags": [
+        "geospatial",
+        "osint",
+        "webgl",
+        "open-source"
+      ],
+      "read_minutes": 10
+    },
     {
       "id": "same-model-different-harness",
       "title": "Same Model, Different Harness: Different Coding-Agent Results",
