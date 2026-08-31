@@ -1,7 +1,107 @@
 {
-  "edition_date": "2026-08-30",
-  "generated_at": "2026-08-30T02:33:36.854886+00:00",
+  "edition_date": "2026-08-31",
+  "generated_at": "2026-08-31T02:35:53.126738+00:00",
   "stories": [
+    {
+      "id": "omarchy-root-creds",
+      "title": "Omarchy: Any User Process Can Escalate to Root",
+      "dek": "A security researcher shows that Omarchy's default configuration put the user in the docker group, so any process in the desktop session can escalate to root through the Docker socket - no sudo or password - with a two-command PoC, a timeline of the misconfiguration, and the fix in 4.0.1.",
+      "why": "For anyone running a developer-focused Linux distro or containers on their workstation: this is a concrete, reproducible example of an insecure default (docker group membership) silently granting root, and it spells out why the docker group is root-equivalent - a process with socket access can mount the host filesystem into a root container. The session-wide scope also matters if you run AI coding agents: they inherit the same access.",
+      "takeaway": "The docker group is root: a daemon socket a user process can talk to is a root shell in disguise, so container access should be a deliberate, explained opt-in - or use a daemonless runtime like Podman where containers run as ordinary child processes in user namespaces.",
+      "source": "HN",
+      "source_url": "https://0xcc.io/posts/omarchy-root-creds/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49499854",
+      "authors": [
+        "0xcc"
+      ],
+      "published_at": "2026-08-30T15:59:49Z",
+      "tags": [
+        "security",
+        "containers",
+        "linux",
+        "docker"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "sm750-hdmi-drm-driver",
+      "title": "An open-source DRM/KMS driver for the SM750 HDMI card",
+      "dek": "A new GPL-2.0 Linux display driver for the Silicon Motion SM750G10 HDMI PCIe card - DKMS-packaged for Linux 6.17+, with dithered RGB565 scanout, DMA uploads, and software-scaled ultrawide modes that push the card's 2048-pixel hardware width limit into a 2560x1080 workspace.",
+      "why": "For builders who like open-source hardware enablement: the repo is a complete, honest example of writing an out-of-tree kernel driver - DKMS packaging, EDID mode handling, module parameters, and a provenance audit showing only GPL code and no proprietary blobs - and the author states it was AI-assisted but physically tested, with experimental modes clearly flagged.",
+      "takeaway": "Bandwidth is the binding constraint on cheap display hardware: over the card's PCIe 1.1 x1 link, switching scanout from XRGB8888 to dithered RGB565 halves device-bound pixel traffic (four bytes per pixel to two), which is why colour conversion at the driver boundary can buy more responsiveness than raw clock speed.",
+      "source": "GitHub",
+      "source_url": "https://github.com/KodeMunkie/sm750hdmifb",
+      "discussion_url": "https://news.ycombinator.com/item?id=49501611",
+      "authors": [
+        "KodeMunkie"
+      ],
+      "published_at": "2026-08-30T15:24:23Z",
+      "tags": [
+        "linux",
+        "kernel",
+        "drivers",
+        "hardware"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "openwrt-ipv6-monitor",
+      "title": "OpenWrt: Monitor your IPv6 status",
+      "dek": "After a 3.5-month IPv6 outage on his fibre line went unnoticed, Ralf built an event-driven monitor: an OpenWrt hotplug script fires on wan6 interface changes, publishes status to an MQTT broker, and a Home Assistant sensor triggers an alert the moment IPv6 goes unhealthy.",
+      "why": "For homelab operators: a complete, copy-pasteable stack (hotplug script, mosquitto publish, HA sensor and automation YAML) that replaces polling with kernel-driven events, uses retained MQTT messages so the sensor state survives Home Assistant reboots, and doubles as a long-term record when exported to InfluxDB.",
+      "takeaway": "Prefer events over polling for infrastructure monitoring: hooking the router's hotplug system means the check only runs when the interface actually changes, so the cost is near zero and the alert is immediate - and publishing with the retained flag makes the current state survive broker and consumer restarts.",
+      "source": "Lobsters",
+      "source_url": "https://bergs.biz/blog/2026/08/30/openwrt-monitor-your-ipv6-status/",
+      "authors": [
+        "Ralf"
+      ],
+      "published_at": "2026-08-30T13:24:45Z",
+      "tags": [
+        "networking",
+        "homelab",
+        "ipv6",
+        "openwrt"
+      ],
+      "read_minutes": 4
+    },
+    {
+      "id": "storyteller-forced-alignment",
+      "title": "Automating immersive reading",
+      "dek": "The Storyteller author explains the forced-alignment pipeline that turns an ebook plus audiobook into an EPUB 3 read-along file: greedy-decoding MMS/CTC emissions to locate chapter boundaries, then Viterbi alignment to timestamp every word, handling reordered, missing, and reworded chapters without manual mapping.",
+      "why": "For anyone curious how audio/text alignment actually works: the post walks through CTC emissions, Wav2Vec 2.0, and the Viterbi algorithm with concrete worked examples, and the payoff is a working toolchain (Storyteller, now with a --ctc flag) that produces immersive ebooks readable on KOReader or a phone.",
+      "takeaway": "Greedy decoding is enough for search: you don't need a perfect transcript to locate text in audio - noisy per-frame character probabilities, collapsed and de-blanked, are sufficient to find where a chapter starts, and exact Viterbi alignment over the emissions then yields millisecond timestamps.",
+      "source": "HN",
+      "source_url": "https://smoores.dev/post/automating_immersive_reading/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49497854",
+      "authors": [
+        "smoores"
+      ],
+      "published_at": "2026-08-30T11:46:23Z",
+      "tags": [
+        "audio",
+        "ml",
+        "alignment",
+        "ebooks"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "claude-code-auto-mode-injection",
+      "title": "Prompt injection in Claude Code Opus 5 Auto Mode",
+      "dek": "A targeted attack chain - nudging Claude from WebFetch to curl, into a ZIP archive, then into running its own decoder inside that archive where a poisoned struct.py shadows Python's standard module - hijacks Claude Code's default Auto Mode into executing code, with 60-80% success in the author's small-sample tests.",
+      "why": "For anyone running coding agents in permission-lite modes: it is a concrete, reproducible injection chain against the newest safety classifier (which an Anthropic-commissioned evaluation reported at 0.00% attack success), explains module shadowing as the payload mechanism, and ends with the real mitigations - containers, egress control, and never exposing credentials to the agent runtime.",
+      "takeaway": "A safety classifier is not a security boundary: the model's own safety decision (refusing the binary, writing its own decoder) becomes the exploit path because the code runs inside an attacker-controlled directory - so run unattended agents in isolated environments and treat Auto Mode approval as a convenience signal, not a safety verdict.",
+      "source": "Lobsters",
+      "source_url": "https://embracethered.com/blog/posts/2026/breaking-claude-code-opus-5-and-automode/",
+      "published_at": "2026-08-30T05:36:51Z",
+      "tags": [
+        "ai-security",
+        "prompt-injection",
+        "agents",
+        "llm"
+      ],
+      "read_minutes": 9
+    },
     {
       "id": "domain-driven-agents",
       "title": "Domain-Driven Agents",
