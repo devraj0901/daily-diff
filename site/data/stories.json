@@ -1,7 +1,85 @@
 {
-  "edition_date": "2026-08-31",
-  "generated_at": "2026-08-31T02:35:53.126738+00:00",
+  "edition_date": "2026-09-01",
+  "generated_at": "2026-09-01T02:37:07.209615+00:00",
   "stories": [
+    {
+      "id": "microduck-rl",
+      "title": "Microduck RL: sim2real training for an open-source bipedal robot",
+      "dek": "Microduck RL is the training side of a ~800 g, 25 cm open-source bipedal robot: PPO policies for walking, stand-up, kicks, and rolls are trained in MuJoCo Warp (mjlab) at 50 Hz, exported to ONNX, and deployed on the real robot with the full sim2real recipe encoded in the repo.",
+      "why": "For robotics and ML folks wanting a concrete sim2real playbook: it documents why actuator fidelity is most of the sim2real gap at this scale (the Dynamixel XL330 is modeled down to its voltage control law instead of an ideal PD), including backlash simulation and domain randomization.",
+      "takeaway": "At small-robot scale the actuator model, not the policy, is most of the sim2real gap — and a shared 61-dimensional observation contract across tasks is what lets the runtime hot-swap any trained policy onto the robot at any moment.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/pollen-robotics/microduck_rl",
+      "authors": [
+        "Pollen Robotics"
+      ],
+      "published_at": "2026-09-01T02:32:05.874438Z",
+      "tags": [
+        "robotics",
+        "reinforcement-learning",
+        "sim2real",
+        "mujoco"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "birdnet-go-bird-identification",
+      "title": "How I turned my security cameras into an automatic bird identification system",
+      "dek": "A homelabber wired three existing RTSP security cameras into BirdNet-Go, a self-hosted soundscape analyzer that runs local AI models in Docker and identifies bird species from audio in real time, with alerts to Home Assistant and Discord.",
+      "why": "For self-hosters: a complete, working stack (RTSP cameras + Docker + local ML + MQTT/Home Assistant + Discord) with no cloud dependency, plus a model gallery that now includes Google Perch v2 supporting ~14,795 species versus the 6,000 in BirdNET 2.4. The author reports 418,726 detections and 271 unique species at 60.9% average confidence over 12 months.",
+      "takeaway": "An existing camera's microphone plus a local inference container turns a security device into a new always-on sensor: audio-based species detection with zero API calls, and MQTT discovery makes it a first-class Home Assistant device.",
+      "source": "HN",
+      "source_url": "https://jasontucker.blog/how-i-turned-my-security-cameras-into-an-automatic-bird-identification-system-with-birdnet-go/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49511856",
+      "authors": [
+        "Jason Tucker"
+      ],
+      "published_at": "2026-08-31T16:47:11Z",
+      "tags": [
+        "homelab",
+        "selfhosting",
+        "docker",
+        "ai"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "cancelation-terminology",
+      "title": "Cancelation Terminology",
+      "dek": "Alex Kladov (matklad) draws the line between synchronous cancellation, asynchronous cancellation, and graceful shutdown — three concurrency concepts routinely conflated — and grounds each in TigerBeetle's grid cancel, state-machine reset, and client shutdown.",
+      "why": "For anyone writing concurrent software, especially in Rust/async where synchronous cancellation is easy and asynchronous cancellation has poor mechanisms: a precise vocabulary that reshapes the code, illustrated by TigerBeetle asynchronously cancelling just the Grid and then synchronously resetting everything above it.",
+      "takeaway": "Name the cancellation kind before implementing: sync cancellation unwinds the stack, async cancellation is a protocol where the requester waits for acknowledgment, and graceful shutdown (drain existing connections, reject new ones) is the pattern that enables rolling upgrades.",
+      "source": "Lobsters",
+      "source_url": "https://matklad.github.io/2026/08/31/cancelation-terminology.html",
+      "authors": [
+        "Alex Kladov"
+      ],
+      "published_at": "2026-08-31T14:19:48Z",
+      "tags": [
+        "concurrency",
+        "rust",
+        "systems",
+        "async"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "prela-sql-binary-relations",
+      "title": "A Better SQL in 11 Lines of Code",
+      "dek": "Prela, a query language under development at UCLA, models data as binary relations so joins become relation composition, and this tutorial builds a working toy implementation in roughly 11 lines of Python covering the select, &, eq, and where operators.",
+      "why": "For anyone who wants to see join machinery from a different angle: binarized tables (6NF decomposition) make queries read like prose ('a movie's company's country'), every subexpression is a valid query so CTEs are just Python variables, and & doubles as both join and conjunction.",
+      "takeaway": "If a query language is built from composable operators, every subexpression is itself a query — which is how Prela compresses a 20-line SQL query into a handful of chained relations without new syntax.",
+      "source": "Lobsters",
+      "source_url": "https://prela-lang.org/tutorial/",
+      "published_at": "2026-08-31T09:10:20Z",
+      "tags": [
+        "databases",
+        "query-language",
+        "sql",
+        "language-design"
+      ],
+      "read_minutes": 8
+    },
     {
       "id": "omarchy-root-creds",
       "title": "Omarchy: Any User Process Can Escalate to Root",
@@ -103,22 +181,44 @@
       "read_minutes": 9
     },
     {
-      "id": "domain-driven-agents",
-      "title": "Domain-Driven Agents",
-      "dek": "A software engineer describes applying domain-driven design to make LLM coding agents work on brownfield codebases: each repo declares a .workflow.json manifest naming its bounded contexts and a CONTEXT.md glossary, agents handle the cheap tactical half of changes, and a generator derives a portfolio-wide context map that mechanically flags disagreements between contexts.",
-      "why": "For anyone who has watched LLM coding agents flail on legacy code: the failure mode is concrete (the model invents a fourth spelling of a concept that already exists three times because the codebase never decided which one was real) and the fix is a small, replicable workflow - declare the domain in the repo, give agents the glossary, and let a scripted map keep context boundaries honest.",
-      "takeaway": "An agent needs the system's meaning, not just its code: when a repo names its bounded contexts and the vocabulary each context owns, the model stops guessing - the context map and glossary are the missing documentation that turns an agent from a guesser into an implementer.",
-      "source": "HN",
-      "source_url": "https://coldtake.dev/blog/domain-driven-agents",
-      "discussion_url": "https://news.ycombinator.com/item?id=49492584",
-      "published_at": "2026-08-29T19:28:28Z",
-      "tags": [
-        "agents",
-        "ddd",
-        "llm",
-        "ai-engineering"
+      "id": "workweave-model-router",
+      "title": "workweave/router: a per-action model router for agentic systems",
+      "dek": "A drop-in, self-hostable proxy for Claude Code, Codex, Cursor, and other agents that picks the best model for every request in under 50 ms using an in-process ONNX embedder and a cluster scorer derived from the Avengers-Pro routing research, speaking Anthropic, OpenAI, and Gemini APIs behind one endpoint.",
+      "why": "For anyone paying for coding agents: the router sits between client and providers, keeps API keys on your box (BYOK), exports OTLP traces, and claims 40-70% cost cuts - and the mechanism is inspectable, with a /v1/route endpoint that returns the routing decision without proxying, plus an optional HMM policy sidecar.",
+      "takeaway": "Routing per action rather than per turn is where the savings come from: a request that needs the frontier model gets it while routine calls fall back to cheap models, and because the decision is exposed as an API call you can audit the policy before trusting the proxy.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/workweave/router",
+      "authors": [
+        "Weave"
       ],
-      "read_minutes": 11
+      "published_at": "2026-08-30T02:30:56Z",
+      "tags": [
+        "llm",
+        "ai-infra",
+        "routing",
+        "self-hosted"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "gods-eye-view",
+      "title": "God's Eye View: an open-source spy-satellite simulator with real data",
+      "dek": "Bilawal Sidhu open-sourced God's Eye View, the viral spy-satellite simulator: a Cesium-based photorealistic 3D globe that fuses live public feeds - aircraft transponders, ship beacons, orbital elements, seismographs, and public cameras - with voice control, sensor-style render modes, and a detection overlay, all from open signals.",
+      "why": "For anyone curious about geospatial and spatial-intelligence engineering: it is a working example of fusing many public real-time feeds into one coherent 3D interface, with honest labeling of modeled vs live layers, a documented cost model (one metered Google Maps key, free tiers for most layers), and a stated line that person-tracking features won't be built.",
+      "takeaway": "The present is the cheap part: rendering live telemetry layers is easy, but tiling, serving, and scrubbing historical data at real resolution is where cost and compute explode - the project's own note that real-time is the affordable direction is the most useful engineering takeaway for anyone building spatial data products.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/bilawalsidhu/gods-eye-view",
+      "authors": [
+        "Bilawal Sidhu"
+      ],
+      "published_at": "2026-08-30T02:30:56Z",
+      "tags": [
+        "geospatial",
+        "osint",
+        "webgl",
+        "open-source"
+      ],
+      "read_minutes": 10
     },
     {
       "id": "omnipresent-availability-risks",
@@ -161,44 +261,22 @@
       "read_minutes": 10
     },
     {
-      "id": "workweave-model-router",
-      "title": "workweave/router: a per-action model router for agentic systems",
-      "dek": "A drop-in, self-hostable proxy for Claude Code, Codex, Cursor, and other agents that picks the best model for every request in under 50 ms using an in-process ONNX embedder and a cluster scorer derived from the Avengers-Pro routing research, speaking Anthropic, OpenAI, and Gemini APIs behind one endpoint.",
-      "why": "For anyone paying for coding agents: the router sits between client and providers, keeps API keys on your box (BYOK), exports OTLP traces, and claims 40-70% cost cuts - and the mechanism is inspectable, with a /v1/route endpoint that returns the routing decision without proxying, plus an optional HMM policy sidecar.",
-      "takeaway": "Routing per action rather than per turn is where the savings come from: a request that needs the frontier model gets it while routine calls fall back to cheap models, and because the decision is exposed as an API call you can audit the policy before trusting the proxy.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/workweave/router",
-      "authors": [
-        "Weave"
-      ],
-      "published_at": "2026-08-30T02:30:56Z",
+      "id": "domain-driven-agents",
+      "title": "Domain-Driven Agents",
+      "dek": "A software engineer describes applying domain-driven design to make LLM coding agents work on brownfield codebases: each repo declares a .workflow.json manifest naming its bounded contexts and a CONTEXT.md glossary, agents handle the cheap tactical half of changes, and a generator derives a portfolio-wide context map that mechanically flags disagreements between contexts.",
+      "why": "For anyone who has watched LLM coding agents flail on legacy code: the failure mode is concrete (the model invents a fourth spelling of a concept that already exists three times because the codebase never decided which one was real) and the fix is a small, replicable workflow - declare the domain in the repo, give agents the glossary, and let a scripted map keep context boundaries honest.",
+      "takeaway": "An agent needs the system's meaning, not just its code: when a repo names its bounded contexts and the vocabulary each context owns, the model stops guessing - the context map and glossary are the missing documentation that turns an agent from a guesser into an implementer.",
+      "source": "HN",
+      "source_url": "https://coldtake.dev/blog/domain-driven-agents",
+      "discussion_url": "https://news.ycombinator.com/item?id=49492584",
+      "published_at": "2026-08-29T19:28:28Z",
       "tags": [
+        "agents",
+        "ddd",
         "llm",
-        "ai-infra",
-        "routing",
-        "self-hosted"
+        "ai-engineering"
       ],
-      "read_minutes": 8
-    },
-    {
-      "id": "gods-eye-view",
-      "title": "God's Eye View: an open-source spy-satellite simulator with real data",
-      "dek": "Bilawal Sidhu open-sourced God's Eye View, the viral spy-satellite simulator: a Cesium-based photorealistic 3D globe that fuses live public feeds - aircraft transponders, ship beacons, orbital elements, seismographs, and public cameras - with voice control, sensor-style render modes, and a detection overlay, all from open signals.",
-      "why": "For anyone curious about geospatial and spatial-intelligence engineering: it is a working example of fusing many public real-time feeds into one coherent 3D interface, with honest labeling of modeled vs live layers, a documented cost model (one metered Google Maps key, free tiers for most layers), and a stated line that person-tracking features won't be built.",
-      "takeaway": "The present is the cheap part: rendering live telemetry layers is easy, but tiling, serving, and scrubbing historical data at real resolution is where cost and compute explode - the project's own note that real-time is the affordable direction is the most useful engineering takeaway for anyone building spatial data products.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/bilawalsidhu/gods-eye-view",
-      "authors": [
-        "Bilawal Sidhu"
-      ],
-      "published_at": "2026-08-30T02:30:56Z",
-      "tags": [
-        "geospatial",
-        "osint",
-        "webgl",
-        "open-source"
-      ],
-      "read_minutes": 10
+      "read_minutes": 11
     },
     {
       "id": "same-model-different-harness",
@@ -678,24 +756,64 @@
       "read_minutes": 10
     },
     {
-      "id": "apache-maka-agent-workspace",
-      "title": "Apache Maka: a local-first agent workspace built on an append-only event log",
-      "dek": "Maka (Apache incubating) is a local-first AI agent workspace where model messages, tool calls, tool results, permission decisions, and termination events are recorded as an append-only execution log; desktop, TUI, and CLI all run through one Runtime Host, with tools that leave the sandbox boundary requiring approval.",
-      "why": "For builders running local agents or writing agent harnesses: Maka's architecture is the interesting part — the session record is the source of truth, the UI and the next model call are projections of it, interrupted turns can resume, and an eval harness runs the same Runtime Host. It is early (no Apache release yet, Apple Silicon desktop only), but the event-sourcing design is directly stealable.",
-      "takeaway": "Model the agent runtime as event sourcing: persisting every message, tool call, and permission decision as append-only facts gives you context reconstruction, branching, recovery, and reproducible evaluation as projections over the record — not features bolted onto a chat loop.",
+      "id": "book-to-skill",
+      "title": "book-to-skill: turn any technical book PDF into an agent skill",
+      "dek": "An MIT-licensed converter that distills a technical book, docs folder, RFCs, or research stack into a structured agent skill - SKILL.md plus per-chapter files, glossary, patterns, and cheatsheet loaded on demand - compatible with the open Agent Skills standard across Claude Code, Copilot CLI, and Amp, with measured 24-51x token savings over context-dumping.",
+      "why": "Directly useful for workflow-fixated builders: instead of pasting a PDF into context and paying the discovery-loop tax on every query, book-to-skill pays the structuring cost once - a deterministic extractor plus a spec-driven generator producing ~1,000-token chapter files that load on demand. If you have ever read a book once and forgotten chapter 7 existed, this is the fix, and the token-savings methodology is documented with per-book tables.",
+      "takeaway": "Structure beats context-dumping: converting a document once into on-demand chapter files - rather than re-navigating the PDF on every turn - is what yields the 24-51x token reduction, and the skill's chapter index keeps the loaded budget small.",
       "source": "GitHub Trending",
-      "source_url": "https://github.com/apache/maka",
+      "source_url": "https://github.com/virgiliojr94/book-to-skill",
       "authors": [
-        "Apache Software Foundation"
+        "virgiliojr94"
       ],
-      "published_at": "2026-05-27T15:46:05Z",
+      "published_at": "2026-08-24T00:00:00Z",
       "tags": [
-        "agents",
-        "local-first",
-        "event-sourcing",
-        "self-hosted"
+        "agent-skills",
+        "llm",
+        "workflow",
+        "pdf"
       ],
-      "read_minutes": 9
+      "read_minutes": 8
+    },
+    {
+      "id": "fire-tablet-four-llms",
+      "title": "Amazon kept shutting down my tablet, so I spent $266 on four AI models to own it",
+      "dek": "A Home Assistant user gets root on a Fire HD 10 (2021) with LLM assistance: Claude diagnoses for months until its safeguards cut in, Kimi K3 finds a CVE-2022-38181 Mali GPU use-after-free route (621 messages, $164), and GLM-5.2/5.3 finish the job - recovering a kernel build-shift offset and flipping SELinux to permissive - so the owner can uninstall Amazon's shutdown-capable packages.",
+      "why": "A wildcard with a real technical spine: it is a detailed account of what frontier-class models can do on kernel-level work (every known Mali bug checked against a kernel extracted from Amazon's own OTA), how multiple models hand work off through a HANDOFF.md, and the safety-flag dynamics - Claude refused to even summarize its own logs while Chinese models helped after reasoning through the legality. Generates obvious build ideas around device ownership and multi-model orchestration.",
+      "takeaway": "Treat multi-model work like a team: a HANDOFF.md with verified findings plus a second model that distrusts the first's 'hardware limitation' conclusion (the kernel was never relocated - every offset was shifted by a build difference) is what turned 500+ failed attempts into a working root.",
+      "source": "Lobsters",
+      "source_url": "https://ericpardee.github.io/fire-hd-ownership/",
+      "authors": [
+        "ericpardee"
+      ],
+      "published_at": "2026-08-23T15:45:01Z",
+      "tags": [
+        "llm",
+        "hardware",
+        "security",
+        "homelab"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "hister-private-search",
+      "title": "Hister - a private, full-content search index you control",
+      "dek": "A self-hosted, AGPLv3 search engine that indexes the full text of pages you visit and files you keep - via browser extension, file watcher, history import, or crawler - into a SQLite/Postgres index with a web UI, terminal client, HTTP API, and MCP server, and no telemetry.",
+      "why": "For anyone whose bookmarks pile up but never get found again, this is the bookmark-manager-adjacent tool that actually indexes content: field filters, quoted phrases, wildcards, aliases, stored readable previews, optional semantic search to your own embeddings endpoint, and an MCP server so your agent can query a private index you control. Runs as a single binary, Docker or Nix.",
+      "takeaway": "A private search index is an extractor plus inverted index plus storage layer - Hister demonstrates the full pipeline (content extraction, skip/priority rules, versioning, SQLite or Postgres backends) you would need to build one yourself, and exposes it to agents cleanly through MCP.",
+      "source": "Lobsters",
+      "source_url": "https://hister.org/",
+      "authors": [
+        "asciimoo"
+      ],
+      "published_at": "2026-08-23T12:28:24Z",
+      "tags": [
+        "self-hosted",
+        "search",
+        "privacy",
+        "mcp"
+      ],
+      "read_minutes": 8
     },
     {
       "id": "qwen38-reverse-engineering",
@@ -732,66 +850,6 @@
         "databases"
       ],
       "read_minutes": 12
-    },
-    {
-      "id": "hister-private-search",
-      "title": "Hister - a private, full-content search index you control",
-      "dek": "A self-hosted, AGPLv3 search engine that indexes the full text of pages you visit and files you keep - via browser extension, file watcher, history import, or crawler - into a SQLite/Postgres index with a web UI, terminal client, HTTP API, and MCP server, and no telemetry.",
-      "why": "For anyone whose bookmarks pile up but never get found again, this is the bookmark-manager-adjacent tool that actually indexes content: field filters, quoted phrases, wildcards, aliases, stored readable previews, optional semantic search to your own embeddings endpoint, and an MCP server so your agent can query a private index you control. Runs as a single binary, Docker or Nix.",
-      "takeaway": "A private search index is an extractor plus inverted index plus storage layer - Hister demonstrates the full pipeline (content extraction, skip/priority rules, versioning, SQLite or Postgres backends) you would need to build one yourself, and exposes it to agents cleanly through MCP.",
-      "source": "Lobsters",
-      "source_url": "https://hister.org/",
-      "authors": [
-        "asciimoo"
-      ],
-      "published_at": "2026-08-23T12:28:24Z",
-      "tags": [
-        "self-hosted",
-        "search",
-        "privacy",
-        "mcp"
-      ],
-      "read_minutes": 8
-    },
-    {
-      "id": "fire-tablet-four-llms",
-      "title": "Amazon kept shutting down my tablet, so I spent $266 on four AI models to own it",
-      "dek": "A Home Assistant user gets root on a Fire HD 10 (2021) with LLM assistance: Claude diagnoses for months until its safeguards cut in, Kimi K3 finds a CVE-2022-38181 Mali GPU use-after-free route (621 messages, $164), and GLM-5.2/5.3 finish the job - recovering a kernel build-shift offset and flipping SELinux to permissive - so the owner can uninstall Amazon's shutdown-capable packages.",
-      "why": "A wildcard with a real technical spine: it is a detailed account of what frontier-class models can do on kernel-level work (every known Mali bug checked against a kernel extracted from Amazon's own OTA), how multiple models hand work off through a HANDOFF.md, and the safety-flag dynamics - Claude refused to even summarize its own logs while Chinese models helped after reasoning through the legality. Generates obvious build ideas around device ownership and multi-model orchestration.",
-      "takeaway": "Treat multi-model work like a team: a HANDOFF.md with verified findings plus a second model that distrusts the first's 'hardware limitation' conclusion (the kernel was never relocated - every offset was shifted by a build difference) is what turned 500+ failed attempts into a working root.",
-      "source": "Lobsters",
-      "source_url": "https://ericpardee.github.io/fire-hd-ownership/",
-      "authors": [
-        "ericpardee"
-      ],
-      "published_at": "2026-08-23T15:45:01Z",
-      "tags": [
-        "llm",
-        "hardware",
-        "security",
-        "homelab"
-      ],
-      "read_minutes": 14
-    },
-    {
-      "id": "book-to-skill",
-      "title": "book-to-skill: turn any technical book PDF into an agent skill",
-      "dek": "An MIT-licensed converter that distills a technical book, docs folder, RFCs, or research stack into a structured agent skill - SKILL.md plus per-chapter files, glossary, patterns, and cheatsheet loaded on demand - compatible with the open Agent Skills standard across Claude Code, Copilot CLI, and Amp, with measured 24-51x token savings over context-dumping.",
-      "why": "Directly useful for workflow-fixated builders: instead of pasting a PDF into context and paying the discovery-loop tax on every query, book-to-skill pays the structuring cost once - a deterministic extractor plus a spec-driven generator producing ~1,000-token chapter files that load on demand. If you have ever read a book once and forgotten chapter 7 existed, this is the fix, and the token-savings methodology is documented with per-book tables.",
-      "takeaway": "Structure beats context-dumping: converting a document once into on-demand chapter files - rather than re-navigating the PDF on every turn - is what yields the 24-51x token reduction, and the skill's chapter index keeps the loaded budget small.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/virgiliojr94/book-to-skill",
-      "authors": [
-        "virgiliojr94"
-      ],
-      "published_at": "2026-08-24T00:00:00Z",
-      "tags": [
-        "agent-skills",
-        "llm",
-        "workflow",
-        "pdf"
-      ],
-      "read_minutes": 8
     },
     {
       "id": "local-llm-feels-dumber",
@@ -865,23 +923,6 @@
       "read_minutes": 6
     },
     {
-      "id": "ai-infra-guard",
-      "title": "Tencent AI-Infra-Guard: AI red-teaming platform",
-      "dek": "An Apache-2.0, full-stack AI red-teaming platform from Tencent's Zhuque Lab that scans AI infrastructure for CVEs (2000+ rules across Ollama, vLLM, ComfyUI, n8n), audits MCP servers and agent skills for injection and tool poisoning, runs jailbreak evaluation, and ships standalone CLIs like aig-skill-scan.",
-      "why": "With agents, MCP servers, and agent skills becoming the new attack surface, this is a deployable scanner rather than a paper: skill-scan uses a 9-category risk taxonomy with published F1 scores on SkillTrustBench (0.98 with top models), and MCP-scan detects tool poisoning, credential exfiltration, and command injection. Directly useful if you install third-party MCP servers or skills, or self-host AI frameworks.",
-      "takeaway": "The skill/MCP supply chain is now a scanable attack surface: treat third-party agent skills and MCP servers like npm packages and static-scan them before wiring them into an agent — and note this platform ships no authentication, so it must run off the public internet.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/Tencent/AI-Infra-Guard",
-      "published_at": "2026-08-17T00:00:00Z",
-      "tags": [
-        "ai-security",
-        "llm",
-        "mcp",
-        "red-teaming"
-      ],
-      "read_minutes": 10
-    },
-    {
       "id": "no-reason-software-slow",
       "title": "There's no reason for software to be slow anymore",
       "dek": "Dan Luu argues that LLM agents have collapsed the cost of performance work, demonstrating it with agent-driven experiments on a regex engine and his own ripgrep workload — workload-specific optimization that once took person-weeks now takes minutes of typing.",
@@ -902,24 +943,6 @@
       "read_minutes": 14
     },
     {
-      "id": "qwen3-tts-sub50ms",
-      "title": "How we made a text-to-speech model respond in sub-50 ms",
-      "dek": "Nari Labs tuned Qwen3-TTS 1.7B serving to sub-50 ms p95 time-to-first-audio at 10 RPS on a single H100 — one scheduler coordinating the Talker, Code Predictor and Codec, plus CUDA graphs and a state-cached codec — and open-sourced the implementation and benchmark.",
-      "why": "A practical-AI read with real numbers: it benchmarks four serving engines under Poisson load, shows which knobs actually move TTFA (leading-silence trim, frame-accumulation ramps), and explains the scheduling design that holds sub-50 ms through 10 RPS with zero underruns. The cost math (~$2/1M characters vs ~$100/1M for ElevenLabs) makes the payoff concrete.",
-      "takeaway": "Streaming latency is a scheduling problem, not just a model problem: split the three TTS modules into independently schedulable tasks, anchor urgent first-audio requests in each batch, and cache codec state so sustained playback never re-decodes history.",
-      "source": "HN",
-      "source_url": "https://nari-labs.com/blog/qwen3-tts-speed-cost-frontier/",
-      "discussion_url": "https://news.ycombinator.com/item?id=49389952",
-      "published_at": "2026-08-21T15:51:10Z",
-      "tags": [
-        "ai",
-        "tts",
-        "inference",
-        "serving"
-      ],
-      "read_minutes": 10
-    },
-    {
       "id": "cobalt-kobo-apps",
       "title": "Kobo can run apps now",
       "dek": "Cobalt is an open-source app platform for Kobo e-readers: a launcher, a signed app store, a Rust SDK, and a runtime that runs each app as its own unprivileged ARM binary, installed once over USB and updated over Wi-Fi.",
@@ -938,23 +961,22 @@
       "read_minutes": 8
     },
     {
-      "id": "cassandra-6-accord-transactions",
-      "title": "The road to ACID transactions in Cassandra 6",
-      "dek": "Phil Eaton walks Cassandra's transaction history — atomic batches, single-partition LWT, and now Accord — by running a 3-node Cassandra 6.0 cluster through an accounting workload, and finds an isolation bug in the pre-release Accord implementation that Apple's C. Scott Andreas confirms.",
-      "why": "A rare reproducible test of a distributed database's transactional guarantees before release: the Monastery assertion harness pins down exactly what each mechanism does and doesn't guarantee (plain updates violate isolation 939/1500 times; LWT cannot span partitions; Accord's final result stays correct but shows a possible concurrent-isolation bug). A good model for how to probe a consensus protocol you're about to depend on.",
-      "takeaway": "When evaluating a new distributed transaction protocol, test the guarantees you actually need — isolation during concurrency, not just final correctness — with a deterministic assertion harness; the author found a real pre-release bug a happy-path test would never have caught.",
-      "source": "Lobsters",
-      "source_url": "https://theconsensus.dev/p/2026/08/16/transactions-in-cassandra.html",
-      "authors": [
-        "Phil Eaton"
-      ],
-      "published_at": "2026-08-16T00:00:00Z",
+      "id": "qwen3-tts-sub50ms",
+      "title": "How we made a text-to-speech model respond in sub-50 ms",
+      "dek": "Nari Labs tuned Qwen3-TTS 1.7B serving to sub-50 ms p95 time-to-first-audio at 10 RPS on a single H100 — one scheduler coordinating the Talker, Code Predictor and Codec, plus CUDA graphs and a state-cached codec — and open-sourced the implementation and benchmark.",
+      "why": "A practical-AI read with real numbers: it benchmarks four serving engines under Poisson load, shows which knobs actually move TTFA (leading-silence trim, frame-accumulation ramps), and explains the scheduling design that holds sub-50 ms through 10 RPS with zero underruns. The cost math (~$2/1M characters vs ~$100/1M for ElevenLabs) makes the payoff concrete.",
+      "takeaway": "Streaming latency is a scheduling problem, not just a model problem: split the three TTS modules into independently schedulable tasks, anchor urgent first-audio requests in each batch, and cache codec state so sustained playback never re-decodes history.",
+      "source": "HN",
+      "source_url": "https://nari-labs.com/blog/qwen3-tts-speed-cost-frontier/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49389952",
+      "published_at": "2026-08-21T15:51:10Z",
       "tags": [
-        "databases",
-        "distributed-systems",
-        "transactions"
+        "ai",
+        "tts",
+        "inference",
+        "serving"
       ],
-      "read_minutes": 14
+      "read_minutes": 10
     },
     {
       "id": "openlogi-local-first-logitech",
@@ -991,6 +1013,25 @@
       "read_minutes": 9
     },
     {
+      "id": "hp-laser-1008a-claude-session",
+      "title": "HP Laser 1008a → native macOS printing: a Claude Code session",
+      "dek": "A ~4-hour Claude Code session, rendered as it happened, goes from 'install the drivers' to reverse-engineering an SPL3 laser by reading its own error pages, beating the macOS USB sandbox, and running HP's real codec in a container.",
+      "why": "For anyone who runs coding agents and wonders what a long autonomous debugging session actually looks like: the transcript shows the full arc — discovering the printer is Samsung SPL3/QPDL rather than PCL, building splix, the USB backend fights, the containerized codec, and the final launchd daemon — with the failures kept in.",
+      "takeaway": "Agent debugging sessions are most useful when the write-up preserves the dead ends: the honest account of the SpliX 2.0.2 investigation and the unresolved cleaner-encoder question is what makes the public repo (github.com/Kuberwastaken/hp-laser-1008a-macos) worth reading.",
+      "source": "Karakeep",
+      "source_url": "https://cdn.kuber.studio/chat/hp-laser-1008a-driver",
+      "authors": [
+        "Kuberwastaken"
+      ],
+      "published_at": "2026-08-20T18:39:10Z",
+      "tags": [
+        "ai-agents",
+        "macos",
+        "reverse-engineering"
+      ],
+      "read_minutes": 12
+    },
+    {
       "id": "midi-autocomplete-piano",
       "title": "Training a 125M-parameter model to autocomplete piano",
       "dek": "A 125M transformer that autocompletes MIDI piano performances in real time (~108 notes/sec on an iPhone 15), where the biggest wins came from the MIDI representation, aggressive data cleaning, scheduled sampling, and DPO post-training.",
@@ -1010,23 +1051,6 @@
         "ios"
       ],
       "read_minutes": 12
-    },
-    {
-      "id": "aliexpress-webaudio-fingerprinting",
-      "title": "AliExpress runs silent WebAudio fingerprinting that breaks Bluetooth multipoint",
-      "dek": "Two obfuscated Alibaba security scripts on the AliExpress homepage silently create WebAudio graphs (oscillator through a zero-gain node to the audio destination) as part of a broad browser fingerprint — which on one setup kept the PC's Bluetooth audio path alive and blocked multipoint headphone switching.",
-      "why": "A crisp browser-security investigation with a concrete fix: the author instruments AudioContext/AudioNode to catch the hidden graphs, explains why tab mute does nothing (no media element exists), lists the fingerprint vectors, and gives two uBlock Origin rules that block collina.js and fireyejs.js.",
-      "takeaway": "A zero-gain AudioContext still counts as live audio processing for the browser and OS — so silent fingerprinting can own the system audio path; block the scripts and close existing tabs, because blocking a script does not shut down an AudioContext it already created.",
-      "source": "HN",
-      "source_url": "https://blog.laserphile.com/2026/08/aliexpress-webpage-keeping-multipoint.html",
-      "discussion_url": "https://news.ycombinator.com/item?id=49372583",
-      "published_at": "2026-08-20T10:08:52Z",
-      "tags": [
-        "privacy",
-        "security",
-        "browser"
-      ],
-      "read_minutes": 8
     },
     {
       "id": "arrayref-supply-chain-attack",
@@ -1049,23 +1073,21 @@
       "read_minutes": 5
     },
     {
-      "id": "hp-laser-1008a-claude-session",
-      "title": "HP Laser 1008a → native macOS printing: a Claude Code session",
-      "dek": "A ~4-hour Claude Code session, rendered as it happened, goes from 'install the drivers' to reverse-engineering an SPL3 laser by reading its own error pages, beating the macOS USB sandbox, and running HP's real codec in a container.",
-      "why": "For anyone who runs coding agents and wonders what a long autonomous debugging session actually looks like: the transcript shows the full arc — discovering the printer is Samsung SPL3/QPDL rather than PCL, building splix, the USB backend fights, the containerized codec, and the final launchd daemon — with the failures kept in.",
-      "takeaway": "Agent debugging sessions are most useful when the write-up preserves the dead ends: the honest account of the SpliX 2.0.2 investigation and the unresolved cleaner-encoder question is what makes the public repo (github.com/Kuberwastaken/hp-laser-1008a-macos) worth reading.",
-      "source": "Karakeep",
-      "source_url": "https://cdn.kuber.studio/chat/hp-laser-1008a-driver",
-      "authors": [
-        "Kuberwastaken"
-      ],
-      "published_at": "2026-08-20T18:39:10Z",
+      "id": "aliexpress-webaudio-fingerprinting",
+      "title": "AliExpress runs silent WebAudio fingerprinting that breaks Bluetooth multipoint",
+      "dek": "Two obfuscated Alibaba security scripts on the AliExpress homepage silently create WebAudio graphs (oscillator through a zero-gain node to the audio destination) as part of a broad browser fingerprint — which on one setup kept the PC's Bluetooth audio path alive and blocked multipoint headphone switching.",
+      "why": "A crisp browser-security investigation with a concrete fix: the author instruments AudioContext/AudioNode to catch the hidden graphs, explains why tab mute does nothing (no media element exists), lists the fingerprint vectors, and gives two uBlock Origin rules that block collina.js and fireyejs.js.",
+      "takeaway": "A zero-gain AudioContext still counts as live audio processing for the browser and OS — so silent fingerprinting can own the system audio path; block the scripts and close existing tabs, because blocking a script does not shut down an AudioContext it already created.",
+      "source": "HN",
+      "source_url": "https://blog.laserphile.com/2026/08/aliexpress-webpage-keeping-multipoint.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=49372583",
+      "published_at": "2026-08-20T10:08:52Z",
       "tags": [
-        "ai-agents",
-        "macos",
-        "reverse-engineering"
+        "privacy",
+        "security",
+        "browser"
       ],
-      "read_minutes": 12
+      "read_minutes": 8
     },
     {
       "id": "reclaim-the-terminal-tty",
@@ -1143,26 +1165,6 @@
         "selfhosted"
       ],
       "read_minutes": 10
-    },
-    {
-      "id": "gralhix004-cuda-geolocation",
-      "title": "Geolocating a random island using geometry and CUDA programming",
-      "dek": "An OSINT writeup that locates a drone photo of a coral-cay resort by fingerprinting the triangle geometry of three islands and matching it against 80.7 million candidate triples built from OpenStreetMap coastline polygons — one CUDA thread per triple, ~204ms kernel time.",
-      "why": "A genuinely hands-on pipeline worth studying: tropical bounding boxes and local-density filters shrink 141k land polygons to 23.5k clusters, stratified sampling keeps triple generation tractable, and every later filter (compactness, oval fill ratio, NDVI vegetation, DEM elevation) is explained down to the final answer at 7.36°N 151.76°E.",
-      "takeaway": "When a search space explodes combinatorially, the fix is cheap geometric pre-filters plus stratified sampling to bound the input, then brute-force parallelism — 80.7M triples in 204ms — instead of a smarter sequential search.",
-      "source": "HN",
-      "source_url": "https://yassa9.github.io/osint/gralhix-004/",
-      "discussion_url": "https://news.ycombinator.com/item?id=49360545",
-      "authors": [
-        "yassa9"
-      ],
-      "published_at": "2026-08-16T00:00:00Z",
-      "tags": [
-        "osint",
-        "gpu",
-        "geometry"
-      ],
-      "read_minutes": 12
     },
     {
       "id": "solo-so-loader-static-binaries",
@@ -1283,47 +1285,6 @@
       "read_minutes": 7
     },
     {
-      "id": "duckdb-v2-preview",
-      "title": "A Preview of DuckDB v2.0",
-      "dek": "DuckDB v2.0 turns the embedded analytics engine into a server: a native client/server protocol (quack), triggers, first-class VARIANT, asynchronous I/O, a new SQL parser, and a new storage format.",
-      "why": "For anyone building analytics tooling on DuckDB: v2.0 adds CONNECT with query pushdown to PostgreSQL/MySQL, NEAREST joins for vector similarity, JSON mutation functions, nested schemas, and a server mode with real observability — the multi-tenant pieces the single-file database was missing.",
-      "takeaway": "VARIANT is JSON 'shredded' into columnar form with automatic schema detection, so semi-structured logs get compression and query speed without declaring a schema; v2.0 makes shredded VARIANT execution work end-to-end, including Parquet read and write.",
-      "source": "HN",
-      "source_url": "https://duckdb.org/2026/08/17/duckdb-20-highlights",
-      "discussion_url": "https://news.ycombinator.com/item?id=49330781",
-      "authors": [
-        "Mark Raasveldt",
-        "Hannes Mühleisen"
-      ],
-      "published_at": "2026-08-17T13:46:27Z",
-      "tags": [
-        "databases",
-        "duckdb",
-        "sql"
-      ],
-      "read_minutes": 15
-    },
-    {
-      "id": "browserpod-rust-in-browser",
-      "title": "Beyond WASI: Running any Rust application in the browser with BrowserPod 3.0",
-      "dek": "Leaning Technologies ships a custom Rust target (wasm32-browserpod-linux-musl) that runs unmodified Rust programs like ripgrep, starship, and jj in a browser tab by exposing the Linux syscall surface on the Web platform.",
-      "why": "For builders interested in in-browser sandboxes: the post details why WASI was not viable (no real threads, missing std::os::unix, no subprocess support), the target-definition hacks used (declaring arch 'wasm64' and dropping the 'wasm' target family so crates keep full functionality), and which large programs already work unmodified.",
-      "takeaway": "A custom Rust target is mostly a JSON descriptor plus std/libc overrides — BrowserPod made crates treat it as full-fidelity Linux by lying about arch and target_family, dodging the ecosystem's assumption that wasm means reduced functionality.",
-      "source": "Lobsters",
-      "source_url": "https://labs.leaningtech.com/blog/browserpod-rust.html",
-      "discussion_url": null,
-      "authors": [
-        "Yuri Iozzelli"
-      ],
-      "published_at": "2026-08-17T13:49:54Z",
-      "tags": [
-        "wasm",
-        "rust",
-        "browser"
-      ],
-      "read_minutes": 10
-    },
-    {
       "id": "benchmarkpocalypse",
       "title": "The benchmarkpocalypse",
       "dek": "Dan Luu runs an LLM agent for a month building a regex engine that claims to beat the Rust regex crate on the rebar suite — then shows the benchmark was overfit, and that agents can trivially cheat even comprehensive benchmarks.",
@@ -1365,24 +1326,83 @@
       "read_minutes": 14
     },
     {
-      "id": "qwen-38-27b-local-overthinking",
-      "title": "Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things",
-      "dek": "Simon Willison's hands-on review of the Apache-2.0 Qwen 3.8 27B: a 17GB local model that codes, drives agents, and draws — as long as you switch its default overthinking off.",
-      "why": "For anyone running local LLMs: concrete numbers on a 27B Q4_K_M build on a MacBook Pro and DGX Spark, including the failure mode of the default xhigh reasoning effort (21 minutes and 22,276 thinking tokens to draw a pelican SVG), working bounding-box vision output, and a full coding-agent session. It also shows a ~72% inference speedup from llama.cpp's MTP speculative decoding.",
-      "takeaway": "Check a model's default reasoning-effort setting before benchmarking it — Qwen 3.8's xhigh default is tuned for benchmark heroics, not consumer hardware; run low or no reasoning first and raise it per-task, and enable MTP speculative decoding for a large throughput win on dense models.",
-      "source": "HN",
-      "source_url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b/",
-      "discussion_url": "https://news.ycombinator.com/item?id=49324985",
+      "id": "pdf-inspector",
+      "title": "pdf-inspector: fast local PDF classification and extraction",
+      "dek": "Firecrawl's pdf-inspector is a Rust library that classifies PDFs as text-based, scanned, or mixed in roughly 10-50 ms by sampling content streams, then extracts structured Markdown with tables and reading order so pipelines pay for OCR only on the ~54% of PDFs that actually need it.",
+      "why": "For anyone building document pipelines (RAG, invoice and report processing): it tops opendataloader-bench at 0.875 overall with 0.47 s for 200 documents versus 17+ s for pymupdf4llm and markitdown, ships bindings for Python, Node, and browser WASM, and routes only scanned pages to OCR with per-page provenance.",
+      "takeaway": "Classify before extracting: sampling content streams to detect text vs scanned in milliseconds lets you skip OCR for the majority of PDFs, cutting cost and latency, while broken-font-encoding detection flags pages that should fall back to OCR instead of silently producing garbage.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/firecrawl/pdf-inspector",
       "authors": [
-        "Simon Willison"
+        "Firecrawl"
       ],
-      "published_at": "2026-08-16T23:45:09Z",
+      "published_at": "2026-08-17T18:07:57Z",
       "tags": [
-        "ai",
-        "llm",
-        "local-models"
+        "pdf",
+        "rust",
+        "ocr",
+        "documents",
+        "ai"
       ],
-      "read_minutes": 9
+      "read_minutes": 6
+    },
+    {
+      "id": "browserpod-rust-in-browser",
+      "title": "Beyond WASI: Running any Rust application in the browser with BrowserPod 3.0",
+      "dek": "Leaning Technologies ships a custom Rust target (wasm32-browserpod-linux-musl) that runs unmodified Rust programs like ripgrep, starship, and jj in a browser tab by exposing the Linux syscall surface on the Web platform.",
+      "why": "For builders interested in in-browser sandboxes: the post details why WASI was not viable (no real threads, missing std::os::unix, no subprocess support), the target-definition hacks used (declaring arch 'wasm64' and dropping the 'wasm' target family so crates keep full functionality), and which large programs already work unmodified.",
+      "takeaway": "A custom Rust target is mostly a JSON descriptor plus std/libc overrides — BrowserPod made crates treat it as full-fidelity Linux by lying about arch and target_family, dodging the ecosystem's assumption that wasm means reduced functionality.",
+      "source": "Lobsters",
+      "source_url": "https://labs.leaningtech.com/blog/browserpod-rust.html",
+      "discussion_url": null,
+      "authors": [
+        "Yuri Iozzelli"
+      ],
+      "published_at": "2026-08-17T13:49:54Z",
+      "tags": [
+        "wasm",
+        "rust",
+        "browser"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "duckdb-v2-preview",
+      "title": "A Preview of DuckDB v2.0",
+      "dek": "DuckDB v2.0 turns the embedded analytics engine into a server: a native client/server protocol (quack), triggers, first-class VARIANT, asynchronous I/O, a new SQL parser, and a new storage format.",
+      "why": "For anyone building analytics tooling on DuckDB: v2.0 adds CONNECT with query pushdown to PostgreSQL/MySQL, NEAREST joins for vector similarity, JSON mutation functions, nested schemas, and a server mode with real observability — the multi-tenant pieces the single-file database was missing.",
+      "takeaway": "VARIANT is JSON 'shredded' into columnar form with automatic schema detection, so semi-structured logs get compression and query speed without declaring a schema; v2.0 makes shredded VARIANT execution work end-to-end, including Parquet read and write.",
+      "source": "HN",
+      "source_url": "https://duckdb.org/2026/08/17/duckdb-20-highlights",
+      "discussion_url": "https://news.ycombinator.com/item?id=49330781",
+      "authors": [
+        "Mark Raasveldt",
+        "Hannes Mühleisen"
+      ],
+      "published_at": "2026-08-17T13:46:27Z",
+      "tags": [
+        "databases",
+        "duckdb",
+        "sql"
+      ],
+      "read_minutes": 15
+    },
+    {
+      "id": "ai-infra-guard",
+      "title": "Tencent AI-Infra-Guard: AI red-teaming platform",
+      "dek": "An Apache-2.0, full-stack AI red-teaming platform from Tencent's Zhuque Lab that scans AI infrastructure for CVEs (2000+ rules across Ollama, vLLM, ComfyUI, n8n), audits MCP servers and agent skills for injection and tool poisoning, runs jailbreak evaluation, and ships standalone CLIs like aig-skill-scan.",
+      "why": "With agents, MCP servers, and agent skills becoming the new attack surface, this is a deployable scanner rather than a paper: skill-scan uses a 9-category risk taxonomy with published F1 scores on SkillTrustBench (0.98 with top models), and MCP-scan detects tool poisoning, credential exfiltration, and command injection. Directly useful if you install third-party MCP servers or skills, or self-host AI frameworks.",
+      "takeaway": "The skill/MCP supply chain is now a scanable attack surface: treat third-party agent skills and MCP servers like npm packages and static-scan them before wiring them into an agent — and note this platform ships no authentication, so it must run off the public internet.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/Tencent/AI-Infra-Guard",
+      "published_at": "2026-08-17T00:00:00Z",
+      "tags": [
+        "ai-security",
+        "llm",
+        "mcp",
+        "red-teaming"
+      ],
+      "read_minutes": 10
     },
     {
       "id": "ponys-arena-allocator",
@@ -1401,6 +1421,26 @@
         "performance"
       ],
       "read_minutes": 10
+    },
+    {
+      "id": "qwen-38-27b-local-overthinking",
+      "title": "Qwen 3.8 27B is excellent, but it defaults to wildly overthinking things",
+      "dek": "Simon Willison's hands-on review of the Apache-2.0 Qwen 3.8 27B: a 17GB local model that codes, drives agents, and draws — as long as you switch its default overthinking off.",
+      "why": "For anyone running local LLMs: concrete numbers on a 27B Q4_K_M build on a MacBook Pro and DGX Spark, including the failure mode of the default xhigh reasoning effort (21 minutes and 22,276 thinking tokens to draw a pelican SVG), working bounding-box vision output, and a full coding-agent session. It also shows a ~72% inference speedup from llama.cpp's MTP speculative decoding.",
+      "takeaway": "Check a model's default reasoning-effort setting before benchmarking it — Qwen 3.8's xhigh default is tuned for benchmark heroics, not consumer hardware; run low or no reasoning first and raise it per-task, and enable MTP speculative decoding for a large throughput win on dense models.",
+      "source": "HN",
+      "source_url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49324985",
+      "authors": [
+        "Simon Willison"
+      ],
+      "published_at": "2026-08-16T23:45:09Z",
+      "tags": [
+        "ai",
+        "llm",
+        "local-models"
+      ],
+      "read_minutes": 9
     },
     {
       "id": "models-getting-dumber-on-purpose",
@@ -1465,64 +1505,6 @@
       "read_minutes": 5
     },
     {
-      "id": "codex-auto-research-qr-kernel",
-      "title": "Auto-research with codex: how Codex hit a 232x faster GPU kernel",
-      "dek": "A GPU Mode contest write-up on running Codex through a benchmark–profile–verify loop to push a batched Householder QR kernel 232x past baseline.",
-      "why": "For builders who want agents on tightly-scoped optimization problems, this is one of the most concrete auto-research walkthroughs yet: 1,500+ submissions over 14 days, with AGENTS.md and problem_statement.md as the program, the popcorn CLI for submit-and-bench feedback, /goal for quantitative targets, and /btw questions for human oversight mid-loop. It is honest about limits too — domain expertise still mattered at the top of the leaderboard, and the fastest solutions aggressively removed library calls.",
-      "takeaway": "Optimization is a tight feedback loop: give an agent a verifier, profiler access, and a numeric goal and it will hill-climb a kernel — but you must inject idea diversity (multiple algorithm routes, not just variants) to escape local maxima.",
-      "source": "HN",
-      "source_url": "https://sankalp.bearblog.dev/autoresearch/",
-      "discussion_url": "https://news.ycombinator.com/item?id=49309549",
-      "authors": [
-        "Sankalp"
-      ],
-      "published_at": "2026-08-15T11:00:02Z",
-      "tags": [
-        "ai",
-        "agents",
-        "gpu",
-        "performance"
-      ],
-      "read_minutes": 12
-    },
-    {
-      "id": "runescape-56k-dialup-protocol",
-      "title": "How 2004 RuneScape fit a multiplayer RPG into 56k dial-up",
-      "dek": "A byte-level tour of the 2004 RuneScape protocol, traced from a decompiled client, showing how a browser Java applet ran an MMO at ~5 KB/s.",
-      "why": "For anyone who designs wire protocols or games under hard constraints: the post follows a single walk click into a seven-byte packet and unpacks the shared-knowledge tricks — client and server running the same pathfinder so only path corners are sent, deltas instead of absolute coordinates, one-bit 'didn't change' flags, five-bit positions, and a bitmask standing in for a schema. The closing argument about when tight co-design beats loose coupling is worth the read on its own.",
-      "takeaway": "Every byte not sent is knowledge both ends share without transmitting: a data model and wire format co-designed into one artifact, with the client running the same algorithms as the server so only deltas cross the wire.",
-      "source": "Lobsters",
-      "source_url": "https://jkm.dev/posts/how-2004-runescape-fit-a-multiplayer-rpg-into-56k-dialup/",
-      "authors": [],
-      "published_at": "2026-05-28T00:00:00Z",
-      "tags": [
-        "networking",
-        "protocols",
-        "games",
-        "systems"
-      ],
-      "read_minutes": 11
-    },
-    {
-      "id": "tla-model-checking-depot-registry",
-      "title": "Improving system safety with TLA+",
-      "dek": "Depot model-checks its OCI registry garbage collector with TLA+, finds a race its tests missed, and lands on S3 versioning as a delete fence.",
-      "why": "A practical, modern TLA+ case study: an agent translates the Go/MySQL/S3 implementation into a spec while humans review the invariants, and TLC exhaustively explores 14.3M states in ~21 minutes to prove 10 safety invariants and 2 liveness properties. The concrete payoff is the S3 versioning pattern — versioning isn't for history when blobs are content-addressed; it turns 'delete this key' into 'delete exactly the bytes I inspected', making deletion safe to race against a concurrent re-upload.",
-      "takeaway": "Tests check the interleavings you thought of; a model checker checks the ones you didn't. For content-addressable stores that garbage-collect, S3 versioning is a cheap delete fence when no transaction spans the reference store and the object store.",
-      "source": "Lobsters",
-      "source_url": "https://depot.dev/blog/tla-verification",
-      "authors": [
-        "Wito Delnat"
-      ],
-      "published_at": "2026-07-20T00:00:00Z",
-      "tags": [
-        "distributed-systems",
-        "verification",
-        "storage"
-      ],
-      "read_minutes": 8
-    },
-    {
       "id": "cli-anything-agent-native-software",
       "title": "CLI-Anything: making software agent-native",
       "dek": "A fast-growing open-source project that generates CLIs and skills for arbitrary applications so AI agents can drive any software, with a public registry of ready-made harnesses.",
@@ -1545,6 +1527,66 @@
       "read_minutes": 10
     },
     {
+      "id": "cassandra-6-accord-transactions",
+      "title": "The road to ACID transactions in Cassandra 6",
+      "dek": "Phil Eaton walks Cassandra's transaction history — atomic batches, single-partition LWT, and now Accord — by running a 3-node Cassandra 6.0 cluster through an accounting workload, and finds an isolation bug in the pre-release Accord implementation that Apple's C. Scott Andreas confirms.",
+      "why": "A rare reproducible test of a distributed database's transactional guarantees before release: the Monastery assertion harness pins down exactly what each mechanism does and doesn't guarantee (plain updates violate isolation 939/1500 times; LWT cannot span partitions; Accord's final result stays correct but shows a possible concurrent-isolation bug). A good model for how to probe a consensus protocol you're about to depend on.",
+      "takeaway": "When evaluating a new distributed transaction protocol, test the guarantees you actually need — isolation during concurrency, not just final correctness — with a deterministic assertion harness; the author found a real pre-release bug a happy-path test would never have caught.",
+      "source": "Lobsters",
+      "source_url": "https://theconsensus.dev/p/2026/08/16/transactions-in-cassandra.html",
+      "authors": [
+        "Phil Eaton"
+      ],
+      "published_at": "2026-08-16T00:00:00Z",
+      "tags": [
+        "databases",
+        "distributed-systems",
+        "transactions"
+      ],
+      "read_minutes": 14
+    },
+    {
+      "id": "gralhix004-cuda-geolocation",
+      "title": "Geolocating a random island using geometry and CUDA programming",
+      "dek": "An OSINT writeup that locates a drone photo of a coral-cay resort by fingerprinting the triangle geometry of three islands and matching it against 80.7 million candidate triples built from OpenStreetMap coastline polygons — one CUDA thread per triple, ~204ms kernel time.",
+      "why": "A genuinely hands-on pipeline worth studying: tropical bounding boxes and local-density filters shrink 141k land polygons to 23.5k clusters, stratified sampling keeps triple generation tractable, and every later filter (compactness, oval fill ratio, NDVI vegetation, DEM elevation) is explained down to the final answer at 7.36°N 151.76°E.",
+      "takeaway": "When a search space explodes combinatorially, the fix is cheap geometric pre-filters plus stratified sampling to bound the input, then brute-force parallelism — 80.7M triples in 204ms — instead of a smarter sequential search.",
+      "source": "HN",
+      "source_url": "https://yassa9.github.io/osint/gralhix-004/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49360545",
+      "authors": [
+        "yassa9"
+      ],
+      "published_at": "2026-08-16T00:00:00Z",
+      "tags": [
+        "osint",
+        "gpu",
+        "geometry"
+      ],
+      "read_minutes": 12
+    },
+    {
+      "id": "codex-auto-research-qr-kernel",
+      "title": "Auto-research with codex: how Codex hit a 232x faster GPU kernel",
+      "dek": "A GPU Mode contest write-up on running Codex through a benchmark–profile–verify loop to push a batched Householder QR kernel 232x past baseline.",
+      "why": "For builders who want agents on tightly-scoped optimization problems, this is one of the most concrete auto-research walkthroughs yet: 1,500+ submissions over 14 days, with AGENTS.md and problem_statement.md as the program, the popcorn CLI for submit-and-bench feedback, /goal for quantitative targets, and /btw questions for human oversight mid-loop. It is honest about limits too — domain expertise still mattered at the top of the leaderboard, and the fastest solutions aggressively removed library calls.",
+      "takeaway": "Optimization is a tight feedback loop: give an agent a verifier, profiler access, and a numeric goal and it will hill-climb a kernel — but you must inject idea diversity (multiple algorithm routes, not just variants) to escape local maxima.",
+      "source": "HN",
+      "source_url": "https://sankalp.bearblog.dev/autoresearch/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49309549",
+      "authors": [
+        "Sankalp"
+      ],
+      "published_at": "2026-08-15T11:00:02Z",
+      "tags": [
+        "ai",
+        "agents",
+        "gpu",
+        "performance"
+      ],
+      "read_minutes": 12
+    },
+    {
       "id": "viofosync-dashcam-selfhosted",
       "title": "viofosync: self-hosted Viofo dashcam backup",
       "dek": "A single-container web app that syncs dashcam footage over Wi-Fi to your NAS, maps journeys from on-camera GPS traces, edits video in the browser, and reports to Home Assistant over MQTT.",
@@ -1561,6 +1603,64 @@
         "self-hosted",
         "docker",
         "automation"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "github-spec-kit",
+      "title": "Spec Kit: spec-driven development for AI coding agents",
+      "dek": "GitHub's open-source toolkit for writing executable specs and driving 30+ AI coding agents from them.",
+      "why": "For teams using AI coding agents, spec-kit offers a ready-made spec-driven workflow: /speckit.* slash commands walk from constitution to spec to plan to tasks to implementation, with a specify CLI under the hood. It is agent-agnostic (Copilot, Codex, Claude Code and 30+ others), MIT-licensed, and shipping releases almost daily (v0.16.4 on 2026-08-14).",
+      "takeaway": "Specs become executable: define what and why first, generate a technical plan from your stack choices, then let the agent implement — /speckit.converge checks the codebase against the spec and appends remaining work as new tasks.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/github/spec-kit",
+      "authors": [
+        "GitHub"
+      ],
+      "published_at": "2026-08-15T02:59:26.793856Z",
+      "tags": [
+        "ai",
+        "agents",
+        "workflow"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "static-html-comment-section",
+      "title": "My comment section is static HTML",
+      "dek": "A Hugo blog with comments compiled into the static page at build time; writing is the only dynamic step.",
+      "why": "A clean, opinionated comment-system design for static sites: readers get plain HTML with zero third-party scripts, and a small Phoenix server (Popsicle Boat) only handles the write path — identity, spam defense, and a build hook. If the server is down, the build simply renders the last comments; the conversation lives in your generated pages, not on a widget's infrastructure.",
+      "takeaway": "Separate the read path from the write path: static comments make readers cost nothing and keep the conversation durable, while a tiny server handles auth and spam only at the moment of writing.",
+      "source": "Lobsters",
+      "source_url": "https://jva.lol/weblog/my-comment-section-is-static-html/",
+      "authors": [
+        "jvalol"
+      ],
+      "published_at": "2026-08-14T23:58:27Z",
+      "tags": [
+        "static-sites",
+        "web",
+        "self-hosted"
+      ],
+      "read_minutes": 5
+    },
+    {
+      "id": "going-dark-ai-bug-hunting",
+      "title": "Everything is about to “go dark”",
+      "dek": "Matthew Green argues that AI bug-hunting is about to exhaust remotely-exploitable vulnerabilities, ending the era of law-enforcement hacking.",
+      "why": "A sharp security essay from a well-known cryptographer: as AI-driven vulnerability scanning is folded into CI pipelines, the stock of usable bugs is likely to collapse within a couple of years, and the old 'exceptional access' debate will re-ignite. Worth reading for anyone building security tooling, deploying AI scanners, or thinking about where the vulnerability market goes next.",
+      "takeaway": "Treat AI vulnerability scanning as a supply-side shock to the bug market: defenders may soon run out of remotely-exploitable bugs in major software, shifting pressure toward intentional backdoors.",
+      "source": "HN",
+      "source_url": "https://blog.cryptographyengineering.com/2026/08/14/everything-is-about-to-go-dark/",
+      "discussion_url": "https://news.ycombinator.com/item?id=49304447",
+      "authors": [
+        "Matthew Green"
+      ],
+      "published_at": "2026-08-14T20:52:44Z",
+      "tags": [
+        "security",
+        "ai",
+        "crypto"
       ],
       "read_minutes": 6
     },
@@ -1585,45 +1685,6 @@
       "read_minutes": 8
     },
     {
-      "id": "going-dark-ai-bug-hunting",
-      "title": "Everything is about to “go dark”",
-      "dek": "Matthew Green argues that AI bug-hunting is about to exhaust remotely-exploitable vulnerabilities, ending the era of law-enforcement hacking.",
-      "why": "A sharp security essay from a well-known cryptographer: as AI-driven vulnerability scanning is folded into CI pipelines, the stock of usable bugs is likely to collapse within a couple of years, and the old 'exceptional access' debate will re-ignite. Worth reading for anyone building security tooling, deploying AI scanners, or thinking about where the vulnerability market goes next.",
-      "takeaway": "Treat AI vulnerability scanning as a supply-side shock to the bug market: defenders may soon run out of remotely-exploitable bugs in major software, shifting pressure toward intentional backdoors.",
-      "source": "HN",
-      "source_url": "https://blog.cryptographyengineering.com/2026/08/14/everything-is-about-to-go-dark/",
-      "discussion_url": "https://news.ycombinator.com/item?id=49304447",
-      "authors": [
-        "Matthew Green"
-      ],
-      "published_at": "2026-08-14T20:52:44Z",
-      "tags": [
-        "security",
-        "ai",
-        "crypto"
-      ],
-      "read_minutes": 6
-    },
-    {
-      "id": "static-html-comment-section",
-      "title": "My comment section is static HTML",
-      "dek": "A Hugo blog with comments compiled into the static page at build time; writing is the only dynamic step.",
-      "why": "A clean, opinionated comment-system design for static sites: readers get plain HTML with zero third-party scripts, and a small Phoenix server (Popsicle Boat) only handles the write path — identity, spam defense, and a build hook. If the server is down, the build simply renders the last comments; the conversation lives in your generated pages, not on a widget's infrastructure.",
-      "takeaway": "Separate the read path from the write path: static comments make readers cost nothing and keep the conversation durable, while a tiny server handles auth and spam only at the moment of writing.",
-      "source": "Lobsters",
-      "source_url": "https://jva.lol/weblog/my-comment-section-is-static-html/",
-      "authors": [
-        "jvalol"
-      ],
-      "published_at": "2026-08-14T23:58:27Z",
-      "tags": [
-        "static-sites",
-        "web",
-        "self-hosted"
-      ],
-      "read_minutes": 5
-    },
-    {
       "id": "curl-performance-suite",
       "title": "curl performance",
       "dek": "Daniel Stenberg stands up a public, continuously-run performance test suite for curl.",
@@ -1643,25 +1704,6 @@
       "read_minutes": 5
     },
     {
-      "id": "github-spec-kit",
-      "title": "Spec Kit: spec-driven development for AI coding agents",
-      "dek": "GitHub's open-source toolkit for writing executable specs and driving 30+ AI coding agents from them.",
-      "why": "For teams using AI coding agents, spec-kit offers a ready-made spec-driven workflow: /speckit.* slash commands walk from constitution to spec to plan to tasks to implementation, with a specify CLI under the hood. It is agent-agnostic (Copilot, Codex, Claude Code and 30+ others), MIT-licensed, and shipping releases almost daily (v0.16.4 on 2026-08-14).",
-      "takeaway": "Specs become executable: define what and why first, generate a technical plan from your stack choices, then let the agent implement — /speckit.converge checks the codebase against the spec and appends remaining work as new tasks.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/github/spec-kit",
-      "authors": [
-        "GitHub"
-      ],
-      "published_at": "2026-08-15T02:59:26.793856Z",
-      "tags": [
-        "ai",
-        "agents",
-        "workflow"
-      ],
-      "read_minutes": 7
-    },
-    {
       "id": "agents-md-progressive-disclosure-guide",
       "title": "A Complete Guide to AGENTS.md",
       "dek": "How to keep an AGENTS.md file small, focused, and effective for AI coding agents.",
@@ -1677,6 +1719,106 @@
         "agents",
         "documentation",
         "workflow"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "modly-local-image-to-3d",
+      "title": "Modly turns images into 3D meshes locally",
+      "dek": "An open-source desktop app runs image-to-3D generation on the user's GPU and exposes model extensions plus an agent-facing CLI for reproducible workflows.",
+      "why": "Modly is a concrete local-AI application rather than a model demo: it packages image-to-mesh generation, smoothing and decimation, installable model extensions, and a CLI that can start workflows, poll runs, and export GLB files. The extension boundary is especially useful to study if you are designing a self-hosted AI tool with replaceable models.",
+      "takeaway": "A model tool becomes easier to automate when the UI workflow and the agent API share explicit run, status, cancel, and export concepts.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/lightningpixel/modly",
+      "published_at": "2026-08-13T13:42:21.303779Z",
+      "authors": [
+        "Lightning Pixel"
+      ],
+      "tags": [
+        "local-ai",
+        "3d",
+        "desktop",
+        "automation"
+      ],
+      "read_minutes": 6
+    },
+    {
+      "id": "obsidian-agent-skills-open-formats",
+      "title": "Obsidian skills teach agents to work with open knowledge formats",
+      "dek": "A portable skill collection covers Obsidian Markdown, Bases, JSON Canvas, the Obsidian CLI, and clean page extraction for compatible coding agents.",
+      "why": "This is a compact example of turning a familiar application into an agent-operable workspace without hiding the data behind a proprietary API. The repository documents reusable skills for Markdown, structured Bases, canvas files, CLI operations, and Defuddle-based extraction, with compatibility across Claude Code, Codex, OpenCode, OpenClaw, and Hermes.",
+      "takeaway": "Skills are most reusable when they target inspectable file formats and a small canonical CLI rather than one agent's private memory or UI.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/kepano/obsidian-skills",
+      "published_at": "2026-08-13T13:42:21.303763Z",
+      "authors": [
+        "Kepano and contributors"
+      ],
+      "tags": [
+        "agents",
+        "knowledge-management",
+        "markdown",
+        "skills"
+      ],
+      "read_minutes": 7
+    },
+    {
+      "id": "unsloth-local-models-hermes",
+      "title": "Unsloth brings local model training and serving into an agent workflow",
+      "dek": "Unsloth combines local model running, fine-tuning, deployment, and agent integrations in a desktop and web workflow that includes Hermes and OpenClaw launch paths.",
+      "why": "The repository is worth inspecting if you want a practical route from a local model to an agent toolchain rather than a notebook-only setup. Its documented surfaces cover GGUF and other exports, an OpenAI-compatible API, MCP, remote access, and commands for starting Hermes or OpenClaw against local models.",
+      "takeaway": "A local-model workflow becomes more useful when training, export, serving, and agent handoff are treated as one operational path instead of separate experiments.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/unslothai/unsloth",
+      "published_at": "2026-08-13T13:42:21.303739Z",
+      "authors": [
+        "Unsloth team"
+      ],
+      "tags": [
+        "local-ai",
+        "llms",
+        "agents",
+        "mcp"
+      ],
+      "read_minutes": 10
+    },
+    {
+      "id": "diagram-design-editorial-agent-skill",
+      "title": "Diagram Design gives agents an editorial vocabulary for technical diagrams",
+      "dek": "A Claude Code-compatible skill ships 27 diagram types as self-contained HTML and SVG, with semantic patterns and optional motion instead of generic Mermaid output.",
+      "why": "The project treats diagrams as a design system rather than a one-off image-generation prompt. Its repository includes static variants, reusable layout primitives, brand onboarding, accessibility-minded semantic patterns, and a redraw path for existing draw.io or Mermaid sources—useful ideas for technical documentation and architecture work.",
+      "takeaway": "Separating semantic patterns from visual layout lets an agent reuse a small set of tested diagram primitives without turning every request into a new template.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/cathrynlavery/diagram-design",
+      "published_at": "2026-08-13T13:42:21.303687Z",
+      "authors": [
+        "Cathryn Lavery and contributors"
+      ],
+      "tags": [
+        "agents",
+        "documentation",
+        "diagrams",
+        "design-systems"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "pi-permission-sandbox-auto-review",
+      "title": "A Pi setup with permission, sandbox, and auto-review",
+      "dek": "A practical host-based security boundary for Pi that combines deterministic permissions, OS sandboxing, and narrowly reviewed host commands.",
+      "why": "This is a useful implementation guide for anyone running a permissive coding agent against real projects. It separates hard-deny rules for secrets and paths, sandboxed Bash for routine work, and automatic review for network or host-IPC exceptions, then gives concrete fixtures to test each boundary.",
+      "takeaway": "Use deterministic policy for actions that must never happen, and reserve model or human review for narrow exceptions instead of asking an LLM to replace the security boundary.",
+      "source": "Lobsters",
+      "source_url": "https://ptgamr.substack.com/p/a-pi-setup-with-permission-sandbox",
+      "published_at": "2026-08-13T11:11:09Z",
+      "authors": [
+        "Anh Trinh"
+      ],
+      "tags": [
+        "agents",
+        "security",
+        "sandboxing",
+        "selfhosted"
       ],
       "read_minutes": 8
     },
@@ -1735,126 +1877,6 @@
       "read_minutes": 4
     },
     {
-      "id": "nvidia-switchyard-llm-routing",
-      "title": "Switchyard: route LLM traffic across models and providers",
-      "dek": "A Rust proxy and library that routes LLM requests across providers while preserving OpenAI and Anthropic API compatibility.",
-      "why": "Point Claude Code or Codex at an open-weight model: Switchyard translates between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats, so agents keep their native API while being served by vLLM, Ollama, or NIM. Pre-alpha, but a solid reference for multi-provider routing, A/B benchmarking, and fallback.",
-      "takeaway": "Protocol translation at the proxy layer decouples agent clients from model backends; routing strategies like LLM-classifier and stage-router let cost/quality trade-offs live in config instead of code.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/NVIDIA-NeMo/Switchyard",
-      "authors": [
-        "NVIDIA NeMo"
-      ],
-      "published_at": "2026-05-19T19:06:33Z",
-      "tags": [
-        "ai",
-        "llm",
-        "routing",
-        "rust"
-      ],
-      "read_minutes": 8
-    },
-    {
-      "id": "pi-permission-sandbox-auto-review",
-      "title": "A Pi setup with permission, sandbox, and auto-review",
-      "dek": "A practical host-based security boundary for Pi that combines deterministic permissions, OS sandboxing, and narrowly reviewed host commands.",
-      "why": "This is a useful implementation guide for anyone running a permissive coding agent against real projects. It separates hard-deny rules for secrets and paths, sandboxed Bash for routine work, and automatic review for network or host-IPC exceptions, then gives concrete fixtures to test each boundary.",
-      "takeaway": "Use deterministic policy for actions that must never happen, and reserve model or human review for narrow exceptions instead of asking an LLM to replace the security boundary.",
-      "source": "Lobsters",
-      "source_url": "https://ptgamr.substack.com/p/a-pi-setup-with-permission-sandbox",
-      "published_at": "2026-08-13T11:11:09Z",
-      "authors": [
-        "Anh Trinh"
-      ],
-      "tags": [
-        "agents",
-        "security",
-        "sandboxing",
-        "selfhosted"
-      ],
-      "read_minutes": 8
-    },
-    {
-      "id": "unsloth-local-models-hermes",
-      "title": "Unsloth brings local model training and serving into an agent workflow",
-      "dek": "Unsloth combines local model running, fine-tuning, deployment, and agent integrations in a desktop and web workflow that includes Hermes and OpenClaw launch paths.",
-      "why": "The repository is worth inspecting if you want a practical route from a local model to an agent toolchain rather than a notebook-only setup. Its documented surfaces cover GGUF and other exports, an OpenAI-compatible API, MCP, remote access, and commands for starting Hermes or OpenClaw against local models.",
-      "takeaway": "A local-model workflow becomes more useful when training, export, serving, and agent handoff are treated as one operational path instead of separate experiments.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/unslothai/unsloth",
-      "published_at": "2026-08-13T13:42:21.303739Z",
-      "authors": [
-        "Unsloth team"
-      ],
-      "tags": [
-        "local-ai",
-        "llms",
-        "agents",
-        "mcp"
-      ],
-      "read_minutes": 10
-    },
-    {
-      "id": "obsidian-agent-skills-open-formats",
-      "title": "Obsidian skills teach agents to work with open knowledge formats",
-      "dek": "A portable skill collection covers Obsidian Markdown, Bases, JSON Canvas, the Obsidian CLI, and clean page extraction for compatible coding agents.",
-      "why": "This is a compact example of turning a familiar application into an agent-operable workspace without hiding the data behind a proprietary API. The repository documents reusable skills for Markdown, structured Bases, canvas files, CLI operations, and Defuddle-based extraction, with compatibility across Claude Code, Codex, OpenCode, OpenClaw, and Hermes.",
-      "takeaway": "Skills are most reusable when they target inspectable file formats and a small canonical CLI rather than one agent's private memory or UI.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/kepano/obsidian-skills",
-      "published_at": "2026-08-13T13:42:21.303763Z",
-      "authors": [
-        "Kepano and contributors"
-      ],
-      "tags": [
-        "agents",
-        "knowledge-management",
-        "markdown",
-        "skills"
-      ],
-      "read_minutes": 7
-    },
-    {
-      "id": "modly-local-image-to-3d",
-      "title": "Modly turns images into 3D meshes locally",
-      "dek": "An open-source desktop app runs image-to-3D generation on the user's GPU and exposes model extensions plus an agent-facing CLI for reproducible workflows.",
-      "why": "Modly is a concrete local-AI application rather than a model demo: it packages image-to-mesh generation, smoothing and decimation, installable model extensions, and a CLI that can start workflows, poll runs, and export GLB files. The extension boundary is especially useful to study if you are designing a self-hosted AI tool with replaceable models.",
-      "takeaway": "A model tool becomes easier to automate when the UI workflow and the agent API share explicit run, status, cancel, and export concepts.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/lightningpixel/modly",
-      "published_at": "2026-08-13T13:42:21.303779Z",
-      "authors": [
-        "Lightning Pixel"
-      ],
-      "tags": [
-        "local-ai",
-        "3d",
-        "desktop",
-        "automation"
-      ],
-      "read_minutes": 6
-    },
-    {
-      "id": "diagram-design-editorial-agent-skill",
-      "title": "Diagram Design gives agents an editorial vocabulary for technical diagrams",
-      "dek": "A Claude Code-compatible skill ships 27 diagram types as self-contained HTML and SVG, with semantic patterns and optional motion instead of generic Mermaid output.",
-      "why": "The project treats diagrams as a design system rather than a one-off image-generation prompt. Its repository includes static variants, reusable layout primitives, brand onboarding, accessibility-minded semantic patterns, and a redraw path for existing draw.io or Mermaid sources—useful ideas for technical documentation and architecture work.",
-      "takeaway": "Separating semantic patterns from visual layout lets an agent reuse a small set of tested diagram primitives without turning every request into a new template.",
-      "source": "GitHub Trending",
-      "source_url": "https://github.com/cathrynlavery/diagram-design",
-      "published_at": "2026-08-13T13:42:21.303687Z",
-      "authors": [
-        "Cathryn Lavery and contributors"
-      ],
-      "tags": [
-        "agents",
-        "documentation",
-        "diagrams",
-        "design-systems"
-      ],
-      "read_minutes": 8
-    },
-    {
       "id": "needle-2-14mb-agentic-llm",
       "title": "Needle 2: a 14 MB agentic LLM for tiny devices",
       "dek": "Cactus Compute's open 45M-parameter model for tool calling, device use, and structured extraction ships as a 14 MB binary that runs in 28 MB of RAM.",
@@ -1873,6 +1895,26 @@
         "tiny-ml"
       ],
       "read_minutes": 7
+    },
+    {
+      "id": "text-watermarking-non-academics",
+      "title": "Text Watermarking for Non-Academics",
+      "dek": "Gabor Koos explains statistical text watermarking from first principles — how a model's token-selection freedom hides a recoverable statistical pattern in plain text, and what a detector actually can and cannot prove.",
+      "why": "With Anthropic announcing how Claude marks AI-generated content, this is the clearest non-academic walkthrough of the mechanism: natural-language redundancy as an encoding channel, why accumulated small choices beat a fixed hidden message, and why stylometry means the technique predates LLMs. It also spells out the limits — a detector shows a pattern is present, not who requested or edited the text — which matters for anyone reasoning about AI provenance in policy or product decisions.",
+      "takeaway": "A text watermark is a statistical bias across many token-selection choices, not a hidden string — so copying preserves it, editing weakens it, and a positive detection licenses no claim about authorship or intent.",
+      "source": "Lobsters",
+      "source_url": "https://blog.gaborkoos.com/posts/2026-08-12-Text-Watermarking-for-Non-Academics/",
+      "authors": [
+        "Gabor Koos"
+      ],
+      "published_at": "2026-08-12T00:29:31Z",
+      "tags": [
+        "ai",
+        "llms",
+        "watermarking",
+        "security"
+      ],
+      "read_minutes": 10
     },
     {
       "id": "sqlite-wal-reset-bug",
@@ -1914,62 +1956,6 @@
         "rendering"
       ],
       "read_minutes": 5
-    },
-    {
-      "id": "my-homelab-got-hacked",
-      "title": "My Homelab Got Hacked — A Postmortem",
-      "dek": "A Forgejo instance is popped via CVE-2026-60004, a Gitea diffpatch RCE: how the attacker got in, what the crypto-miner payload did, and what changed afterward.",
-      "why": "A first-person, low-stakes incident postmortem that walks the whole chain: a scripted attacker signed up (open registrations), pushed a repo with a malicious git hook, and triggered the diffpatch endpoint three times. The writeup diff's the in-the-wild exploit against the published PoC, decodes the obfuscated second-stage miner script, and traces the attack through gateway logs. The two self-inflicted mistakes — leaving signups open and pinning Forgejo v13 six months past EOL because the project offers no 'latest' tag — are exactly the failure modes every self-hoster should check, and the 3-2-1 backups saved the day.",
-      "takeaway": "For projects without 'latest' image tags, EOL tracking is on you: pin-and-forget left this Forgejo exposed to a patched RCE, while daily 3-2-1 backups and quick detection made the breach recoverable.",
-      "source": "Lobsters",
-      "source_url": "https://phunky.cafe/my-homelab-got-hacked/",
-      "authors": [],
-      "published_at": "2026-08-10T00:00:00Z",
-      "tags": [
-        "homelab",
-        "security",
-        "selfhosted"
-      ],
-      "read_minutes": 7
-    },
-    {
-      "id": "github-stacks-in-jujutsu",
-      "title": "GitHub Stacks in Jujutsu",
-      "dek": "A hands-on primer for driving GitHub's new stacked PR feature from Jujutsu (jj): bookmark-per-commit workflows, revset aliases, and an honest critique of the developer experience.",
-      "why": "GitHub shipped stacked PRs into public preview on 2026-07-30, and this guide shows exactly how to use them from jj — the one bookmark per commit, the gh stack link/push subcommands that matter in a jj repo, and a config override for bookmark-advance-to. The writeup is grounded in real usage: adding commits to the top works, adding to the middle requires deleting and recreating the stack. It also gives a balanced verdict — the feature builds on GitHub's existing PR model rather than fixing it, so set expectations low and it works.",
-      "takeaway": "GitHub's stacking implementation requires a branch per change and offers no automatic submit, so jj users manage bookmarks by hand and recreate stacks for mid-stack edits — usable, but an unambitious take on prior art.",
-      "source": "Lobsters",
-      "source_url": "https://alan.norbauer.com/articles/github-stacks-with-jujutsu/",
-      "authors": [
-        "Alan Norbauer"
-      ],
-      "published_at": "2026-08-08T00:00:00Z",
-      "tags": [
-        "git",
-        "jujutsu",
-        "workflow"
-      ],
-      "read_minutes": 8
-    },
-    {
-      "id": "text-watermarking-non-academics",
-      "title": "Text Watermarking for Non-Academics",
-      "dek": "Gabor Koos explains statistical text watermarking from first principles — how a model's token-selection freedom hides a recoverable statistical pattern in plain text, and what a detector actually can and cannot prove.",
-      "why": "With Anthropic announcing how Claude marks AI-generated content, this is the clearest non-academic walkthrough of the mechanism: natural-language redundancy as an encoding channel, why accumulated small choices beat a fixed hidden message, and why stylometry means the technique predates LLMs. It also spells out the limits — a detector shows a pattern is present, not who requested or edited the text — which matters for anyone reasoning about AI provenance in policy or product decisions.",
-      "takeaway": "A text watermark is a statistical bias across many token-selection choices, not a hidden string — so copying preserves it, editing weakens it, and a positive detection licenses no claim about authorship or intent.",
-      "source": "Lobsters",
-      "source_url": "https://blog.gaborkoos.com/posts/2026-08-12-Text-Watermarking-for-Non-Academics/",
-      "authors": [
-        "Gabor Koos"
-      ],
-      "published_at": "2026-08-12T00:29:31Z",
-      "tags": [
-        "ai",
-        "llms",
-        "watermarking",
-        "security"
-      ],
-      "read_minutes": 10
     },
     {
       "id": "yy-dtoa-fastest-double-to-string",
@@ -2292,6 +2278,23 @@
       "read_minutes": 6
     },
     {
+      "id": "my-homelab-got-hacked",
+      "title": "My Homelab Got Hacked — A Postmortem",
+      "dek": "A Forgejo instance is popped via CVE-2026-60004, a Gitea diffpatch RCE: how the attacker got in, what the crypto-miner payload did, and what changed afterward.",
+      "why": "A first-person, low-stakes incident postmortem that walks the whole chain: a scripted attacker signed up (open registrations), pushed a repo with a malicious git hook, and triggered the diffpatch endpoint three times. The writeup diff's the in-the-wild exploit against the published PoC, decodes the obfuscated second-stage miner script, and traces the attack through gateway logs. The two self-inflicted mistakes — leaving signups open and pinning Forgejo v13 six months past EOL because the project offers no 'latest' tag — are exactly the failure modes every self-hoster should check, and the 3-2-1 backups saved the day.",
+      "takeaway": "For projects without 'latest' image tags, EOL tracking is on you: pin-and-forget left this Forgejo exposed to a patched RCE, while daily 3-2-1 backups and quick detection made the breach recoverable.",
+      "source": "Lobsters",
+      "source_url": "https://phunky.cafe/my-homelab-got-hacked/",
+      "authors": [],
+      "published_at": "2026-08-10T00:00:00Z",
+      "tags": [
+        "homelab",
+        "security",
+        "selfhosted"
+      ],
+      "read_minutes": 7
+    },
+    {
       "id": "nixpkgs-multiverse",
       "title": "nixpkgs-multiverse: every version that ever existed",
       "dek": "One flake input that exposes every version of every package ever shipped in Nixpkgs — 1,393 revisions indexed in 5.18 MB of JSON, fetched lazily so evaluation stays flat.",
@@ -2542,6 +2545,25 @@
         "incident-response"
       ],
       "read_minutes": 5
+    },
+    {
+      "id": "github-stacks-in-jujutsu",
+      "title": "GitHub Stacks in Jujutsu",
+      "dek": "A hands-on primer for driving GitHub's new stacked PR feature from Jujutsu (jj): bookmark-per-commit workflows, revset aliases, and an honest critique of the developer experience.",
+      "why": "GitHub shipped stacked PRs into public preview on 2026-07-30, and this guide shows exactly how to use them from jj — the one bookmark per commit, the gh stack link/push subcommands that matter in a jj repo, and a config override for bookmark-advance-to. The writeup is grounded in real usage: adding commits to the top works, adding to the middle requires deleting and recreating the stack. It also gives a balanced verdict — the feature builds on GitHub's existing PR model rather than fixing it, so set expectations low and it works.",
+      "takeaway": "GitHub's stacking implementation requires a branch per change and offers no automatic submit, so jj users manage bookmarks by hand and recreate stacks for mid-stack edits — usable, but an unambitious take on prior art.",
+      "source": "Lobsters",
+      "source_url": "https://alan.norbauer.com/articles/github-stacks-with-jujutsu/",
+      "authors": [
+        "Alan Norbauer"
+      ],
+      "published_at": "2026-08-08T00:00:00Z",
+      "tags": [
+        "git",
+        "jujutsu",
+        "workflow"
+      ],
+      "read_minutes": 8
     },
     {
       "id": "planetscale-concurrency-vs-throughput",
@@ -3161,6 +3183,83 @@
         "rce"
       ],
       "read_minutes": 9
+    },
+    {
+      "id": "tla-model-checking-depot-registry",
+      "title": "Improving system safety with TLA+",
+      "dek": "Depot model-checks its OCI registry garbage collector with TLA+, finds a race its tests missed, and lands on S3 versioning as a delete fence.",
+      "why": "A practical, modern TLA+ case study: an agent translates the Go/MySQL/S3 implementation into a spec while humans review the invariants, and TLC exhaustively explores 14.3M states in ~21 minutes to prove 10 safety invariants and 2 liveness properties. The concrete payoff is the S3 versioning pattern — versioning isn't for history when blobs are content-addressed; it turns 'delete this key' into 'delete exactly the bytes I inspected', making deletion safe to race against a concurrent re-upload.",
+      "takeaway": "Tests check the interleavings you thought of; a model checker checks the ones you didn't. For content-addressable stores that garbage-collect, S3 versioning is a cheap delete fence when no transaction spans the reference store and the object store.",
+      "source": "Lobsters",
+      "source_url": "https://depot.dev/blog/tla-verification",
+      "authors": [
+        "Wito Delnat"
+      ],
+      "published_at": "2026-07-20T00:00:00Z",
+      "tags": [
+        "distributed-systems",
+        "verification",
+        "storage"
+      ],
+      "read_minutes": 8
+    },
+    {
+      "id": "runescape-56k-dialup-protocol",
+      "title": "How 2004 RuneScape fit a multiplayer RPG into 56k dial-up",
+      "dek": "A byte-level tour of the 2004 RuneScape protocol, traced from a decompiled client, showing how a browser Java applet ran an MMO at ~5 KB/s.",
+      "why": "For anyone who designs wire protocols or games under hard constraints: the post follows a single walk click into a seven-byte packet and unpacks the shared-knowledge tricks — client and server running the same pathfinder so only path corners are sent, deltas instead of absolute coordinates, one-bit 'didn't change' flags, five-bit positions, and a bitmask standing in for a schema. The closing argument about when tight co-design beats loose coupling is worth the read on its own.",
+      "takeaway": "Every byte not sent is knowledge both ends share without transmitting: a data model and wire format co-designed into one artifact, with the client running the same algorithms as the server so only deltas cross the wire.",
+      "source": "Lobsters",
+      "source_url": "https://jkm.dev/posts/how-2004-runescape-fit-a-multiplayer-rpg-into-56k-dialup/",
+      "authors": [],
+      "published_at": "2026-05-28T00:00:00Z",
+      "tags": [
+        "networking",
+        "protocols",
+        "games",
+        "systems"
+      ],
+      "read_minutes": 11
+    },
+    {
+      "id": "apache-maka-agent-workspace",
+      "title": "Apache Maka: a local-first agent workspace built on an append-only event log",
+      "dek": "Maka (Apache incubating) is a local-first AI agent workspace where model messages, tool calls, tool results, permission decisions, and termination events are recorded as an append-only execution log; desktop, TUI, and CLI all run through one Runtime Host, with tools that leave the sandbox boundary requiring approval.",
+      "why": "For builders running local agents or writing agent harnesses: Maka's architecture is the interesting part — the session record is the source of truth, the UI and the next model call are projections of it, interrupted turns can resume, and an eval harness runs the same Runtime Host. It is early (no Apache release yet, Apple Silicon desktop only), but the event-sourcing design is directly stealable.",
+      "takeaway": "Model the agent runtime as event sourcing: persisting every message, tool call, and permission decision as append-only facts gives you context reconstruction, branching, recovery, and reproducible evaluation as projections over the record — not features bolted onto a chat loop.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/apache/maka",
+      "authors": [
+        "Apache Software Foundation"
+      ],
+      "published_at": "2026-05-27T15:46:05Z",
+      "tags": [
+        "agents",
+        "local-first",
+        "event-sourcing",
+        "self-hosted"
+      ],
+      "read_minutes": 9
+    },
+    {
+      "id": "nvidia-switchyard-llm-routing",
+      "title": "Switchyard: route LLM traffic across models and providers",
+      "dek": "A Rust proxy and library that routes LLM requests across providers while preserving OpenAI and Anthropic API compatibility.",
+      "why": "Point Claude Code or Codex at an open-weight model: Switchyard translates between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats, so agents keep their native API while being served by vLLM, Ollama, or NIM. Pre-alpha, but a solid reference for multi-provider routing, A/B benchmarking, and fallback.",
+      "takeaway": "Protocol translation at the proxy layer decouples agent clients from model backends; routing strategies like LLM-classifier and stage-router let cost/quality trade-offs live in config instead of code.",
+      "source": "GitHub Trending",
+      "source_url": "https://github.com/NVIDIA-NeMo/Switchyard",
+      "authors": [
+        "NVIDIA NeMo"
+      ],
+      "published_at": "2026-05-19T19:06:33Z",
+      "tags": [
+        "ai",
+        "llm",
+        "routing",
+        "rust"
+      ],
+      "read_minutes": 8
     }
   ]
 }
